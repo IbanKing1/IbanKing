@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\IBanKing\\IBanKing\\IBanKing.csproj",
+      "projectUniqueName": "C:\\Users\\Administrator\\IbanKing\\IBanKing\\IBanKing.csproj",
       "projectName": "IBanKing",
-      "projectPath": "D:\\Projects\\IBanKing\\IBanKing\\IBanKing.csproj",
+      "projectPath": "C:\\Users\\Administrator\\IbanKing\\IBanKing\\IBanKing.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\IBanKing\\IBanKing\\obj\\",
+      "outputPath": "C:\\Users\\Administrator\\IbanKing\\IBanKing\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
