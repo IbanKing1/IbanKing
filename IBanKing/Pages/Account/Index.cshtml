@@ -1,0 +1,41 @@
+@page
+@model AccountModel
+@{
+    ViewData["Title"] = "Account";
+}
+
+<div class="layout-wrapper">
+    <aside class="sidebar" id="sidebar">
+        <div>
+            <div class="sidebar-header">
+                <button id="toggle-sidebar">&#9776;</button>
+            </div>
+
+            <ul>
+                <li><a class="btn" asp-page="/Home/Index">Home</a></li>
+                <li><a class="btn" asp-page="/Transactions/Index">Transactions</a></li>
+                <li><a class="btn" asp-page="/MakePayment/Index">Make a payment</a></li>
+                <li><a class="btn" asp-page="/Account/Index">Account</a></li>
+                <li><a class="btn" asp-page="/ExchangeRate/Index">Exchange Rate</a></li>
+            </ul>
+        </div>
+
+        <div class="user-footer">
+            <img src="~/images/user-photo.png" alt="User photo">
+            <span>User name</span>
+        </div>
+    </aside>
+
+    <div class="main-content-wrapper">
+        <main class="main-content">
+            <div class="page-body text-center">
+                <h1>Account</h1>
+            </div>
+        </main>
+    </div>
+</div>
+
+<footer class="page-footer">
+    <a href="#">Terms and conditions</a>
+    <a href="#">Contact</a>
+</footer>
