@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\TermsAndConditions\**" />
+    <Content Remove="Pages\TermsAndConditions\**" />
+    <EmbeddedResource Remove="Pages\TermsAndConditions\**" />
+    <None Remove="Pages\TermsAndConditions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 

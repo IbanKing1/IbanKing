@@ -4,26 +4,58 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - IBanKing</title>
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IBanKing.styles.css" asp-append-version="true" />
 </head>
 <body>
-   
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <button id="toggle-sidebar">&#9776;</button>
+                </div>
+
+                <ul>
+                    <li><a class="btn" asp-page="/Home/Index">Home</a></li>
+                    <li><a class="btn" asp-page="/Transactions/Index">Transactions</a></li>
+                    <li><a class="btn" asp-page="/MakePayment/Index">Make a payment</a></li>
+                    <li><a class="btn" asp-page="/Account/Index">Account</a></li>
+                    <li><a class="btn" asp-page="/ExchangeRate/Index">Exchange Rate</a></li>
+                    
+                </ul>
+            </div>
+
+            <div class="user-footer">
+                <img src="~/images/user-photo.png" alt="User photo">
+                <span>User name</span>
+            </div>
+        </aside>
+
+        <div class="main-content-wrapper">
+            <main class="main-content">
+                <div class="page-body">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
     </div>
 
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <footer class="page-footer text-center mt-4">
+        <ul class="list-inline">
+            <li class="list-inline-item">
+                <a class="btn btn-link" asp-page="/Terms And Conditions/Index">Terms and Conditions</a>
+            </li>
+            <li class="list-inline-item">
+                <a class="btn btn-link" asp-page="/Contact/Index">Contact</a>
+            </li>
+        </ul>
+    </footer>
 
-    
 
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

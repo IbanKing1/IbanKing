@@ -1,7 +1,6 @@
 ﻿body {
     margin: 0;
 }
-
 /* === SIDEBAR === */
 .sidebar {
     width: 250px;
@@ -17,11 +16,9 @@
     transition: width 0.3s ease;
     overflow: hidden;
 }
-
     .sidebar.sidebar-hidden {
         width: 60px;
     }
-
     .sidebar .sidebar-header {
         display: flex;
         justify-content: flex-start;
@@ -30,8 +27,7 @@
         width: 100%;
         padding-left: 10px;
     }
-
-/* Buton hamburger */
+/* Hamburger button */
 #toggle-sidebar {
     background: none;
     border: none;
@@ -39,32 +35,26 @@
     font-size: 24px;
     cursor: pointer;
 }
-
     #toggle-sidebar:hover {
         color: #aaa;
     }
-
     #toggle-sidebar:focus {
         outline: none;
     }
-
-/* Ascunde meniul + user-footer când e colapsat */
+/* Hide menu + user-footer when collapsed */
 .sidebar.sidebar-hidden ul,
 .sidebar.sidebar-hidden .user-footer {
     display: none;
 }
-
-/* === MENIU === */
+/* === MENU === */
 .sidebar ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
 .sidebar li {
     margin: 0;
 }
-
 .sidebar .btn {
     display: block;
     width: 100%;
@@ -81,32 +71,27 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
     .sidebar .btn:hover {
         background-color: #5a6268;
     }
-
-/* === FOOTER UTILIZATOR === */
+/* === USER FOOTER === */
 .sidebar .user-footer {
     display: flex;
     align-items: center;
     padding: 1rem;
     border-top: 1px solid #333;
 }
-
     .sidebar .user-footer img {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         margin-right: 10px;
     }
-
-/* === CONȚINUT PRINCIPAL === */
+/* === MAIN CONTENT === */
 .layout-wrapper {
     display: flex;
     min-height: 100vh;
 }
-
 .main-content-wrapper {
     margin-left: 250px;
     flex: 1;
@@ -114,20 +99,16 @@
     flex-direction: column;
     min-height: 100vh;
 }
-
     .main-content-wrapper.sidebar-hidden {
         margin-left: 60px;
     }
-
 .main-content {
     flex-grow: 1;
     padding: 2rem;
 }
-
 .page-body {
     flex-grow: 1;
 }
-
 /* === FOOTER === */
 .page-footer {
     background-color: black;
@@ -142,19 +123,16 @@
     z-index: 1000;
     transition: all 0.3s ease;
 }
-
     .page-footer.sidebar-hidden {
         left: 60px;
         width: calc(100% - 60px);
     }
-
     .page-footer a {
         color: white;
         text-decoration: none;
         margin: 0 1rem;
         transition: color 0.3s ease;
     }
-
         .page-footer a:hover {
             color: #aaa;
         }
