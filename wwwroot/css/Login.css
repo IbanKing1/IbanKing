@@ -1,0 +1,26 @@
+﻿body {
+    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.form-control {
+    border-radius: 2rem;
+}
+
+.btn-login {
+    border-radius: 2rem;
+    padding: 0.5rem 2rem;
+}

@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var userName = Context.Session.GetString("UserName") ?? "Employee";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IBanKing (Employee)</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/BankEmployeeLayout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/IBanKing.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button id="toggle-sidebar">&#9776;</button>
+            </div>
+            <ul class="list-unstyled">
+                <li><a class="btn" asp-page="/BankEmployee/Index">Home</a></li>
+                <li><a class="btn" asp-page="/Transactions/Index">Manage transactions</a></li>
+                <li><a class="btn" asp-page="/Account/Index">Manage accounts</a></li>
+                <li><a class="btn" asp-page="/BankEmployee/AddClient">Add Client</a></li>
+                <li>
+                    <form method="post" asp-page="/Logout/Index">
+                        <button class="btn btn-danger mt-2">Logout</button>
+                    </form>
+                </li>
+            </ul>
+            <div class="user-footer">
+                <img src="~/images/user-photo.png" alt="User photo">
+                <span>@userName</span>
+            </div>
+        </aside>
+        <div class="main-content-wrapper">
+            <main class="main-content">
+                <div class="page-body">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+    <footer class="page-footer text-center mt-4">
+        <ul class="list-inline">
+            <li class="list-inline-item"><a class="btn btn-link" asp-page="/Terms And Conditions/Index">Terms and Conditions</a></li>
+            <li class="list-inline-item"><a class="btn btn-link" asp-page="/Contact/Index">Contact</a></li>
+        </ul>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
