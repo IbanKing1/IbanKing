@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http
 @{
     var userName = Context.Session.GetString("UserName") ?? "Client";
+    var role = Context.Session.GetString("UserRole") ?? "";
 }
 
 <!DOCTYPE html>
@@ -21,8 +22,12 @@
             </div>
 
             <ul>
-                
 
+                <li><a class="btn" asp-page="/Client/Index">Home</a></li>
+                <li><a class="btn" asp-page="/Client/Transactions/Index">Transactions</a></li>
+                <li><a class="btn" asp-page="/Client/MakePayment/Index">Make Payment</a></li>
+                <li><a class="btn" asp-page="/Client/ExchangeRate/Index">Exchange Rate</a></li>
+                <li><a class="btn" asp-page="/Client/Account/Index">Account</a></li>
                 <li>
                     <form method="post" asp-page="/Logout/Index">
                         <button class="btn btn-danger mt-2">Logout</button>
@@ -45,10 +50,18 @@
         </div>
     </div>
 
+
     <footer class="page-footer text-center mt-4">
         <ul class="list-inline">
-            <li class="list-inline-item"><a class="btn btn-link" asp-page="/Terms And Conditions/Index">Terms and Conditions</a></li>
-            <li class="list-inline-item"><a class="btn btn-link" asp-page="/Contact/Index">Contact</a></li>
+            <li class="list-inline-item">
+                <a class="btn btn-link" asp-page="/Terms And Conditions/Index">Terms and Conditions</a>
+            </li>
+            <li class="list-inline-item">
+                <a class="btn btn-link" asp-page="/Contact/Index">Contact</a>
+            </li>
+            <li class="list-inline-item">
+                <a class="btn btn-link" asp-page="/Feedback/Index">Feedback</a>
+            </li>
         </ul>
     </footer>
 

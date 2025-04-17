@@ -22,10 +22,8 @@
 
             <ul>
                 <li><a class="btn" asp-page="/Admin/Index">Home</a></li>
-                <li><a class="btn" asp-page="/Account/Index">Account</a></li>
-
-                @* Admin-only actions *@
                 <li><a class="btn" asp-page="/Admin/AddEmployee">Add Bank Employee</a></li>
+                <li><a class="btn" asp-page="/Admin/Account">Manage Accounts</a></li>
                 <li>
                     <form method="post" asp-page="/Logout/Index">
                         <button class="btn btn-danger mt-2">Logout</button>

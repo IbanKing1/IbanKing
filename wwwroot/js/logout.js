@@ -6,7 +6,7 @@
         clearTimeout(time);
         time = setTimeout(() => {
             window.location.href = redirectUrl;
-        }, 10 * 1000); 
+        }, 10 * 60 * 1000); 
     }
 
     window.onload = resetTimer;

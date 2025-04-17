@@ -13,44 +13,16 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IBanKing.styles.css" asp-append-version="true" />
 </head>
+
 <body>
     <div class="layout-wrapper">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <button id="toggle-sidebar">&#9776;</button>
             </div>
-            <ul>
-                @* Role-based navigation *@
-                @if (role == "Admin")
-                {
-                    <li><a class="btn" asp-page="/Admin/Index">Home</a></li>
-                    <li><a class="btn" asp-page="/Admin/AddEmployee">Add Bank Employee</a></li>
-                    <li><a class="btn" asp-page="/Admin/Account">Manage Accounts</a></li>
-                }
-                else if (role == "BankEmployee")
-                {
-                    <li><a class="btn" asp-page="/BankEmployee/Index">Home</a></li>
-                    <li><a class="btn" asp-page="/BankEmployee/AddClient">Add Client</a></li>
-                    <li><a class="btn" asp-page="/BankEmployee/Account/Index">Manage Accounts</a></li>
-                    <li><a class="btn" asp-page="/BankEmployee/Transactions/Index">Manage Transactions</a></li>
 
-                }
-                else if (role == "Client")
-                {   
-                    <li><a class="btn" asp-page="/Client/Index">Home</a></li>
-                    <li><a class="btn" asp-page="/Client/Transactions/Index">Transactions</a></li>
-                    <li><a class="btn" asp-page="/Client/MakePayment/Index">Make Payment</a></li>
-                    <li><a class="btn" asp-page="/Client/ExchangeRate/Index">Exchange Rate</a></li>
-                    <li><a class="btn" asp-page="/Client/Account/Index">Account</a></li>
-                }
-                <li>
-                    <form method="post" asp-page="/Logout/Index">
-                        <button class="btn btn-danger mt-2">Logout</button>
-                    </form>
-                </li>
-            </ul>
             <div class="user-footer">
-                <img src="~/images/user-photo.png" alt="User photo">
+                <img src="/images/user.png" alt="User photo">
                 <span>@userName</span>
             </div>
         </aside>
@@ -62,12 +34,7 @@
             </main>
         </div>
     </div>
-    <footer class="page-footer text-center mt-4">
-        <ul class="list-inline">
-            <li class="list-inline-item"><a class="btn btn-link" asp-page="/Terms And Conditions/Index">Terms and Conditions</a></li>
-            <li class="list-inline-item"><a class="btn btn-link" asp-page="/Contact/Index">Contact</a></li>
-        </ul>
-    </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
