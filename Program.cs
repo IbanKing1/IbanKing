@@ -18,7 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Session (set to expire after 1 minute of inactivity)
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(0.1); // ⏱️ change as needed
+   // options.IdleTimeout = TimeSpan.FromMinutes(10); 
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -45,7 +45,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-// Seed test BankEmployee user
+//Seed test BankEmployee user
 //using (var scope = app.Services.CreateScope())
 //{
 //    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -57,18 +57,18 @@ app.MapRazorPages();
 //        context.SaveChanges();
 //    }
 
-//    var hashedPassword = IBanKing.Utils.PasswordHelper.HashPassword("test!2");
+//    var hashedPassword = IBanKing.Utils.PasswordHelper.HashPassword("Parola123");
 
 //    context.Users.Add(new IBanKing.Models.User
 //    {
 //        Name = "Test",
-//        Email = "testEmployee@iban.com",
+//        Email = "andreea@gmail.com",
 //        Password = hashedPassword,
-//        Role = "BankEmployee",
+//        Role = "Admin",
 //        DateBirth = new DateTime(2002, 06, 05),
-//        Address = "Str. Ciocii",
-//        Gender = "M",
-//        PhoneNumber = "072521212240",
+//        Address = "Str. Morii",
+//        Gender = "F",
+//        PhoneNumber = "07252121240",
 //        IsBlocked = false,
 //        FailedLoginAttempts = 0
 //    });

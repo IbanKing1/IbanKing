@@ -8,6 +8,35 @@ namespace IBanKing.Data
             : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.ServicedPayment)
+                .WithMany()
+                .HasForeignKey(t => t.ServicedPaymentId)
+                .OnDelete(DeleteBehavior.Restrict);  
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.ExchangeRate)
+                .WithMany()
+                .HasForeignKey(t => t.ExchangeRateId)
+                .OnDelete(DeleteBehavior.Restrict); 
+        }
+
         public DbSet<User> Users { get; set; }
+        public DbSet<ExchangeRate> ExchangeRates { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<ServicedPayment> ServicedPayments { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+
     }
 }

@@ -74,7 +74,7 @@ namespace IBanKing.Pages.Login
             await _context.SaveChangesAsync();
 
             // Store user session
-            HttpContext.Session.SetString("UserId", user.Id.ToString());
+            HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("UserRole", user.Role);
             HttpContext.Session.SetString("UserName", user.Name);
 

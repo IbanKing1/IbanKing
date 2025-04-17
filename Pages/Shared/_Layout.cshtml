@@ -25,19 +25,23 @@
                 {
                     <li><a class="btn" asp-page="/Admin/Index">Home</a></li>
                     <li><a class="btn" asp-page="/Admin/AddEmployee">Add Bank Employee</a></li>
-                    <li><a class="btn" asp-page="/BankEmployee/AddClient">Add Client</a></li>
+                    <li><a class="btn" asp-page="/Admin/Account">Manage Accounts</a></li>
                 }
                 else if (role == "BankEmployee")
                 {
                     <li><a class="btn" asp-page="/BankEmployee/Index">Home</a></li>
                     <li><a class="btn" asp-page="/BankEmployee/AddClient">Add Client</a></li>
-                    <li><a class="btn" asp-page="/Account/Index">Manage Accounts</a></li>
-                    <li><a class="btn" asp-page="/Transactions/Index">Manage Transactions</a></li>
+                    <li><a class="btn" asp-page="/BankEmployee/Account/Index">Manage Accounts</a></li>
+                    <li><a class="btn" asp-page="/BankEmployee/Transactions/Index">Manage Transactions</a></li>
 
                 }
                 else if (role == "Client")
                 {   
                     <li><a class="btn" asp-page="/Client/Index">Home</a></li>
+                    <li><a class="btn" asp-page="/Client/Transactions/Index">Transactions</a></li>
+                    <li><a class="btn" asp-page="/Client/MakePayment/Index">Make Payment</a></li>
+                    <li><a class="btn" asp-page="/Client/ExchangeRate/Index">Exchange Rate</a></li>
+                    <li><a class="btn" asp-page="/Client/Account/Index">Account</a></li>
                 }
                 <li>
                     <form method="post" asp-page="/Logout/Index">
