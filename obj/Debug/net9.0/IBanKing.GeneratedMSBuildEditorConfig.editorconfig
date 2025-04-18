@@ -17,109 +17,117 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = IBanKing
 build_property.RootNamespace = IBanKing
-build_property.ProjectDir = D:\IBanKing\
+build_property.ProjectDir = D:\Projects\IBanKing\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\IBanKing
+build_property.MSBuildProjectDirectory = D:\Projects\IBanKing
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/IBanKing/Pages/Account/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Account/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Admin/AddEmployee.cshtml]
+[D:/Projects/IBanKing/Pages/Admin/AddEmployee.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWRkRW1wbG95ZWUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Admin/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Admin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/BankEmployee/Index.cshtml]
+[D:/Projects/IBanKing/Pages/BankEmployee/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmFua0VtcGxveWVlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Client/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Client/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Contact/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Contact/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Error.cshtml]
+[D:/Projects/IBanKing/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/ExchangeRate/Index.cshtml]
+[D:/Projects/IBanKing/Pages/ExchangeRate/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXhjaGFuZ2VSYXRlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Feedback/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Feedback/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmVlZGJhY2tcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Login/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Login/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Logout/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Logout/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/MakePayment/Index.cshtml]
+[D:/Projects/IBanKing/Pages/MakePayment/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Privacy.cshtml]
+[D:/Projects/IBanKing/Pages/MakePayment/Step2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcU3RlcDIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Projects/IBanKing/Pages/MakePayment/Step3.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcU3RlcDMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Projects/IBanKing/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Shared/_LayoutAdmin.cshtml]
+[D:/Projects/IBanKing/Pages/Shared/_LayoutAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRBZG1pbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Shared/_LayoutClient.cshtml]
+[D:/Projects/IBanKing/Pages/Shared/_LayoutClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRDbGllbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Shared/_LayoutEmployee.cshtml]
+[D:/Projects/IBanKing/Pages/Shared/_LayoutEmployee.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRFbXBsb3llZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Shared/_LoginLayout.cshtml]
+[D:/Projects/IBanKing/Pages/Shared/_LoginLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[D:/Projects/IBanKing/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Terms And Conditions/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Terms And Conditions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVybXMgQW5kIENvbmRpdGlvbnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Transactions/Index.cshtml]
+[D:/Projects/IBanKing/Pages/Transactions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY3Rpb25zXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/_ViewImports.cshtml]
+[D:/Projects/IBanKing/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/_ViewStart.cshtml]
+[D:/Projects/IBanKing/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/IBanKing/Pages/Shared/_Layout.cshtml]
+[D:/Projects/IBanKing/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-w6t35j2i5n

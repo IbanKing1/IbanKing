@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IBanKing.Pages.Admin
 {
-    public class Index  : PageModel
+    public class IndexModel : PageModel
     {
       
 

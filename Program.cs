@@ -46,35 +46,35 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 //Seed test BankEmployee user
-//using (var scope = app.Services.CreateScope())
-//{
-//    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-//    var existingUser = context.Users.FirstOrDefault(u => u.Email == "testEmployee@iban.com");
-//    if (existingUser != null)
-//    {
-//        context.Users.Remove(existingUser);
-//        context.SaveChanges();
-//    }
+    var existingUser = context.Users.FirstOrDefault(u => u.Email == "nadolur152@gmail.com");
+    if (existingUser != null)
+    {
+        context.Users.Remove(existingUser);
+        context.SaveChanges();
+    }
 
-//    var hashedPassword = IBanKing.Utils.PasswordHelper.HashPassword("Parola123");
+    var hashedPassword = IBanKing.Utils.PasswordHelper.HashPassword("Parola123");
 
-//    context.Users.Add(new IBanKing.Models.User
-//    {
-//        Name = "Test",
-//        Email = "andreea@gmail.com",
-//        Password = hashedPassword,
-//        Role = "Admin",
-//        DateBirth = new DateTime(2002, 06, 05),
-//        Address = "Str. Morii",
-//        Gender = "F",
-//        PhoneNumber = "07252121240",
-//        IsBlocked = false,
-//        FailedLoginAttempts = 0
-//    });
+    context.Users.Add(new IBanKing.Models.User
+    {
+        Name = "Radu",
+        Email = "nadolur152@gmail.com",
+        Password = hashedPassword,
+        Role = "Client",
+        DateBirth = new DateTime(2003, 06, 08),
+        Address = "Str. Independentei 14",
+        Gender = "M",
+        PhoneNumber = "0726454521",
+        IsBlocked = false,
+        FailedLoginAttempts = 0
+    });
 
-//    context.SaveChanges();
-//}
+    context.SaveChanges();
+}
 
 // Redirect root to /Login
 app.MapGet("/", context =>

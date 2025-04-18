@@ -37,6 +37,7 @@ namespace IBanKing.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ServicedPayment> ServicedPayments { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
     }
 }
