@@ -32,6 +32,7 @@ namespace IBanKing.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Notification> Notifications { get; set; }
