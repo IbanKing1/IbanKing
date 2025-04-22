@@ -1,0 +1,59 @@
+﻿@page
+@model IBanKing.Pages.BankEmployee.ManageAccountsModel
+@{
+    Layout = "_LayoutEmployee";
+    ViewData["Title"] = "Manage Client Accounts";
+}
+
+<h2>Manage Client Accounts</h2>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success">@Model.Message</div>
+}
+
+<table class="table table-bordered mt-4">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model.Clients)
+        {
+            <tr>
+                <form method="post" asp-page-handler="EditName">
+                <td>
+                    <input type="hidden" name="EditUserId" value="@client.UserId" />
+                    <input type="text" name="EditedName" class="form-control" value="@client.Name" />
+                </td>
+                <td>@client.Email</td>
+                <td>@client.PhoneNumber</td>
+                <td>
+                        @if (client.IsBlocked)
+                        {
+                        <span class="text-danger">Blocked</span>
+                        }
+                        else
+                        {
+                        <span class="text-success">Active</span>
+                        }
+                </td>
+                <td class="d-flex gap-1">
+                    <button type="submit" class="btn btn-warning btn-sm">Save</button>
+                    <form method="post" asp-page-handler="ToggleBlock" asp-route-id="@client.UserId" class="d-inline">
+                        <button type="submit" class="btn @(client.IsBlocked ? "btn-success" : "btn-danger") btn-sm">
+                                @(client.IsBlocked ? "Unblock" : "Block")
+                        </button>
+                    </form>
+                </td>
+                </form>
+            </tr>
+        }
+
+    </tbody>
+</table>

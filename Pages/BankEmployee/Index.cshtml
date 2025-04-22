@@ -1,12 +1,55 @@
 ﻿@page
-@model IBanKing.Pages.BankEmployee.Index
+@model IBanKing.Pages.BankEmployee.IndexModel
 @{
     Layout = "_LayoutEmployee";
     ViewData["Title"] = "Bank Employee Dashboard";
 }
-@* @{ *@
-@*     Layout = "_Layout"; *@
-@*     ViewData["Title"] = "Bank Employee Dashboard"; *@
-@* } *@
-<h2>Welcome, @ViewData["Title"]!</h2>
-<p>As a Bank Employee, you can manage transactions, accounts, and clients.</p>
+
+<h2>Welcome to the Dashboard</h2>
+
+<form method="get" class="row mb-4 g-2">
+    <div class="col-md-4">
+        <input name="Search" class="form-control" value="@Model.Search" placeholder="Search by ID or Name" />
+    </div>
+    <div class="col-md-3">
+        <input name="MinBalance" class="form-control" type="number" step="0.01" value="@Model.MinBalance" placeholder="Min Balance" />
+    </div>
+    <div class="col-md-3">
+        <select name="SortBy" class="form-select">
+            <option value="">Sort By</option>
+            <option value="balance_asc">Balance ↑</option>
+            <option value="balance_desc">Balance ↓</option>
+            <option value="name_asc">Name A-Z</option>
+            <option value="name_desc">Name Z-A</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Client ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>IBAN</th>
+            <th>Balance</th>
+            <th>Currency</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var acc in Model.Accounts)
+        {
+            <tr>
+                <td>@acc.User.UserId</td>
+                <td>@acc.User.Name</td>
+                <td>@acc.User.Email</td>
+                <td>@acc.IBAN</td>
+                <td>@acc.Balance.ToString("F2")</td>
+                <td>@acc.Currency</td>
+            </tr>
+        }
+    </tbody>
+</table>
