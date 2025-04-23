@@ -24,7 +24,10 @@
 
                 <div class="currency-input-group">
                     <label for="fromCurrency">From</label>
-                    <select id="fromCurrency" class="currency-select"></select>
+                    <div class="currency-select-wrapper">
+                        <select id="fromCurrency" class="currency-select"></select>
+                        <span class="select-arrow">▼</span>
+                    </div>
                 </div>
 
                 <button type="button" id="swapCurrencies" class="swap-currencies" title="Swap currencies">
@@ -33,7 +36,10 @@
 
                 <div class="currency-input-group">
                     <label for="toCurrency">To</label>
-                    <select id="toCurrency" class="currency-select"></select>
+                    <div class="currency-select-wrapper">
+                        <select id="toCurrency" class="currency-select"></select>
+                        <span class="select-arrow">▼</span>
+                    </div>
                 </div>
             </div>
 
@@ -80,7 +86,7 @@
         <div id="availableCurrencies" class="available-currencies"></div>
 
         <div class="modal-actions">
-            <button id="cancelEdit" class="btn btn-secondary" onclick="document.getElementById('editModal').style.display='none'">Cancel</button>
+            <button id="cancelEdit" class="btn btn-secondary">Cancel</button>
             <button id="saveFavorites" class="btn btn-primary">Save</button>
         </div>
     </div>

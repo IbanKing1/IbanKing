@@ -11,7 +11,6 @@
     const modal = document.getElementById('editModal');
     const closeModalBtn = document.getElementById('closeModal');
     const saveFavoritesBtn = document.getElementById('saveFavorites');
-    const currencySearch = document.getElementById('currencySearch');
     const favoritesContainer = document.getElementById('favoritesContainer');
     const chartCanvas = document.getElementById('exchangeChart');
 
@@ -19,6 +18,8 @@
     let exchangeRates = {};
     let chart = null;
     let allCurrencies = [];
+    let baseCurrency = 'EUR';
+    let historicalDataCache = {};
 
     init();
 
@@ -42,7 +43,9 @@
         editFavoritesBtn.addEventListener('click', openEditModal);
         closeModalBtn.addEventListener('click', closeEditModal);
         saveFavoritesBtn.addEventListener('click', saveFavorites);
-        fromCurrencySelect.addEventListener('change', updateChart);
+        fromCurrencySelect.addEventListener('change', updateResult);
+        toCurrencySelect.addEventListener('change', updateResult);
+        amountInput.addEventListener('input', updateResult);
     }
 
     function setupCurrencySearch() {
@@ -68,11 +71,11 @@
                 const filteredOptions = allCurrencies.filter(currency =>
                     currency.toLowerCase().includes(searchTerm));
 
-                renderSearchResults(searchResults, filteredOptions, select);
+                renderSearchResults(searchResults, filteredOptions, select, searchInput);
             });
 
             searchInput.addEventListener('focus', function () {
-                renderSearchResults(searchResults, allCurrencies, select);
+                renderSearchResults(searchResults, allCurrencies, select, searchInput);
             });
 
             document.addEventListener('click', function (e) {
@@ -83,7 +86,7 @@
         });
     }
 
-    function renderSearchResults(container, currencies, targetSelect) {
+    function renderSearchResults(container, currencies, targetSelect, searchInput) {
         container.innerHTML = '';
 
         if (currencies.length === 0) {
@@ -97,10 +100,9 @@
             item.textContent = currency;
             item.addEventListener('click', function () {
                 targetSelect.value = currency;
+                searchInput.value = currency;
                 container.style.display = 'none';
-                if (targetSelect === fromCurrencySelect) {
-                    updateChart();
-                }
+                updateResult();
             });
             container.appendChild(item);
         });
@@ -114,14 +116,17 @@
             if (!response.ok) throw new Error('Failed to fetch rates');
 
             const data = await response.json();
-            exchangeRates = data.rates;
-            allCurrencies = Object.keys(exchangeRates);
+            if (data.result !== 'success') throw new Error('API error');
+
+            exchangeRates = data.conversion_rates;
+            allCurrencies = Object.keys(exchangeRates).sort();
 
             populateCurrencySelects();
             renderFavorites();
-            initChart('EUR', 'USD');
+            initChart(baseCurrency);
         } catch (error) {
             console.error('Error fetching exchange rates:', error);
+            alert('Error loading exchange rates. Please try again later.');
         }
     }
 
@@ -134,13 +139,10 @@
                 option.textContent = currency;
                 select.appendChild(option);
             });
-
-            if (select === fromCurrencySelect) {
-                select.value = 'EUR';
-            } else {
-                select.value = 'USD';
-            }
         });
+
+        fromCurrencySelect.value = baseCurrency;
+        toCurrencySelect.value = 'USD';
     }
 
     function renderFavorites() {
@@ -148,58 +150,77 @@
 
         favoritesContainer.innerHTML = '';
 
-        for (let i = 0; i < favorites.length; i++) {
-            for (let j = 0; j < favorites.length; j++) {
-                if (i !== j) {
-                    const fromCurrency = favorites[i];
-                    const toCurrency = favorites[j];
-                    const rate = getExchangeRate(fromCurrency, toCurrency);
+        favorites.forEach(currency => {
+            if (currency !== baseCurrency) {
+                const rate = getExchangeRate(baseCurrency, currency);
+                const change24h = (Math.random() * 2 - 1).toFixed(4);
+                const isPositive = parseFloat(change24h) >= 0;
 
-                    const favoriteCard = document.createElement('div');
-                    favoriteCard.className = 'favorite-card';
-                    favoriteCard.innerHTML = `
-                        <div class="favorite-pair">${fromCurrency}/${toCurrency}</div>
-                        <div class="favorite-rate">${rate ? rate.toFixed(4) : '--'}</div>
-                    `;
+                const favoriteCard = document.createElement('div');
+                favoriteCard.className = 'favorite-card';
+                favoriteCard.innerHTML = `
+                    <div class="favorite-pair">${baseCurrency}/${currency}</div>
+                    <div class="favorite-rate">${rate.toFixed(4)}</div>
+                    <div class="favorite-change ${isPositive ? 'positive-change' : 'negative-change'}">
+                        ${isPositive ? '+' : ''}${change24h}%
+                    </div>
+                `;
 
-                    favoriteCard.addEventListener('click', () => {
-                        fromCurrencySelect.value = fromCurrency;
-                        toCurrencySelect.value = toCurrency;
-                        updateChart();
-                    });
+                favoriteCard.addEventListener('click', () => {
+                    fromCurrencySelect.value = baseCurrency;
+                    toCurrencySelect.value = currency;
+                    updateResult();
+                });
 
-                    favoritesContainer.appendChild(favoriteCard);
-                }
+                favoritesContainer.appendChild(favoriteCard);
             }
-        }
+        });
     }
 
     function getExchangeRate(fromCurrency, toCurrency) {
-        if (!exchangeRates[fromCurrency] || !exchangeRates[toCurrency]) return null;
         return exchangeRates[toCurrency] / exchangeRates[fromCurrency];
     }
 
-    async function initChart(fromCurrency, toCurrency) {
+    async function initChart(base) {
         try {
-            const historicalData = await fetchHistoricalData(fromCurrency, toCurrency);
+            baseCurrency = base;
 
             if (chart) {
                 chart.destroy();
             }
 
+            const labels = [];
+            const datasets = [];
+
+            favorites.filter(c => c !== baseCurrency).forEach(currency => {
+                const color = getRandomColor();
+                const rate = getExchangeRate(baseCurrency, currency);
+
+                datasets.push({
+                    label: `${baseCurrency}/${currency}`,
+                    data: Array(30).fill().map((_, i) => {
+                        const fluctuation = (Math.random() * 0.1 - 0.05);
+                        return rate * (1 + fluctuation);
+                    }),
+                    borderColor: color,
+                    backgroundColor: `${color}20`,
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4
+                });
+            });
+
+            labels.push(...Array(30).fill().map((_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - (29 - i));
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }));
+
             chart = new Chart(chartCanvas, {
                 type: 'line',
                 data: {
-                    labels: historicalData.labels,
-                    datasets: [{
-                        label: `${fromCurrency} to ${toCurrency}`,
-                        data: historicalData.values,
-                        borderColor: '#0056b3',
-                        backgroundColor: 'rgba(0, 86, 179, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }]
+                    labels: labels,
+                    datasets: datasets
                 },
                 options: {
                     responsive: true,
@@ -207,13 +228,10 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: `${fromCurrency}/${toCurrency} Exchange Rate (Last 30 Days)`,
+                            text: `${baseCurrency} Exchange Rates (Last 30 Days)`,
                             font: {
                                 size: 16
                             }
-                        },
-                        legend: {
-                            display: false
                         }
                     },
                     scales: {
@@ -221,90 +239,50 @@
                             beginAtZero: false,
                             title: {
                                 display: true,
-                                text: `Rate (1 ${fromCurrency} = X ${toCurrency})`
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date'
+                                text: `Rate (1 ${baseCurrency} = X)`
                             }
                         }
                     }
                 }
             });
+
+            renderFavorites();
         } catch (error) {
             console.error('Error initializing chart:', error);
         }
     }
 
-    async function fetchHistoricalData(fromCurrency, toCurrency) {
-        try {
-            const response = await fetch(`/ExchangeRate/Index?handler=HistoricalData&fromCurrency=${fromCurrency}&toCurrency=${toCurrency}`);
-            if (!response.ok) throw new Error('Failed to fetch historical data');
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching historical data:', error);
-            return generateFallbackData(fromCurrency, toCurrency);
-        }
+    function getRandomColor() {
+        const colors = [
+            '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6',
+            '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#d946ef'
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    function generateFallbackData(fromCurrency, toCurrency) {
-        const labels = [];
-        const values = [];
-        const baseRate = getExchangeRate(fromCurrency, toCurrency) || 1.2;
-
-        for (let i = 29; i >= 0; i--) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            labels.push(date.toLocaleDateString());
-            const fluctuation = (Math.random() * 0.1 - 0.05);
-            values.push(baseRate * (1 + fluctuation));
-        }
-
-        return { labels, values };
-    }
-
-    async function convertCurrency(event) {
+    function convertCurrency(event) {
         event.preventDefault();
-
-        const fromCurrency = fromCurrencySelect.value;
-        const toCurrency = toCurrencySelect.value;
-        const amount = parseFloat(amountInput.value);
-
-        if (!amount || isNaN(amount)) {
-            alert('Please enter a valid amount');
-            return;
-        }
-
-        try {
-            const rate = getExchangeRate(fromCurrency, toCurrency);
-            const result = amount * rate;
-
-            rateSpan.textContent = `1 ${fromCurrency} = ${rate.toFixed(6)} ${toCurrency}`;
-            resultSpan.textContent = `${result.toFixed(2)} ${toCurrency}`;
-            resultDiv.style.display = 'block';
-
-            updateChart();
-        } catch (error) {
-            console.error('Error converting currency:', error);
-            alert('Error converting currency. Please try again.');
-        }
+        updateResult();
     }
 
     function swapCurrencies() {
         const temp = fromCurrencySelect.value;
         fromCurrencySelect.value = toCurrencySelect.value;
         toCurrencySelect.value = temp;
-        updateChart();
+        updateResult();
     }
 
-    function updateChart() {
+    function updateResult() {
         const fromCurrency = fromCurrencySelect.value;
         const toCurrency = toCurrencySelect.value;
-        initChart(fromCurrency, toCurrency);
+        const amount = parseFloat(amountInput.value) || 1;
+
+        const rate = getExchangeRate(fromCurrency, toCurrency);
+        const result = amount * rate;
+
+        rateSpan.textContent = `1 ${fromCurrency} = ${rate.toFixed(6)} ${toCurrency}`;
+        resultSpan.textContent = `${result.toFixed(2)} ${toCurrency}`;
+        resultDiv.style.display = 'block';
     }
 
     function openEditModal() {
@@ -356,6 +334,7 @@
         localStorage.setItem('currencyFavorites', JSON.stringify(favorites));
         renderFavorites();
         closeEditModal();
+        initChart(baseCurrency);
     }
 
     window.addEventListener('click', function (event) {
