@@ -68,7 +68,7 @@ namespace IBanKing.Pages.BankEmployee
                 FailedLoginAttempts = 0,
                 TransactionLimit = "0",
                 TransactionMaxAmount = "0",
-                LastLog = new DateTime(2000, 1, 1)
+                LastLog = DateTime.Now
             };
 
             _context.Users.Add(newClient);
