@@ -15,6 +15,7 @@
     const chartCanvas = document.getElementById('exchangeChart');
     const currencySearch = document.getElementById('currencySearch');
     const saveFavoritesBtn = document.getElementById('saveFavorites');
+    const chartTitle = document.getElementById('chartTitle');
 
     let favorites = ['EUR', 'USD', 'GBP', 'RON'];
     let exchangeRates = {};
@@ -23,6 +24,7 @@
     let baseCurrency = 'RON';
     let fromCurrency = 'RON';
     let toCurrency = 'EUR';
+    let resizeTimeout;
 
     init();
 
@@ -30,7 +32,7 @@
         loadFavorites();
         setupEventListeners();
         fetchExchangeRates();
-        adjustLayout();
+        setupResizeObserver();
     }
 
     function loadFavorites() {
@@ -69,27 +71,19 @@
                 hideCurrencyDropdown('to');
             }
         });
-
-        window.addEventListener('resize', handleWindowResize);
     }
 
-    function handleWindowResize() {
-        adjustLayout();
-        if (chart) {
-            chart.resize();
-        }
-    }
-
-    function adjustLayout() {
-        const container = document.querySelector('.exchange-container');
-        const width = container.clientWidth;
-        const currencyInputs = document.querySelector('.currency-inputs');
-
-        if (width < 768) {
-            currencyInputs.style.flexDirection = 'column';
-        } else {
-            currencyInputs.style.flexDirection = 'row';
-        }
+    function setupResizeObserver() {
+        const resizeObserver = new ResizeObserver(() => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (chart) {
+                    chart.resize();
+                    chart.update();
+                }
+            }, 200);
+        });
+        resizeObserver.observe(chartCanvas);
     }
 
     function filterCurrencyOptions(type) {
@@ -245,6 +239,7 @@
             if (!response.ok) throw new Error('Failed to fetch historical data');
 
             const data = await response.json();
+            chartTitle.textContent = `${baseCurrency} to ${toCurrency}`;
             renderChart(data);
         } catch (error) {
             console.error('Error fetching historical data:', error);
@@ -442,8 +437,7 @@
         const baseItem = document.createElement('div');
         baseItem.className = 'currency-item base';
         baseItem.textContent = `${baseCurrency} (Base)`;
-        baseItem.addEventListener('click', () => {
-        });
+        baseItem.addEventListener('click', () => { });
         container.appendChild(baseItem);
 
         allCurrencies.forEach(currency => {
