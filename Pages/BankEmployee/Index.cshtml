@@ -53,3 +53,37 @@
         }
     </tbody>
 </table>
+<!-- Inactive Users Section -->
+<div class="mt-5">
+    <h4 class="text-danger">Inactive Users (No login for 30+ days)</h4>
+    @if (Model.InactiveUsers.Any())
+    {
+        <table class="table table-warning table-striped">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Last Login Date</th>
+                    <th>Days Inactive</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.InactiveUsers)
+                {
+                    <tr>
+                        <td>@user.UserId</td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@user.LastLog.ToShortDateString()</td>
+                        <td>@((DateTime.Now - user.LastLog).Days)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-success">No inactive users found.</div>
+    }
+</div>

@@ -16,6 +16,7 @@ namespace IBanKing.Pages.BankEmployee
         }
 
         public List<Account> Accounts { get; set; }
+        public List<User> InactiveUsers { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string? Search { get; set; }
@@ -55,6 +56,14 @@ namespace IBanKing.Pages.BankEmployee
             };
 
             Accounts = await query.ToListAsync();
+
+            // Logic to get inactive users (>30 days)
+            var inactiveThreshold = DateTime.Now.AddDays(-30);
+
+            InactiveUsers = await _context.Users
+                .Where(u => u.Role == "Client" && u.LastLog < inactiveThreshold)
+                .OrderBy(u => u.LastLog)
+                .ToListAsync();
         }
     }
 }

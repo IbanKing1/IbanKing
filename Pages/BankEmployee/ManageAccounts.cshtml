@@ -19,16 +19,18 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Transaction Limit</th>
+            <th>Max Transaction Amount</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var client in Model.Clients)
         {
             <tr>
-                <form method="post" asp-page-handler="EditName">
+                <form method="post" asp-page-handler="EditClient">
                 <td>
-                    <input type="hidden" name="EditUserId" value="@client.UserId" />
+                    <input type="hidden" name="UserId" value="@client.UserId" />
                     <input type="text" name="EditedName" class="form-control" value="@client.Name" />
                 </td>
                 <td>@client.Email</td>
@@ -43,9 +45,15 @@
                         <span class="text-success">Active</span>
                         }
                 </td>
+                <td>
+                    <input type="number" name="TransactionLimit" class="form-control" value="@client.TransactionLimit" min="0" />
+                </td>
+                <td>
+                    <input type="number" name="TransactionMaxAmount" class="form-control" value="@client.TransactionMaxAmount" min="0" step="0.01" />
+                </td>
                 <td class="d-flex gap-1">
                     <button type="submit" class="btn btn-warning btn-sm">Save</button>
-                    <form method="post" asp-page-handler="ToggleBlock" asp-route-id="@client.UserId" class="d-inline">
+                    <form method="post" asp-page-handler="ToggleBlock" asp-route-id="@client.UserId">
                         <button type="submit" class="btn @(client.IsBlocked ? "btn-success" : "btn-danger") btn-sm">
                                 @(client.IsBlocked ? "Unblock" : "Block")
                         </button>
@@ -54,6 +62,5 @@
                 </form>
             </tr>
         }
-
     </tbody>
 </table>

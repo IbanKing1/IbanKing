@@ -11,6 +11,9 @@ namespace IBanKing.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Balance)
+                .HasPrecision(18, 2);  
 
             modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.User)

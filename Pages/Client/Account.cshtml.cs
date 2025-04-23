@@ -30,13 +30,18 @@ namespace IBanKing.Pages.Client
 
             public string Address { get; set; }
 
-            [Phone]
+            [Required]
+            [RegularExpression(@"^\d{7,15}$", ErrorMessage = "Phone number must contain only digits (7-15 digits).")]
             public string PhoneNumber { get; set; }
 
             [DataType(DataType.Password)]
-            [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
+            [Required(ErrorMessage = "Password is required.")]
+            [StringLength(100, ErrorMessage = "Password must be at least {2} characters.", MinimumLength = 8)]
+            [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}:;'<>,.?\/~`-]).{8,}$",
+                ErrorMessage = "Password must contain at least one uppercase letter, one digit, and one special character.")]
             public string? NewPassword { get; set; }
         }
+
 
         public async Task<IActionResult> OnGetAsync()
         {

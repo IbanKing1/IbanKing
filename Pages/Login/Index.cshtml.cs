@@ -71,6 +71,7 @@ namespace IBanKing.Pages.Login
             // Reset failed attempts on successful login
             Console.WriteLine("✅ Password correct. Login successful.");
             user.FailedLoginAttempts = 0;
+            user.LastLog = DateTime.Now;
             await _context.SaveChangesAsync();
 
             // Store user session
