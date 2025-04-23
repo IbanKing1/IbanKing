@@ -18,8 +18,8 @@
     let exchangeRates = {};
     let chart = null;
     let allCurrencies = [];
-    let baseCurrency = 'EUR';
-    let historicalDataCache = {};
+    let currentFromCurrency = 'RON';
+    let currentToCurrency = 'EUR';
 
     init();
 
@@ -43,19 +43,21 @@
         editFavoritesBtn.addEventListener('click', openEditModal);
         closeModalBtn.addEventListener('click', closeEditModal);
         saveFavoritesBtn.addEventListener('click', saveFavorites);
-        fromCurrencySelect.addEventListener('change', updateResult);
-        toCurrencySelect.addEventListener('change', updateResult);
+        fromCurrencySelect.addEventListener('change', updateFromCurrency);
+        toCurrencySelect.addEventListener('change', updateToCurrency);
         amountInput.addEventListener('input', updateResult);
     }
 
     function setupCurrencySearch() {
         const currencySelects = [fromCurrencySelect, toCurrencySelect];
+        const searchInputs = [];
 
-        currencySelects.forEach(select => {
+        currencySelects.forEach((select, index) => {
             const searchBox = document.createElement('div');
             searchBox.className = 'search-box';
             searchBox.innerHTML = `
-                <input type="text" placeholder="Search currency..." class="currency-search-input">
+                <input type="text" placeholder="Search currency..." class="currency-search-input" 
+                       value="${index === 0 ? 'RON' : 'EUR'}">
                 <span class="search-icon">🔍</span>
                 <div class="currency-search-results"></div>
             `;
@@ -65,6 +67,7 @@
 
             const searchInput = searchBox.querySelector('.currency-search-input');
             const searchResults = searchBox.querySelector('.currency-search-results');
+            searchInputs.push(searchInput);
 
             searchInput.addEventListener('input', function () {
                 const searchTerm = this.value.toLowerCase();
@@ -84,6 +87,8 @@
                 }
             });
         });
+
+        return searchInputs;
     }
 
     function renderSearchResults(container, currencies, targetSelect, searchInput) {
@@ -102,7 +107,13 @@
                 targetSelect.value = currency;
                 searchInput.value = currency;
                 container.style.display = 'none';
+                if (targetSelect === fromCurrencySelect) {
+                    currentFromCurrency = currency;
+                } else {
+                    currentToCurrency = currency;
+                }
                 updateResult();
+                fetchHistoricalData();
             });
             container.appendChild(item);
         });
@@ -112,22 +123,96 @@
 
     async function fetchExchangeRates() {
         try {
-            const response = await fetch('/ExchangeRate/Index?handler=LiveRates');
+            const response = await fetch('https://api.frankfurter.app/latest');
             if (!response.ok) throw new Error('Failed to fetch rates');
 
             const data = await response.json();
-            if (data.result !== 'success') throw new Error('API error');
-
-            exchangeRates = data.conversion_rates;
+            exchangeRates = data.rates;
+            exchangeRates[data.base] = 1;
             allCurrencies = Object.keys(exchangeRates).sort();
 
             populateCurrencySelects();
             renderFavorites();
-            initChart(baseCurrency);
+            fetchHistoricalData();
         } catch (error) {
             console.error('Error fetching exchange rates:', error);
             alert('Error loading exchange rates. Please try again later.');
         }
+    }
+
+    async function fetchHistoricalData() {
+        try {
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(endDate.getDate() - 30);
+
+            const response = await fetch(
+                `https://api.frankfurter.app/${formatDate(startDate)}..${formatDate(endDate)}?from=${currentFromCurrency}&to=${currentToCurrency}`
+            );
+            if (!response.ok) throw new Error('Failed to fetch historical data');
+
+            const data = await response.json();
+            renderChart(data);
+        } catch (error) {
+            console.error('Error fetching historical data:', error);
+        }
+    }
+
+    function formatDate(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    function renderChart(data) {
+        if (!data.rates) return;
+
+        const labels = Object.keys(data.rates).map(date => {
+            const d = new Date(date);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+
+        const values = Object.values(data.rates).map(rate => rate[currentToCurrency]);
+
+        if (chart) {
+            chart.destroy();
+        }
+
+        chart = new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `${currentFromCurrency}/${currentToCurrency}`,
+                    data: values,
+                    borderColor: '#3b82f6',
+                    backgroundColor: '#3b82f620',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `${currentFromCurrency}/${currentToCurrency} Exchange Rate (Last 30 Days)`,
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: `Rate (1 ${currentFromCurrency} = X ${currentToCurrency})`
+                        }
+                    }
+                }
+            }
+        });
     }
 
     function populateCurrencySelects() {
@@ -141,8 +226,8 @@
             });
         });
 
-        fromCurrencySelect.value = baseCurrency;
-        toCurrencySelect.value = 'USD';
+        fromCurrencySelect.value = currentFromCurrency;
+        toCurrencySelect.value = currentToCurrency;
     }
 
     function renderFavorites() {
@@ -151,25 +236,28 @@
         favoritesContainer.innerHTML = '';
 
         favorites.forEach(currency => {
-            if (currency !== baseCurrency) {
-                const rate = getExchangeRate(baseCurrency, currency);
-                const change24h = (Math.random() * 2 - 1).toFixed(4);
-                const isPositive = parseFloat(change24h) >= 0;
-
+            if (currency !== currentFromCurrency) {
+                const rate = getExchangeRate(currentFromCurrency, currency);
                 const favoriteCard = document.createElement('div');
                 favoriteCard.className = 'favorite-card';
                 favoriteCard.innerHTML = `
-                    <div class="favorite-pair">${baseCurrency}/${currency}</div>
+                    <div class="favorite-pair">${currentFromCurrency}/${currency}</div>
                     <div class="favorite-rate">${rate.toFixed(4)}</div>
-                    <div class="favorite-change ${isPositive ? 'positive-change' : 'negative-change'}">
-                        ${isPositive ? '+' : ''}${change24h}%
-                    </div>
                 `;
 
                 favoriteCard.addEventListener('click', () => {
-                    fromCurrencySelect.value = baseCurrency;
+                    const fromSearch = document.querySelector('.currency-select-wrapper:first-child .currency-search-input');
+                    const toSearch = document.querySelector('.currency-select-wrapper:last-child .currency-search-input');
+
+                    fromCurrencySelect.value = currentFromCurrency;
                     toCurrencySelect.value = currency;
+                    currentToCurrency = currency;
+
+                    if (fromSearch) fromSearch.value = currentFromCurrency;
+                    if (toSearch) toSearch.value = currentToCurrency;
+
                     updateResult();
+                    fetchHistoricalData();
                 });
 
                 favoritesContainer.appendChild(favoriteCard);
@@ -181,107 +269,54 @@
         return exchangeRates[toCurrency] / exchangeRates[fromCurrency];
     }
 
-    async function initChart(base) {
-        try {
-            baseCurrency = base;
-
-            if (chart) {
-                chart.destroy();
-            }
-
-            const labels = [];
-            const datasets = [];
-
-            favorites.filter(c => c !== baseCurrency).forEach(currency => {
-                const color = getRandomColor();
-                const rate = getExchangeRate(baseCurrency, currency);
-
-                datasets.push({
-                    label: `${baseCurrency}/${currency}`,
-                    data: Array(30).fill().map((_, i) => {
-                        const fluctuation = (Math.random() * 0.1 - 0.05);
-                        return rate * (1 + fluctuation);
-                    }),
-                    borderColor: color,
-                    backgroundColor: `${color}20`,
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.4
-                });
-            });
-
-            labels.push(...Array(30).fill().map((_, i) => {
-                const date = new Date();
-                date.setDate(date.getDate() - (29 - i));
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            }));
-
-            chart = new Chart(chartCanvas, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: `${baseCurrency} Exchange Rates (Last 30 Days)`,
-                            font: {
-                                size: 16
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            title: {
-                                display: true,
-                                text: `Rate (1 ${baseCurrency} = X)`
-                            }
-                        }
-                    }
-                }
-            });
-
-            renderFavorites();
-        } catch (error) {
-            console.error('Error initializing chart:', error);
-        }
-    }
-
-    function getRandomColor() {
-        const colors = [
-            '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6',
-            '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#d946ef'
-        ];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
     function convertCurrency(event) {
         event.preventDefault();
         updateResult();
     }
 
     function swapCurrencies() {
-        const temp = fromCurrencySelect.value;
-        fromCurrencySelect.value = toCurrencySelect.value;
-        toCurrencySelect.value = temp;
+        const temp = currentFromCurrency;
+        currentFromCurrency = currentToCurrency;
+        currentToCurrency = temp;
+
+        fromCurrencySelect.value = currentFromCurrency;
+        toCurrencySelect.value = currentToCurrency;
+
+        const fromSearch = document.querySelector('.currency-select-wrapper:first-child .currency-search-input');
+        const toSearch = document.querySelector('.currency-select-wrapper:last-child .currency-search-input');
+
+        if (fromSearch) fromSearch.value = currentFromCurrency;
+        if (toSearch) toSearch.value = currentToCurrency;
+
         updateResult();
+        fetchHistoricalData();
+        renderFavorites();
+    }
+
+    function updateFromCurrency() {
+        currentFromCurrency = fromCurrencySelect.value;
+        const searchInput = document.querySelector('.currency-select-wrapper:first-child .currency-search-input');
+        if (searchInput) searchInput.value = currentFromCurrency;
+        updateResult();
+        fetchHistoricalData();
+        renderFavorites();
+    }
+
+    function updateToCurrency() {
+        currentToCurrency = toCurrencySelect.value;
+        const searchInput = document.querySelector('.currency-select-wrapper:last-child .currency-search-input');
+        if (searchInput) searchInput.value = currentToCurrency;
+        updateResult();
+        fetchHistoricalData();
     }
 
     function updateResult() {
-        const fromCurrency = fromCurrencySelect.value;
-        const toCurrency = toCurrencySelect.value;
         const amount = parseFloat(amountInput.value) || 1;
-
-        const rate = getExchangeRate(fromCurrency, toCurrency);
+        const rate = getExchangeRate(currentFromCurrency, currentToCurrency);
         const result = amount * rate;
 
-        rateSpan.textContent = `1 ${fromCurrency} = ${rate.toFixed(6)} ${toCurrency}`;
-        resultSpan.textContent = `${result.toFixed(2)} ${toCurrency}`;
+        rateSpan.textContent = `1 ${currentFromCurrency} = ${rate.toFixed(6)} ${currentToCurrency}`;
+        resultSpan.textContent = `${result.toFixed(2)} ${currentToCurrency}`;
         resultDiv.style.display = 'block';
     }
 
@@ -334,7 +369,6 @@
         localStorage.setItem('currencyFavorites', JSON.stringify(favorites));
         renderFavorites();
         closeEditModal();
-        initChart(baseCurrency);
     }
 
     window.addEventListener('click', function (event) {
