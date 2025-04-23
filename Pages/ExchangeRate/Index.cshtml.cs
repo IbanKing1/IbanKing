@@ -1,125 +1,88 @@
-using IBanKing.Data;
-using IBanKing.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.Net.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IBanKing.Pages.ExchangeRate
 {
     [IgnoreAntiforgeryToken]
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        private readonly HttpClient _httpClient;
 
-        public Dictionary<string, decimal> LiveRates { get; set; } = new();
-        public string BaseCurrency { get; set; } = "EUR";
-        public List<Models.Account> UserAccounts { get; set; } = new();
-
-        public IndexModel(ApplicationDbContext context,
-                        IConfiguration configuration,
-                        IHttpClientFactory httpClientFactory)
+        public IndexModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
             _configuration = configuration;
-            _httpClient = httpClientFactory.CreateClient();
-        }
-
-        public async Task OnGetAsync()
-        {
-            var apiKey = _configuration["ExchangeRateApi:ApiKey"];
-            var baseUrl = _configuration["ExchangeRateApi:BaseUrl"];
-            var response = await _httpClient.GetAsync($"{baseUrl}{apiKey}/latest/{BaseCurrency}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ExchangeRateApiResponse>(content);
-                LiveRates = result.conversion_rates;
-            }
-
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId.HasValue)
-            {
-                UserAccounts = await _context.Accounts
-                    .Where(a => a.UserId == userId.Value)
-                    .ToListAsync();
-            }
         }
 
         public async Task<JsonResult> OnGetLiveRatesAsync()
         {
+            var client = _httpClientFactory.CreateClient();
             var apiKey = _configuration["ExchangeRateApi:ApiKey"];
-            var baseUrl = _configuration["ExchangeRateApi:BaseUrl"];
-            var response = await _httpClient.GetAsync($"{baseUrl}{apiKey}/latest/EUR");
+            var response = await client.GetAsync($"https://v6.exchangerate-api.com/v6/{apiKey}/latest/USD");
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ExchangeRateApiResponse>(content);
-
-                var allPairs = new Dictionary<string, decimal>();
-                var currencies = result.conversion_rates.Keys.ToList();
-
-                foreach (var from in currencies)
-                {
-                    foreach (var to in currencies)
-                    {
-                        if (from != to)
-                        {
-                            var rate = result.conversion_rates[to] / result.conversion_rates[from];
-                            allPairs[$"{from}_{to}"] = rate;
-                        }
-                    }
-                }
-
-                return new JsonResult(allPairs);
+                return new JsonResult(JsonSerializer.Deserialize<ExchangeRateApiResponse>(content));
             }
 
-            return new JsonResult(new Dictionary<string, decimal>());
+            return new JsonResult(new { error = "Failed to fetch rates" });
         }
 
-        public async Task<JsonResult> OnGetConvertAsync(string fromCurrency, string toCurrency, decimal amount)
+        public async Task<JsonResult> OnGetHistoricalDataAsync(string fromCurrency, string toCurrency)
         {
             try
             {
+                var client = _httpClientFactory.CreateClient();
                 var apiKey = _configuration["ExchangeRateApi:ApiKey"];
-                var baseUrl = _configuration["ExchangeRateApi:BaseUrl"];
-                var response = await _httpClient.GetAsync(
-                    $"{baseUrl}{apiKey}/pair/{fromCurrency}/{toCurrency}/{amount}");
+                var endDate = DateTime.Now.ToString("yyyy-MM-dd");
+                var startDate = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd");
+
+                var response = await client.GetAsync(
+                    $"https://v6.exchangerate-api.com/v6/{apiKey}/history/USD/{startDate}/{endDate}");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var result = JsonSerializer.Deserialize<ConversionResult>(content);
-                    return new JsonResult(result);
+                    var result = JsonSerializer.Deserialize<HistoricalDataResponse>(content);
+
+                    var labels = new List<string>();
+                    var values = new List<decimal>(); // Changed to decimal
+
+                    foreach (var date in result.conversion_rates.OrderBy(x => x.Key))
+                    {
+                        labels.Add(DateTime.Parse(date.Key).ToString("MMM dd"));
+                        values.Add(date.Value[toCurrency] / date.Value[fromCurrency]);
+                    }
+
+                    return new JsonResult(new { labels, values });
                 }
-                return new JsonResult(new { error = "API request failed" });
             }
-            catch (Exception ex)
+            catch
             {
-                return new JsonResult(new { error = ex.Message });
             }
+
+            return new JsonResult(new { error = "Failed to fetch historical data" });
         }
 
         private class ExchangeRateApiResponse
         {
+            public string result { get; set; }
             public string base_code { get; set; }
             public Dictionary<string, decimal> conversion_rates { get; set; }
+            public Dictionary<string, decimal> rates => conversion_rates;
         }
 
-        private class ConversionResult
+        private class HistoricalDataResponse
         {
-            public string base_code { get; set; }
-            public string target_code { get; set; }
-            public decimal conversion_rate { get; set; }
-            public decimal conversion_result { get; set; }
+            public Dictionary<string, Dictionary<string, decimal>> conversion_rates { get; set; }
         }
     }
 }

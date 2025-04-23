@@ -33,6 +33,7 @@
 
 .currency-input-group {
     flex: 1;
+    position: relative;
 }
 
 .currency-select {
@@ -41,6 +42,7 @@
     border-radius: 4px;
     border: 1px solid #ced4da;
     background-color: white;
+    height: 40px;
 }
 
 .currency-amount {
@@ -113,6 +115,7 @@
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
 }
 
 .favorite-pair {
@@ -158,7 +161,9 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -167,6 +172,8 @@
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .modal-header {
@@ -174,6 +181,10 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding-top: 10px;
 }
 
 .modal-title {
@@ -217,11 +228,19 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    padding-bottom: 10px;
 }
 
 .search-box {
     position: relative;
     margin-bottom: 15px;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding-top: 10px;
 }
 
     .search-box input {
@@ -239,6 +258,27 @@
     color: #6c757d;
 }
 
+.currency-search-results {
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    z-index: 100;
+    display: none;
+}
+
+.currency-search-item {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+    .currency-search-item:hover {
+        background-color: #f8f9fa;
+    }
+
 @media (max-width: 768px) {
     .currency-inputs {
         flex-direction: column;
@@ -246,5 +286,9 @@
 
     .favorites-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .edit-modal {
+        padding-top: 20px;
     }
 }

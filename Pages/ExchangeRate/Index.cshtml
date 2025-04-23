@@ -24,12 +24,7 @@
 
                 <div class="currency-input-group">
                     <label for="fromCurrency">From</label>
-                    <select id="fromCurrency" class="currency-select">
-                        @foreach (var currency in Model.LiveRates.Keys)
-                        {
-                            <option value="@currency" selected="@(currency == "EUR")">@currency</option>
-                        }
-                    </select>
+                    <select id="fromCurrency" class="currency-select"></select>
                 </div>
 
                 <button type="button" id="swapCurrencies" class="swap-currencies" title="Swap currencies">
@@ -38,12 +33,7 @@
 
                 <div class="currency-input-group">
                     <label for="toCurrency">To</label>
-                    <select id="toCurrency" class="currency-select">
-                        @foreach (var currency in Model.LiveRates.Keys)
-                        {
-                            <option value="@currency" selected="@(currency == "USD")">@currency</option>
-                        }
-                    </select>
+                    <select id="toCurrency" class="currency-select"></select>
                 </div>
             </div>
 
@@ -90,7 +80,7 @@
         <div id="availableCurrencies" class="available-currencies"></div>
 
         <div class="modal-actions">
-            <button id="cancelEdit" class="btn btn-secondary">Cancel</button>
+            <button id="cancelEdit" class="btn btn-secondary" onclick="document.getElementById('editModal').style.display='none'">Cancel</button>
             <button id="saveFavorites" class="btn btn-primary">Save</button>
         </div>
     </div>
