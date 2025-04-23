@@ -18,7 +18,6 @@ namespace IBanKing.Pages.ExchangeRate
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
 
-        public List<Models.ExchangeRate> ExchangeRates { get; set; } = new();
         public Dictionary<string, decimal> LiveRates { get; set; } = new();
         public string BaseCurrency { get; set; } = "EUR";
         public List<Models.Account> UserAccounts { get; set; } = new();
@@ -34,8 +33,6 @@ namespace IBanKing.Pages.ExchangeRate
 
         public async Task OnGetAsync()
         {
-            ExchangeRates = await _context.ExchangeRates.ToListAsync();
-
             var apiKey = _configuration["ExchangeRateApi:ApiKey"];
             var baseUrl = _configuration["ExchangeRateApi:BaseUrl"];
             var response = await _httpClient.GetAsync($"{baseUrl}{apiKey}/latest/{BaseCurrency}");
@@ -56,10 +53,39 @@ namespace IBanKing.Pages.ExchangeRate
             }
         }
 
-        public async Task<IActionResult> OnPostConvertAsync(
-            string fromCurrency,
-            string toCurrency,
-            decimal amount)
+        public async Task<JsonResult> OnGetLiveRatesAsync()
+        {
+            var apiKey = _configuration["ExchangeRateApi:ApiKey"];
+            var baseUrl = _configuration["ExchangeRateApi:BaseUrl"];
+            var response = await _httpClient.GetAsync($"{baseUrl}{apiKey}/latest/EUR");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<ExchangeRateApiResponse>(content);
+
+                var allPairs = new Dictionary<string, decimal>();
+                var currencies = result.conversion_rates.Keys.ToList();
+
+                foreach (var from in currencies)
+                {
+                    foreach (var to in currencies)
+                    {
+                        if (from != to)
+                        {
+                            var rate = result.conversion_rates[to] / result.conversion_rates[from];
+                            allPairs[$"{from}_{to}"] = rate;
+                        }
+                    }
+                }
+
+                return new JsonResult(allPairs);
+            }
+
+            return new JsonResult(new Dictionary<string, decimal>());
+        }
+
+        public async Task<JsonResult> OnGetConvertAsync(string fromCurrency, string toCurrency, decimal amount)
         {
             try
             {

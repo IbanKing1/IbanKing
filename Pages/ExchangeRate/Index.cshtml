@@ -1,121 +1,102 @@
-@page
+﻿@page
 @model IBanKing.Pages.ExchangeRate.IndexModel
 @{
-    ViewData["Title"] = "Exchange Rate";
+    ViewData["Title"] = "Exchange Rates";
     Layout = "_LayoutClient";
 }
 
-<h1 class="text-center">Exchange Rate</h1>
+<link rel="stylesheet" href="~/css/exchange-rate.css" asp-append-version="true" />
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Live Exchange Rates (Base: @Model.BaseCurrency)</h3>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Currency</th>
-                        <th>Rate</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var rate in Model.LiveRates)
-                    {
-                        <tr>
-                            <td>@rate.Key</td>
-                            <td>@rate.Value.ToString("0.0000")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+<div class="exchange-container">
+    <h1 class="text-center mb-4">Currency Exchange</h1>
+
+    <div class="currency-converter">
+        <div class="converter-header">
+            <h2 class="converter-title">Currency Converter</h2>
         </div>
 
-        <div class="col-md-6">
-            <h3>Currency Converter</h3>
-            <div class="card">
-                <div class="card-body">
-                    <form id="conversionForm" method="post">
-                        <div class="form-group">
-                            <label>From Account (optional):</label>
-                            <select class="form-control" id="fromAccount">
-                                <option value="">Select Account</option>
-                                @foreach (var account in Model.UserAccounts)
-                                {
-                                    <option value="@account.AccountId" data-currency="@account.Currency">
-                                        @account.Type - @account.Balance @account.Currency
-                                    </option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>From Currency:</label>
-                            <select class="form-control" id="fromCurrency" name="fromCurrency" required>
-                                <option value="EUR">EUR</option>
-                                <option value="USD">USD</option>
-                                <option value="RON">RON</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>To Currency:</label>
-                            <select class="form-control" id="toCurrency" name="toCurrency" required>
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="RON">RON</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Amount:</label>
-                            <input type="number" class="form-control" id="amount" name="amount" required step="0.01" min="0.01">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Convert</button>
-                    </form>
-                    <div id="conversionResult" class="mt-3" style="display: none;">
-                        <h5>Conversion Result:</h5>
-                        <p>Rate: <span id="rate"></span></p>
-                        <p>Result: <span id="result"></span></p>
-                    </div>
+        <form id="conversionForm">
+            <div class="currency-inputs">
+                <div class="currency-input-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" class="currency-amount" value="1" min="0.01" step="0.01">
+                </div>
+
+                <div class="currency-input-group">
+                    <label for="fromCurrency">From</label>
+                    <select id="fromCurrency" class="currency-select">
+                        @foreach (var currency in Model.LiveRates.Keys)
+                        {
+                            <option value="@currency" selected="@(currency == "EUR")">@currency</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="button" id="swapCurrencies" class="swap-currencies" title="Swap currencies">
+                    ⇄
+                </button>
+
+                <div class="currency-input-group">
+                    <label for="toCurrency">To</label>
+                    <select id="toCurrency" class="currency-select">
+                        @foreach (var currency in Model.LiveRates.Keys)
+                        {
+                            <option value="@currency" selected="@(currency == "USD")">@currency</option>
+                        }
+                    </select>
                 </div>
             </div>
+
+            <button type="submit" id="convertButton" class="btn btn-primary">Convert</button>
+        </form>
+
+        <div id="conversionResult" class="converter-result" style="display: none;">
+            <div class="result-text">
+                <div id="result"></div>
+                <div class="rate-info" id="rate"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="favorites-section">
+        <div class="favorites-header">
+            <h2 class="favorites-title">Favorite Currency Pairs</h2>
+            <button id="editFavorites" class="edit-favorites">Edit Favorites</button>
+        </div>
+
+        <div id="favoritesContainer" class="favorites-grid"></div>
+    </div>
+
+    <div class="chart-section">
+        <h2 class="mb-3">Exchange Rate History</h2>
+        <div class="chart-container">
+            <canvas id="exchangeChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div id="editModal" class="edit-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Favorite Currencies</h3>
+            <button id="closeModal" class="close-modal">×</button>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="currencySearch" placeholder="Search currencies...">
+            <span class="search-icon">🔍</span>
+        </div>
+
+        <div id="availableCurrencies" class="available-currencies"></div>
+
+        <div class="modal-actions">
+            <button id="cancelEdit" class="btn btn-secondary">Cancel</button>
+            <button id="saveFavorites" class="btn btn-primary">Save</button>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Update currency dropdown when account is selected
-            $('#fromAccount').change(function() {
-                const selectedOption = $(this).find('option:selected');
-                if (selectedOption.val()) {
-                    $('#fromCurrency').val(selectedOption.data('currency'));
-                }
-            });
-
-            // Handle form submission
-            $('#conversionForm').submit(function(e) {
-                e.preventDefault();
-
-                const formData = $(this).serialize();
-
-                $.ajax({
-                    url: '?handler=Convert',
-                    type: 'POST',
-                    data: formData,
-                    success: function(data) {
-                        if (data.error) {
-                            alert(data.error);
-                        } else {
-                            $('#rate').text(`1 ${data.base_code} = ${data.conversion_rate} ${data.target_code}`);
-                            $('#result').text(`${data.conversion_result} ${data.target_code}`);
-                            $('#conversionResult').show();
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Error: ' + error);
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/exchange-rate.js" asp-append-version="true"></script>
 }
