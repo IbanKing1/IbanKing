@@ -17,28 +17,24 @@ namespace IBanKing.Pages.BankEmployee
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public NewClientInput Input { get; set; }
 
         public bool Success { get; set; } = false;
 
-        public class InputModel
+        public class NewClientInput
         {
             [Required]
             public string Name { get; set; }
 
-            [Required]
-            [EmailAddress]
+            [Required, EmailAddress]
             public string Email { get; set; }
 
-            [Required]
-            [DataType(DataType.Password)]
-            [MinLength(8, ErrorMessage = "Password must be at least 8 characters.")]
-            [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$",
-            ErrorMessage = "Password must contain at least one uppercase letter, one digit, and one special character.")]
+            [Required, MinLength(8)]
+            [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$",
+                ErrorMessage = "Password must be at least 8 characters and include one uppercase letter, one number, and one special character.")]
             public string Password { get; set; }
 
             [Required]
-            [DataType(DataType.Date)]
             public DateTime DateBirth { get; set; }
 
             [Required]
@@ -46,7 +42,8 @@ namespace IBanKing.Pages.BankEmployee
 
             public string Address { get; set; }
 
-            [Phone]
+            [Required]
+            [RegularExpression(@"^\d+$", ErrorMessage = "Phone number must contain only digits.")]
             public string PhoneNumber { get; set; }
         }
 
@@ -55,43 +52,31 @@ namespace IBanKing.Pages.BankEmployee
             if (!ModelState.IsValid)
                 return Page();
 
-            int age = DateTime.Today.Year - Input.DateBirth.Year;
-            if (Input.DateBirth.Date > DateTime.Today.AddYears(-age)) age--;
+            var hashedPassword = PasswordHelper.HashPassword(Input.Password);
 
-            if (age < 18)
-            {
-                ModelState.AddModelError("Input.DateBirth", "User must be at least 18 years old.");
-                return Page();
-            }
-
-            var existingUser = _context.Users.FirstOrDefault(u => u.Email == Input.Email);
-            if (existingUser != null)
-            {
-                ModelState.AddModelError("Input.Email", "Email already in use.");
-                return Page();
-            }
-
-            var user = new User
+            var newClient = new User
             {
                 Name = Input.Name,
                 Email = Input.Email,
-                Password = PasswordHelper.HashPassword(Input.Password),
+                Password = hashedPassword,
                 DateBirth = Input.DateBirth,
                 Gender = Input.Gender,
                 Address = Input.Address,
                 PhoneNumber = Input.PhoneNumber,
                 Role = "Client",
-                IsBlocked = false
+                IsBlocked = false,
+                FailedLoginAttempts = 0,
+                TransactionLimit = "0",
+                TransactionMaxAmount = "0",
+                LastLog = new DateTime(2000, 1, 1)
             };
 
-            _context.Users.Add(user);
+            _context.Users.Add(newClient);
             await _context.SaveChangesAsync();
-            Success = true;
 
-            ModelState.Clear(); 
-            Input = new InputModel(); 
+            Success = true;
+            ModelState.Clear();
             return Page();
         }
-
     }
 }

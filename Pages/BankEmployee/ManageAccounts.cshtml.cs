@@ -59,5 +59,23 @@ namespace IBanKing.Pages.BankEmployee
             Message = client.IsBlocked ? "Client blocked." : "Client unblocked.";
             return RedirectToPage();
         }
+
+        public async Task<IActionResult> OnPostDeleteClientAsync(int id)
+        {
+            var client = await _context.Users.FindAsync(id);
+            if (client == null)
+            {
+                Message = "Client not found.";
+                return RedirectToPage();
+            }
+
+            _context.Users.Remove(client);
+            await _context.SaveChangesAsync();
+
+            Message = "Client deleted successfully.";
+            return RedirectToPage();
+        }
+
+
     }
 }
