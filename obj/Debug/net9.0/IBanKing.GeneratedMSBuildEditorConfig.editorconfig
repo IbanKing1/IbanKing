@@ -1,0 +1,149 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = IBanKing
+build_property.RootNamespace = IBanKing
+build_property.ProjectDir = C:\Users\japan\OneDrive\Documents\IbanKing\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = C:\Users\japan\OneDrive\Documents\IbanKing
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Admin/AddEmployee.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWRkRW1wbG95ZWUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Admin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/BankEmployee/AddClient.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmFua0VtcGxveWVlXEFkZENsaWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/BankEmployee/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmFua0VtcGxveWVlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/BankEmployee/ManageAccounts.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmFua0VtcGxveWVlXE1hbmFnZUFjY291bnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/BankEmployee/ManageTransactions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmFua0VtcGxveWVlXE1hbmFnZVRyYW5zYWN0aW9ucy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/BankEmployee/TermsAndConditions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmFua0VtcGxveWVlXFRlcm1zQW5kQ29uZGl0aW9ucy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Client/Account.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50XEFjY291bnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Client/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Contact/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/ExchangeRate/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXhjaGFuZ2VSYXRlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Login/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Logout/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/MakePayment/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/MakePayment/Step2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcU3RlcDIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/MakePayment/Step3.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcU3RlcDMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Shared/_LayoutAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Shared/_LayoutClient.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRDbGllbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Shared/_LayoutEmployee.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRFbXBsb3llZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Shared/_LoginLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Terms And Conditions/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVybXMgQW5kIENvbmRpdGlvbnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Transactions/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY3Rpb25zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/UserFeedback/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlckZlZWRiYWNrXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/japan/OneDrive/Documents/IbanKing/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-w6t35j2i5n

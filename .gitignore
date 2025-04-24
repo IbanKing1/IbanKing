@@ -28,7 +28,7 @@ TestResults/
 *.mdb
 *.pidb
 
-# Rider files (dacă cineva folosește JetBrains Rider)
+# Rider files
 .idea/
 *.sln.iml
 
@@ -58,7 +58,7 @@ ehthumbs.db
 Desktop.ini
 *.DS_Store
 
-# OneDrive folders (că ziceai că ești în OneDrive)
+# OneDrive folders
 *.lnk
 ~$*
 *.tmp

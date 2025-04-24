@@ -24,5 +24,8 @@ namespace IBanKing.Models
 
         public bool IsBlocked { get; set; }
         public int FailedLoginAttempts { get; set; } = 0;
+        public string TransactionLimit { get; set; }
+        public string TransactionMaxAmount { get; set; }
+        public DateTime LastLog { get; set; }
     }
 }

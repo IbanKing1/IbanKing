@@ -11,6 +11,9 @@ namespace IBanKing.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Balance)
+                .HasPrecision(18, 2);  
 
             modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.User)
@@ -32,12 +35,12 @@ namespace IBanKing.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ServicedPayment> ServicedPayments { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Account> Accounts { get; set; }
 
     }
 }

@@ -1,0 +1,84 @@
+﻿@page
+@model IBanKing.Pages.BankEmployee.AddClientModel
+@{
+    Layout = "_LayoutEmployee";
+    ViewData["Title"] = "Add New Client";
+}
+
+<h2 class="mb-4">Add New Client</h2>
+
+@if (Model.Success)
+{
+    <div class="alert alert-success">Client added successfully!</div>
+}
+<div class="main-content">
+    <form method="post" autocomplete="off">
+    <div class="form-group mb-3">
+        <label asp-for="Input.Name"></label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Email"></label>
+        <input asp-for="Input.Email" class="form-control" autocomplete="off" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Password"></label>
+            <div class="input-group">
+                <input asp-for="Input.Password" type="password" class="form-control" id="passwordInput" autocomplete="new-password" />
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword" tabindex="-1">
+                    <i class="fas fa-eye" id="toggleIcon"></i>
+                </button>
+            </div>
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.DateBirth"></label>
+        <input asp-for="Input.DateBirth" class="form-control" type="date" />
+        <span asp-validation-for="Input.DateBirth" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Gender"></label>
+        <select asp-for="Input.Gender" class="form-control">
+            <option value="">Select gender</option>
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+        <span asp-validation-for="Input.Gender" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Address"></label>
+        <input asp-for="Input.Address" class="form-control" />
+        <span asp-validation-for="Input.Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.PhoneNumber"></label>
+        <input asp-for="Input.PhoneNumber" class="form-control" />
+        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Client</button>
+</form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordInput = document.getElementById("passwordInput");
+            const icon = document.getElementById("toggleIcon");
+
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+            icon.classList.toggle("fa-eye");
+            icon.classList.toggle("fa-eye-slash");
+        });
+    </script>
+}

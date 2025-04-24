@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IBanKing.Pages.Feedback
+namespace IBanKing.Pages.BankEmployee
 {
-    public class IndexModel : PageModel
+    public class ManageTransactionsModel : PageModel
     {
         public void OnGet()
         {

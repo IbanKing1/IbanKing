@@ -30,11 +30,13 @@ namespace IBanKing.Pages.MakePayment
             ViewModel.ReceiverIBAN = TempData["ReceiverIBAN"].ToString();
             ViewModel.Amount = double.Parse(TempData["Amount"].ToString(), CultureInfo.InvariantCulture);
             ViewModel.Currency = TempData["Currency"]?.ToString() ?? "RON";
-            ViewModel.IsHighPriority = TempData["IsHighPriority"]?.ToString() == "True";
             TempData.Keep();
 
+            // Convertim Amount la decimal pentru operații ulterioare
+            decimal amountDecimal = Convert.ToDecimal(ViewModel.Amount, CultureInfo.InvariantCulture);
+
             // 2. Verificare sesiune și user
-            var userIdStr = HttpContext.Session.GetString("UserId");
+            var userIdStr = HttpContext.Session.GetString("UserId") ?? TempData["UserId"]?.ToString();
             if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
             {
                 ViewModel.Status = "error";
@@ -67,23 +69,25 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
-            if (account.Balance < ViewModel.Amount)
+            if (account.Balance < amountDecimal)
             {
                 ViewModel.Status = "error";
                 ViewModel.Message = "Insufficient funds.";
                 return Page();
             }
-
-            // 5. Conversie valutară
-            double convertedAmount = ViewModel.Amount;
+            account.Balance = Math.Max(0, account.Balance - amountDecimal);
+            _context.Accounts.Update(account);
+            // 5. Conversie valutară (pentru scopuri interne - ex: raportări în RON)
+            decimal convertedAmount = amountDecimal;
             int? exchangeRateId = null;
 
             var exchange = _context.ExchangeRates.FirstOrDefault(e => e.FromCurrency == ViewModel.Currency && e.ToCurrency == "RON");
             if (exchange != null)
             {
-                convertedAmount = ViewModel.Amount * exchange.Rate;
+                convertedAmount = amountDecimal * (decimal)exchange.Rate;
                 exchangeRateId = exchange.ExchangeRateId;
             }
+
 
             // 6. Căutăm dacă e plată către un serviciu
             var servicedPayment = _context.ServicedPayments.FirstOrDefault(s => s.IBAN == ViewModel.ReceiverIBAN);
@@ -91,7 +95,7 @@ namespace IBanKing.Pages.MakePayment
             ViewModel.ServicedPaymentName = servicedPayment?.Bill_Name;
 
             // 7. Scădem suma din cont
-            account.Balance -= ViewModel.Amount;
+            account.Balance -= amountDecimal;
             _context.Accounts.Update(account);
 
             // 8. Salvăm tranzacția
@@ -99,15 +103,15 @@ namespace IBanKing.Pages.MakePayment
             {
                 Sender = $"USER-{userId}",
                 Receiver = ViewModel.ReceiverIBAN,
-                Amount = convertedAmount,
+                Amount = (double)convertedAmount,
                 Currency = ViewModel.Currency,
                 DateTime = DateTime.Now,
                 UserId = userId,
-                IsHighPriority = ViewModel.IsHighPriority,
                 ExchangeRateId = exchangeRateId,
                 ServicedPaymentId = servicedPaymentId,
                 Status = "Completed"
             };
+
 
             _context.Transactions.Add(transaction);
             _context.SaveChanges();
@@ -137,6 +141,9 @@ namespace IBanKing.Pages.MakePayment
             ViewModel.Status = "success";
             ViewModel.Message = "Payment completed and saved successfully.";
             return Page();
+
         }
+
     }
+
 }

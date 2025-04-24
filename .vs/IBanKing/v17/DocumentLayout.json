@@ -1,0 +1,322 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\pages\\shared\\_layoutclient.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:pages\\shared\\_layoutclient.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\migrations\\20250424112742_aftermerge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:migrations\\20250424112742_aftermerge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/IbanKingDB/True/SqlTable/dbo.Feedbacks.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/IbanKingDB/True/SqlTable/dbo.Users.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\japan\\AppData\\Local\\Temp\\dbo.Users.data.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Migrations\\20250424112323_AfterMerge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250424112323_AfterMerge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\pages\\exchangerate\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:pages\\exchangerate\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\models\\exchangerate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:models\\exchangerate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\pages\\exchangerate\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:pages\\exchangerate\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\wwwroot\\css\\login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:wwwroot\\css\\login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\pages\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:pages\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|c:\\users\\japan\\onedrive\\documents\\ibanking\\pages\\makepayment\\step3.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{585AB03B-E10A-BF10-68DC-2FA574F18BA7}|IBanKing.csproj|solutionrelative:pages\\makepayment\\step3.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\japan\\AppData\\Local\\Temp\\dbo.Users.data.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\japan\\AppData\\Local\\Temp\\dbo.Users.data.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "20250424112742_AfterMerge.cs",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Migrations\\20250424112742_AfterMerge.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250424112742_AfterMerge.cs",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Migrations\\20250424112742_AfterMerge.cs",
+              "RelativeToolTip": "Migrations\\20250424112742_AfterMerge.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAADwvyUAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T11:27:42.379Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Microsoft.Common.CurrentVersion.targets",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ViewState": "AgIAAP4UAAAAAAAAAAAswPMUAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-04-24T11:24:13.382Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-18T10:36:00.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_LayoutClient.cshtml",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\Shared\\_LayoutClient.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Shared\\_LayoutClient.cshtml",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\Shared\\_LayoutClient.cshtml",
+              "RelativeToolTip": "Pages\\Shared\\_LayoutClient.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACMAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-19T14:27:27.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "dbo.Users [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/IbanKingDB/True/SqlTable/dbo.Users.sql",
+              "ToolTip": "dbo.Users [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-04-24T11:31:37.089Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "dbo.Users.data ",
+              "DocumentMoniker": "C:\\Users\\japan\\AppData\\Local\\Temp\\dbo.Users.data.sql",
+              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\Temp\\dbo.Users.data.sql",
+              "ToolTip": "dbo.Users.data *",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-04-24T11:31:40.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "dbo.Feedbacks [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/IbanKingDB/True/SqlTable/dbo.Feedbacks.sql",
+              "ToolTip": "dbo.Feedbacks [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-04-24T11:35:16.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "20250424112323_AfterMerge.cs",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Migrations\\20250424112323_AfterMerge.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250424112323_AfterMerge.cs",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Migrations\\20250424112323_AfterMerge.cs",
+              "RelativeToolTip": "Migrations\\20250424112323_AfterMerge.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T11:23:23.793Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\ExchangeRate\\Index.cshtml",
+              "RelativeDocumentMoniker": "Pages\\ExchangeRate\\Index.cshtml",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\ExchangeRate\\Index.cshtml",
+              "RelativeToolTip": "Pages\\ExchangeRate\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-19T14:27:10.771Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\ExchangeRate\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\ExchangeRate\\Index.cshtml.cs",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\ExchangeRate\\Index.cshtml.cs",
+              "RelativeToolTip": "Pages\\ExchangeRate\\Index.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T14:27:16.718Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ExchangeRate.cs",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Models\\ExchangeRate.cs",
+              "RelativeDocumentMoniker": "Models\\ExchangeRate.cs",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Models\\ExchangeRate.cs",
+              "RelativeToolTip": "Models\\ExchangeRate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T14:26:59.233Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-19T15:44:46.523Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Account.cs",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Models\\Account.cs",
+              "RelativeDocumentMoniker": "Models\\Account.cs",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Models\\Account.cs",
+              "RelativeToolTip": "Models\\Account.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-18T09:44:43.879Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Login.css",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\wwwroot\\css\\Login.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\Login.css",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\wwwroot\\css\\Login.css",
+              "RelativeToolTip": "wwwroot\\css\\Login.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-04-19T14:43:27.538Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "_LayoutAdmin.cshtml",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\Shared\\_LayoutAdmin.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Shared\\_LayoutAdmin.cshtml",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\Shared\\_LayoutAdmin.cshtml",
+              "RelativeToolTip": "Pages\\Shared\\_LayoutAdmin.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-19T14:27:26.428Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Pages\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAiwCsAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-19T14:27:21.975Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAowCsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T14:26:54.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Step3.cshtml",
+              "DocumentMoniker": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\MakePayment\\Step3.cshtml",
+              "RelativeDocumentMoniker": "Pages\\MakePayment\\Step3.cshtml",
+              "ToolTip": "C:\\Users\\japan\\OneDrive\\Documents\\IbanKing\\Pages\\MakePayment\\Step3.cshtml",
+              "RelativeToolTip": "Pages\\MakePayment\\Step3.cshtml",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABYAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-18T10:33:29.521Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
