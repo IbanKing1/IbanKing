@@ -4,6 +4,7 @@ using IBanKing.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBanKing.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423161902_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,11 +177,8 @@ namespace IBanKing.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ExchangeRateId")
+                    b.Property<int>("ExchangeRateId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsHighPriority")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Receiver")
                         .IsRequired()
@@ -315,12 +315,14 @@ namespace IBanKing.Migrations
                     b.HasOne("IBanKing.Models.ExchangeRate", "ExchangeRate")
                         .WithMany()
                         .HasForeignKey("ExchangeRateId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("IBanKing.Models.ServicedPayment", "ServicedPayment")
                         .WithMany()
                         .HasForeignKey("ServicedPaymentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("IBanKing.Models.User", "User")
                         .WithMany()

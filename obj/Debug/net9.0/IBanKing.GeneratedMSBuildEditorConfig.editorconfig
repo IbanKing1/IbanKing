@@ -80,6 +80,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/IBanKing/Pages/MakePayment/Step2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcU3RlcDIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/IBanKing/Pages/MakePayment/Step3.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFrZVBheW1lbnRcU3RlcDMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/IBanKing/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

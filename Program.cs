@@ -62,9 +62,9 @@ app.MapRazorPages();
 //    context.Users.Add(new IBanKing.Models.User
 //    {
 //        Name = "Test",
-//        Email = "andreea@gmail.com",
+//        Email = "andreea4@gmail.com",
 //        Password = hashedPassword,
-//        Role = "Admin",
+//        Role = "Client",
 //        DateBirth = new DateTime(2002, 06, 05),
 //        Address = "Str. Morii",
 //        Gender = "F",

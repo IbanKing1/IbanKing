@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IBanKing")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d352e4fc70972753f424df924a28a4b29d08756")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+163a5802eda1e6bcf49cf23c90a4d976e372b73b")]
 [assembly: System.Reflection.AssemblyProductAttribute("IBanKing")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IBanKing")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
