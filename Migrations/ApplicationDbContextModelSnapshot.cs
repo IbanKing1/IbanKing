@@ -174,8 +174,11 @@ namespace IBanKing.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ExchangeRateId")
+                    b.Property<int?>("ExchangeRateId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsHighPriority")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Receiver")
                         .IsRequired()
@@ -312,14 +315,12 @@ namespace IBanKing.Migrations
                     b.HasOne("IBanKing.Models.ExchangeRate", "ExchangeRate")
                         .WithMany()
                         .HasForeignKey("ExchangeRateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IBanKing.Models.ServicedPayment", "ServicedPayment")
                         .WithMany()
                         .HasForeignKey("ServicedPaymentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IBanKing.Models.User", "User")
                         .WithMany()

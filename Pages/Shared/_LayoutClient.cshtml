@@ -24,10 +24,11 @@
             <ul>
 
                 <li><a class="btn" asp-page="/Client/Index">Home</a></li>
-                <li><a class="btn" asp-page="/Client/Transactions/Index">Transactions</a></li>
-                <li><a class="btn" asp-page="/Client/MakePayment/Index">Make Payment</a></li>
-                <li><a class="btn" asp-page="/Client/ExchangeRate/Index">Exchange Rate</a></li>
-                <li><a class="btn" asp-page="/Client/Account/Index">Account</a></li>
+                <a class="btn btn-link" asp-page="/Transactions/Index">Transactions</a>
+                <li><a class="btn" asp-page="/MakePayment/Index">Make Payment</a></li>
+                <li><a class="btn" asp-page="/ExchangeRate/Index">Exchange Rate</a></li>
+                <li><a class="btn" asp-page="/Account/Index">Account</a></li>
+
                 <li>
                     <form method="post" asp-page="/Logout/Index">
                         <button class="btn btn-danger mt-2">Logout</button>

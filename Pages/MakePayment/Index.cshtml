@@ -1,8 +1,43 @@
 @page
-@model MakePaymentModel
+@model IBanKing.Pages.MakePayment.IndexModel
 @{
-    ViewData["Title"] = "Make Payment";
-    Layout = "_Layout";
+    ViewData["Title"] = "Make a Payment";
+    Layout = "_LayoutClient";
 }
 
-<h1 class="text-center">Make a payment</h1>
+<h2 class="text-center">Step 1/3: Payment Details</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>Receiver IBAN</label>
+        <input asp-for="ReceiverIBAN" class="form-control" />
+        <span asp-validation-for="ReceiverIBAN" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Amount</label>
+        <input asp-for="Amount" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Currency</label>
+        <select asp-for="Currency" class="form-control">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="RON">RON</option>
+        </select>
+        <span asp-validation-for="Currency" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mt-2">
+        <input asp-for="IsHighPriority" class="form-check-input" />
+        <label class="form-check-label">High Priority</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Continue to Step 2</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
