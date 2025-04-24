@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v9.0": {
       "IBanKing/1.0.0": {
         "dependencies": {
+          "Microsoft.EntityFrameworkCore": "9.0.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.4",
           "Microsoft.EntityFrameworkCore.Tools": "9.0.4"
         },
