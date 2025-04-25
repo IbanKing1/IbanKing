@@ -26,8 +26,8 @@ builder.Services.AddSession(options =>
 // DI for Repositories & Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-var app = builder.Build();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IFavoriteCurrencyService, FavoriteCurrencyService>(); var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {

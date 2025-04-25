@@ -8,13 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="Pages\TermsAndConditions\**" />
+    <Compile Remove="Services\Interfaces\**" />
     <Content Remove="Pages\TermsAndConditions\**" />
+    <Content Remove="Services\Interfaces\**" />
     <EmbeddedResource Remove="Pages\TermsAndConditions\**" />
+    <EmbeddedResource Remove="Services\Interfaces\**" />
     <None Remove="Pages\TermsAndConditions\**" />
+    <None Remove="Services\Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Interfaces\" />
     <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

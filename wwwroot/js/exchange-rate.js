@@ -28,24 +28,39 @@
 
     init();
 
-    function init() {
-        loadFavorites();
+    async function init() {
+        await loadFavorites();
         setupEventListeners();
         fetchExchangeRates();
         setupResizeObserver();
     }
 
-    function loadFavorites() {
-        const savedFavorites = localStorage.getItem('currencyFavorites');
-        if (savedFavorites) {
-            favorites = JSON.parse(savedFavorites);
-        }
-        const savedBase = localStorage.getItem('baseCurrency');
-        if (savedBase) {
-            baseCurrency = savedBase;
-            fromCurrency = savedBase;
+    async function loadFavorites() {
+        try {
+            const response = await fetch('/ExchangeRate?handler=Favorites&baseCurrency=' + encodeURIComponent(baseCurrency), {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                favorites = data;
+            } else {
+                favorites = ['EUR', 'USD', 'GBP'];
+            }
+
+            const savedBase = localStorage.getItem('baseCurrency');
+            if (savedBase) {
+                baseCurrency = savedBase;
+                fromCurrency = savedBase;
+            }
+        } catch (error) {
+            console.error('Error loading favorites:', error);
+            favorites = ['EUR', 'USD', 'GBP'];
         }
     }
+
 
     function setupEventListeners() {
         convertButton.addEventListener('click', convertCurrency);
@@ -484,17 +499,38 @@
         }
         renderAvailableCurrencies();
     }
-
-    function saveFavorites() {
+    async function saveFavorites() {
         if (favorites.length < 1) {
             showError('Please select at least 1 currency');
             return;
         }
 
-        localStorage.setItem('currencyFavorites', JSON.stringify(favorites));
-        renderFavorites();
-        editFavoritesSection.style.display = 'none';
-        toggleEditFavoritesBtn.textContent = 'Manage Favorites';
+        try {
+            const response = await fetch('/ExchangeRate?handler=SaveFavorites', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    BaseCurrency: baseCurrency,
+                    Currencies: favorites
+                })
+            });
+
+            if (response.ok) {
+                renderFavorites();
+                editFavoritesSection.style.display = 'none';
+                toggleEditFavoritesBtn.textContent = 'Manage Favorites';
+            } else if (response.status === 401) {
+                showError('Please login to save favorites');
+            } else {
+                showError('Failed to save favorites');
+            }
+        } catch (error) {
+            console.error('Error saving favorites:', error);
+            showError('Error saving favorites');
+        }
     }
 
     function showError(message) {
