@@ -6,11 +6,14 @@ namespace IBanKing.Services
 {
     public interface INotificationService
     {
-        Task CreatePaymentRequestNotification(int userId, int transactionId, decimal amount);
-        Task CreateInactivityNotification(int userId);
-        Task CreateTermsUpdateNotification(int userId);
-        Task<List<Notification>> GetUserNotifications(int userId);
-        Task<int> GetUnreadNotificationsCount(int userId);
-        Task MarkAsRead(int notificationId);
+        Task CreateAsync(Notification notification);
+        Task CreatePaymentNotification(string userId, int transactionId, decimal amount);
+        Task CreateInactivityNotification(string userId);
+        Task MarkAsReadAsync(int id);
+        Task MarkAllAsReadAsync(string userId);
+        Task DeleteAsync(int id);
+        Task DeleteAllAsync(string userId);
+        Task<List<Notification>> GetUserNotificationsAsync(string userId, int count = 10);
+        Task<int> GetUnreadCountAsync(string userId);
     }
 }

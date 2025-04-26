@@ -64,7 +64,7 @@ namespace IBanKing.Pages.BankEmployee
 
             Accounts = await query.ToListAsync();
 
-            var inactiveThreshold = DateTime.Now.AddDays(-30);
+            var inactiveThreshold = DateTime.UtcNow.AddDays(-30);
             InactiveUsers = await _context.Users
                 .Where(u => u.Role == "Client" && u.LastLog < inactiveThreshold)
                 .OrderBy(u => u.LastLog)
@@ -73,13 +73,13 @@ namespace IBanKing.Pages.BankEmployee
             foreach (var user in InactiveUsers)
             {
                 var hasNotification = await _context.Notifications
-                    .AnyAsync(n => n.UserId == user.UserId &&
-                                  n.NotificationType == "Inactivity" &&
+                    .AnyAsync(n => n.UserId == user.UserId.ToString() &&
+                                  n.Type == "Inactivity" &&
                                   n.CreatedAt > inactiveThreshold);
 
                 if (!hasNotification)
                 {
-                    await _notificationService.CreateInactivityNotification(user.UserId);
+                    await _notificationService.CreateInactivityNotification(user.UserId.ToString());
                 }
             }
         }

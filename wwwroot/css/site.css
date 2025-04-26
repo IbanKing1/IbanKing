@@ -161,3 +161,44 @@
 .main-content {
     padding-bottom: 80px; /* ajustează în funcție de înălțimea footerului */
 }
+
+.notification-dropdown {
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-icon {
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.notification-title {
+    font-weight: 500;
+}
+
+.notification-message {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.6rem;
+}
+
+.dropdown-item.unread {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.list-group-item.unread {
+    background-color: rgba(13, 110, 253, 0.05);
+    border-left: 3px solid var(--primary);
+}

@@ -98,7 +98,7 @@ namespace IBanKing.Pages.MakePayment
                 Receiver = ViewModel.ReceiverIBAN,
                 Amount = (double)convertedAmount,
                 Currency = ViewModel.Currency,
-                DateTime = DateTime.Now,
+                DateTime = DateTime.UtcNow,
                 UserId = userId,
                 ExchangeRateId = exchangeRateId,
                 ServicedPaymentId = servicedPaymentId,
@@ -129,8 +129,8 @@ namespace IBanKing.Pages.MakePayment
             var receiverAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == ViewModel.ReceiverIBAN);
             if (receiverAccount != null)
             {
-                await _notificationService.CreatePaymentRequestNotification(
-                    receiverAccount.UserId,
+                await _notificationService.CreatePaymentNotification(
+                    receiverAccount.UserId.ToString(),
                     transaction.TransactionId,
                     amountDecimal);
             }

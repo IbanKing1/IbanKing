@@ -20,13 +20,33 @@ namespace IBanKing.Pages.Client
 
         public async Task OnGetAsync()
         {
-            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
-            Notifications = await _notificationService.GetUserNotifications(userId);
+            var userId = HttpContext.Session.GetString("UserId");
+            Notifications = await _notificationService.GetUserNotificationsAsync(userId, 50);
         }
 
         public async Task<IActionResult> OnPostMarkAsReadAsync(int id)
         {
-            await _notificationService.MarkAsRead(id);
+            await _notificationService.MarkAsReadAsync(id);
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostMarkAllAsReadAsync()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            await _notificationService.MarkAllAsReadAsync(userId);
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            await _notificationService.DeleteAsync(id);
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostDeleteAllAsync()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            await _notificationService.DeleteAllAsync(userId);
             return RedirectToPage();
         }
     }

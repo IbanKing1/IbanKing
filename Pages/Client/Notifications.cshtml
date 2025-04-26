@@ -5,32 +5,64 @@
     Layout = "_LayoutClient";
 }
 
-<h2>My Notifications</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Notifications</h2>
+                <div>
+                    <form method="post" asp-page-handler="MarkAllAsRead">
+                        <button type="submit" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-check-circle"></i> Mark all as read
+                        </button>
+                    </form>
+                </div>
+            </div>
 
-@if (Model.Notifications.Any())
-{
-    <div class="list-group">
-        @foreach (var notification in Model.Notifications)
-        {
-            <div class="list-group-item @(!notification.IsRead ? "list-group-item-primary" : "")">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5>@notification.Title</h5>
-                        <p>@notification.Message</p>
-                        <small>@notification.CreatedAt.ToString("g")</small>
-                    </div>
-                    @if (!notification.IsRead)
+            <div class="card">
+                <div class="card-body p-0">
+                    @if (Model.Notifications.Any())
                     {
-                        <form method="post" asp-page-handler="MarkAsRead" asp-route-id="@notification.NotificationId">
-                            <button type="submit" class="btn btn-sm btn-outline-success">Mark as read</button>
-                        </form>
+                        <div class="list-group list-group-flush">
+                            @foreach (var notification in Model.Notifications)
+                            {
+                                <div class="list-group-item @(!notification.IsRead ? "bg-light" : "")">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="me-3">
+                                            <i class="@notification.IconClass text-primary me-2"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">@notification.Title</h6>
+                                                <small class="text-muted">@notification.TimeAgo</small>
+                                            </div>
+                                            <p class="mb-1">@notification.Message</p>
+                                            @if (!string.IsNullOrEmpty(notification.ActionUrl))
+                                            {
+                                                <a href="@notification.ActionUrl" class="btn btn-sm btn-link p-0">View details</a>
+                                            }
+                                        </div>
+                                        <div class="ms-3">
+                                            <form method="post" asp-page-handler="Delete" asp-route-id="@notification.Id">
+                                                <button type="submit" class="btn btn-sm btn-link text-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No notifications found</p>
+                        </div>
                     }
                 </div>
             </div>
-        }
+        </div>
     </div>
-}
-else
-{
-    <div class="alert alert-info">You have no notifications.</div>
-}
+</div>
