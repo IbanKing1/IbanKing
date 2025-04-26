@@ -76,6 +76,30 @@ namespace IBanKing.Migrations
                     b.ToTable("ExchangeRates");
                 });
 
+            modelBuilder.Entity("IBanKing.Models.FavoriteCurrencyPair", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BaseCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TargetCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FavoriteCurrencyPairs");
+                });
+
             modelBuilder.Entity("IBanKing.Models.Feedback", b =>
                 {
                     b.Property<int>("FeedbackId")
@@ -188,8 +212,12 @@ namespace IBanKing.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ServicedPaymentId")
+                    b.Property<int?>("ServicedPaymentId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

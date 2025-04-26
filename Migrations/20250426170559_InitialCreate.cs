@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IBanKing.Migrations
 {
     /// <inheritdoc />
-    public partial class AfterMerge : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,21 @@ namespace IBanKing.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExchangeRates", x => x.ExchangeRateId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FavoriteCurrencyPairs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    BaseCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TargetCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FavoriteCurrencyPairs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -218,6 +233,9 @@ namespace IBanKing.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Accounts");
+
+            migrationBuilder.DropTable(
+                name: "FavoriteCurrencyPairs");
 
             migrationBuilder.DropTable(
                 name: "Feedbacks");

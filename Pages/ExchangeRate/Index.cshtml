@@ -49,6 +49,10 @@
                 <span class="btn-text">Convert</span>
                 <span class="btn-icon">→</span>
             </button>
+
+            <button type="button" id="changeAccountCurrency" class="btn-convert" style="margin-top: 15px;">
+                Change Account Currency
+            </button>
         </form>
 
         <div id="conversionResult" class="converter-result">
@@ -85,6 +89,25 @@
         <h2 class="mb-3">Exchange Rate History: <span id="chartTitle"></span></h2>
         <div class="chart-container">
             <canvas id="exchangeChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div id="changeCurrencyModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Change Account Currency</h3>
+            <button id="closeModal" class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <select id="accountSelect" class="select-account">
+                <option value="">Select an account</option>
+            </select>
+            <p>New currency will be: <strong id="newCurrencyDisplay"></strong></p>
+        </div>
+        <div class="modal-footer">
+            <button id="confirmChange" class="btn-confirm">Confirm Change</button>
+            <button id="closeModalBtn" class="btn-cancel">Cancel</button>
         </div>
     </div>
 </div>

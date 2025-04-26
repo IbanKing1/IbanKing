@@ -11,10 +11,14 @@ namespace IBanKing.Pages.ExchangeRate
     public class IndexModel : PageModel
     {
         private readonly IFavoriteCurrencyService _favoriteCurrencyService;
+        private readonly IAccountService _accountService;
 
-        public IndexModel(IFavoriteCurrencyService favoriteCurrencyService)
+        public IndexModel(
+            IFavoriteCurrencyService favoriteCurrencyService,
+            IAccountService accountService)
         {
             _favoriteCurrencyService = favoriteCurrencyService;
+            _accountService = accountService;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -76,21 +80,42 @@ namespace IBanKing.Pages.ExchangeRate
             await _favoriteCurrencyService.SaveFavoritesAsync(userId, request.BaseCurrency, request.Currencies);
             return new OkResult();
         }
-    }
 
-    public class AddFavoriteRequest
-    {
-        public string TargetCurrency { get; set; }
-    }
+        public async Task<IActionResult> OnGetUserAccountsAsync()
+        {
+            if (!int.TryParse(HttpContext.Session.GetString("UserId"), out var userId))
+            {
+                return Unauthorized();
+            }
 
-    public class RemoveFavoriteRequest
-    {
-        public string TargetCurrency { get; set; }
-    }
+            var accounts = await _accountService.GetUserAccountsAsync(userId);
+            return new JsonResult(accounts);
+        }
 
-    public class SaveFavoritesRequest
-    {
-        public string BaseCurrency { get; set; }
-        public List<string> Currencies { get; set; }
+        public async Task<IActionResult> OnPostChangeAccountCurrencyAsync([FromBody] ChangeAccountCurrencyRequest request)
+        {
+            if (!int.TryParse(HttpContext.Session.GetString("UserId"), out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var success = await _accountService.ChangeAccountCurrencyAsync(request.AccountId, request.NewCurrency);
+            return success ? new OkResult() : BadRequest();
+        }
+        public class AddFavoriteRequest
+        {
+            public string TargetCurrency { get; set; }
+        }
+
+        public class RemoveFavoriteRequest
+        {
+            public string TargetCurrency { get; set; }
+        }
+
+        public class SaveFavoritesRequest
+        {
+            public string BaseCurrency { get; set; }
+            public List<string> Currencies { get; set; }
+        }
     }
 }

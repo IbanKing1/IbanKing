@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IBanKing.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250423161902_InitialCreate")]
+    [Migration("20250426170559_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -77,6 +77,30 @@ namespace IBanKing.Migrations
                     b.HasKey("ExchangeRateId");
 
                     b.ToTable("ExchangeRates");
+                });
+
+            modelBuilder.Entity("IBanKing.Models.FavoriteCurrencyPair", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BaseCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TargetCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FavoriteCurrencyPairs");
                 });
 
             modelBuilder.Entity("IBanKing.Models.Feedback", b =>
@@ -177,8 +201,11 @@ namespace IBanKing.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ExchangeRateId")
+                    b.Property<int?>("ExchangeRateId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsHighPriority")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Receiver")
                         .IsRequired()
@@ -188,8 +215,12 @@ namespace IBanKing.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ServicedPaymentId")
+                    b.Property<int?>("ServicedPaymentId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -315,14 +346,12 @@ namespace IBanKing.Migrations
                     b.HasOne("IBanKing.Models.ExchangeRate", "ExchangeRate")
                         .WithMany()
                         .HasForeignKey("ExchangeRateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IBanKing.Models.ServicedPayment", "ServicedPayment")
                         .WithMany()
                         .HasForeignKey("ServicedPaymentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IBanKing.Models.User", "User")
                         .WithMany()
