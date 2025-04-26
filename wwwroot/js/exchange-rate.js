@@ -17,7 +17,7 @@
     const saveFavoritesBtn = document.getElementById('saveFavorites');
     const chartTitle = document.getElementById('chartTitle');
 
-    let favorites = ['EUR', 'USD', 'GBP', 'RON'];
+    let favorites = [];
     let exchangeRates = {};
     let chart = null;
     let allCurrencies = [];
@@ -29,15 +29,36 @@
     init();
 
     async function init() {
+        await loadBaseCurrency();
         await loadFavorites();
         setupEventListeners();
         fetchExchangeRates();
         setupResizeObserver();
     }
 
+    async function loadBaseCurrency() {
+        try {
+            const response = await fetch('/ExchangeRate?handler=BaseCurrency', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data) {
+                    baseCurrency = data;
+                    fromCurrency = data;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading base currency:', error);
+        }
+    }
+
     async function loadFavorites() {
         try {
-            const response = await fetch('/ExchangeRate?handler=Favorites&baseCurrency=' + encodeURIComponent(baseCurrency), {
+            const response = await fetch('/ExchangeRate?handler=Favorites', {
                 headers: {
                     'Accept': 'application/json'
                 }
@@ -46,21 +67,11 @@
             if (response.ok) {
                 const data = await response.json();
                 favorites = data;
-            } else {
-                favorites = ['EUR', 'USD', 'GBP'];
-            }
-
-            const savedBase = localStorage.getItem('baseCurrency');
-            if (savedBase) {
-                baseCurrency = savedBase;
-                fromCurrency = savedBase;
             }
         } catch (error) {
             console.error('Error loading favorites:', error);
-            favorites = ['EUR', 'USD', 'GBP'];
         }
     }
-
 
     function setupEventListeners() {
         convertButton.addEventListener('click', convertCurrency);
@@ -140,18 +151,12 @@
                 searchBox.value = currency;
                 if (type === 'from') {
                     fromCurrency = currency;
-                    baseCurrency = currency;
-                    localStorage.setItem('baseCurrency', currency);
                 } else {
                     toCurrency = currency;
                 }
                 hideCurrencyDropdown(type);
                 updateResult();
                 fetchHistoricalData();
-                if (type === 'from') {
-                    renderFavorites();
-                    renderAvailableCurrencies();
-                }
             });
             dropdown.appendChild(option);
         });
@@ -230,9 +235,8 @@
             exchangeRates[data.base] = 1;
             allCurrencies = Object.keys(exchangeRates).sort();
 
-            fromCurrencySearch.value = baseCurrency;
-            toCurrencySearch.value = favorites.includes('EUR') ? 'EUR' : favorites[0] || 'USD';
-            toCurrency = toCurrencySearch.value;
+            fromCurrencySearch.value = fromCurrency;
+            toCurrencySearch.value = toCurrency;
 
             renderFavorites();
             fetchHistoricalData();
@@ -249,12 +253,12 @@
             startDate.setDate(endDate.getDate() - 30);
 
             const response = await fetch(
-                `https://api.frankfurter.app/${formatDate(startDate)}..${formatDate(endDate)}?from=${baseCurrency}&to=${toCurrency}`
+                `https://api.frankfurter.app/${formatDate(startDate)}..${formatDate(endDate)}?from=${fromCurrency}&to=${toCurrency}`
             );
             if (!response.ok) throw new Error('Failed to fetch historical data');
 
             const data = await response.json();
-            chartTitle.textContent = `${baseCurrency} to ${toCurrency}`;
+            chartTitle.textContent = `${fromCurrency} to ${toCurrency}`;
             renderChart(data);
         } catch (error) {
             console.error('Error fetching historical data:', error);
@@ -285,7 +289,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: `${baseCurrency}/${toCurrency}`,
+                    label: `${fromCurrency}/${toCurrency}`,
                     data: values,
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.05)',
@@ -321,7 +325,7 @@
                         displayColors: false,
                         callbacks: {
                             label: function (context) {
-                                return `1 ${baseCurrency} = ${context.parsed.y.toFixed(4)} ${toCurrency}`;
+                                return `1 ${fromCurrency} = ${context.parsed.y.toFixed(4)} ${toCurrency}`;
                             }
                         }
                     }
@@ -391,10 +395,26 @@
         });
     }
 
-    function removeFavorite(currency) {
-        favorites = favorites.filter(fav => fav !== currency);
-        localStorage.setItem('currencyFavorites', JSON.stringify(favorites));
-        renderFavorites();
+    async function removeFavorite(currency) {
+        try {
+            const response = await fetch('/ExchangeRate?handler=RemoveFavorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    targetCurrency: currency
+                })
+            });
+
+            if (response.ok) {
+                favorites = favorites.filter(fav => fav !== currency);
+                renderFavorites();
+            }
+        } catch (error) {
+            console.error('Error removing favorite:', error);
+        }
     }
 
     function getExchangeRate(fromCurrency, toCurrency) {
@@ -414,13 +434,8 @@
         fromCurrencySearch.value = fromCurrency;
         toCurrencySearch.value = toCurrency;
 
-        baseCurrency = fromCurrency;
-        localStorage.setItem('baseCurrency', baseCurrency);
-
         updateResult();
         fetchHistoricalData();
-        renderFavorites();
-        renderAvailableCurrencies();
     }
 
     function updateResult() {
@@ -471,7 +486,6 @@
                         fromCurrencySearch.value = currency;
                         fromCurrency = currency;
                         baseCurrency = currency;
-                        localStorage.setItem('baseCurrency', currency);
                         updateResult();
                         fetchHistoricalData();
                         renderFavorites();
@@ -490,21 +504,39 @@
         });
     }
 
-    function toggleFavorite(currency) {
+    async function toggleFavorite(currency) {
         const index = favorites.indexOf(currency);
         if (index === -1) {
-            favorites.push(currency);
+            await addFavorite(currency);
         } else {
-            favorites.splice(index, 1);
+            await removeFavorite(currency);
         }
         renderAvailableCurrencies();
     }
-    async function saveFavorites() {
-        if (favorites.length < 1) {
-            showError('Please select at least 1 currency');
-            return;
-        }
 
+    async function addFavorite(currency) {
+        try {
+            const response = await fetch('/ExchangeRate?handler=AddFavorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    targetCurrency: currency
+                })
+            });
+
+            if (response.ok) {
+                favorites.push(currency);
+                renderFavorites();
+            }
+        } catch (error) {
+            console.error('Error adding favorite:', error);
+        }
+    }
+
+    async function saveFavorites() {
         try {
             const response = await fetch('/ExchangeRate?handler=SaveFavorites', {
                 method: 'POST',
@@ -513,8 +545,8 @@
                     'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                 },
                 body: JSON.stringify({
-                    BaseCurrency: baseCurrency,
-                    Currencies: favorites
+                    baseCurrency: baseCurrency,
+                    currencies: favorites
                 })
             });
 
@@ -522,10 +554,6 @@
                 renderFavorites();
                 editFavoritesSection.style.display = 'none';
                 toggleEditFavoritesBtn.textContent = 'Manage Favorites';
-            } else if (response.status === 401) {
-                showError('Please login to save favorites');
-            } else {
-                showError('Failed to save favorites');
             }
         } catch (error) {
             console.error('Error saving favorites:', error);
