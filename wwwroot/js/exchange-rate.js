@@ -18,8 +18,8 @@
     const chartTitle = document.getElementById('chartTitle');
     const changeCurrencyBtn = document.getElementById('changeAccountCurrency');
     const accountSelect = document.getElementById('accountSelect');
-    const changeCurrencyModal = document.getElementById('changeCurrencyModal');
-    const closeModalBtn = document.getElementById('closeModal');
+    const changeCurrencySection = document.getElementById('changeCurrencySection');
+    const cancelChangeBtn = document.getElementById('cancelChange');
     const confirmChangeBtn = document.getElementById('confirmChange');
     const newCurrencyDisplay = document.getElementById('newCurrencyDisplay');
     const previewSection = document.getElementById('previewSection');
@@ -81,8 +81,8 @@
         saveFavoritesBtn.addEventListener('click', saveFavorites);
         amountInput.addEventListener('input', updateResult);
         currencySearch.addEventListener('input', filterCurrencies);
-        changeCurrencyBtn.addEventListener('click', showChangeCurrencyModal);
-        closeModalBtn.addEventListener('click', () => changeCurrencyModal.style.display = 'none');
+        changeCurrencyBtn.addEventListener('click', showChangeCurrencySection);
+        cancelChangeBtn.addEventListener('click', hideChangeCurrencySection);
         confirmChangeBtn.addEventListener('click', changeAccountCurrency);
         accountSelect.addEventListener('change', handleAccountSelectChange);
 
@@ -102,13 +102,10 @@
                 hideCurrencyDropdown('from');
                 hideCurrencyDropdown('to');
             }
-            if (!e.target.closest('.modal-content') && e.target !== changeCurrencyBtn) {
-                changeCurrencyModal.style.display = 'none';
-            }
         });
     }
 
-    async function showChangeCurrencyModal() {
+    async function showChangeCurrencySection() {
         const accounts = await loadUserAccounts();
         accountSelect.innerHTML = '';
         previewSection.style.display = 'none';
@@ -121,7 +118,11 @@
         });
 
         updateNewCurrencyDisplay();
-        changeCurrencyModal.style.display = 'block';
+        changeCurrencySection.style.display = 'block';
+    }
+
+    function hideChangeCurrencySection() {
+        changeCurrencySection.style.display = 'none';
     }
 
     function handleAccountSelectChange() {
@@ -142,13 +143,14 @@
         }
     }
 
-    async function showCurrencyConversionPreview(account) {
+    function showCurrencyConversionPreview(account) {
         const rate = getExchangeRate(account.currency, toCurrency);
         const newBalance = account.balance * rate;
 
         currentBalanceDisplay.textContent = account.balance.toFixed(2);
         newBalanceDisplay.textContent = newBalance.toFixed(2);
         currentCurrencyDisplay.textContent = account.currency;
+        newCurrencyPreviewDisplay.textContent = toCurrency;
         conversionRateInfo.textContent = `1 ${account.currency} = ${rate.toFixed(4)} ${toCurrency}`;
 
         previewSection.style.display = 'block';
@@ -156,7 +158,7 @@
 
     async function changeAccountCurrency() {
         if (!accountSelect.value) {
-            alert('Please select an account');
+            showError('Please select an account');
             return;
         }
 
@@ -177,16 +179,52 @@
             });
 
             if (response.ok) {
-                alert('Account currency changed successfully!');
-                changeCurrencyModal.style.display = 'none';
+                showSuccess('Account currency changed successfully!');
+                hideChangeCurrencySection();
                 window.location.reload();
             } else {
-                alert('Failed to change account currency');
+                showError('Failed to change account currency');
             }
         } catch (error) {
             console.error('Error changing account currency:', error);
-            alert('Error changing account currency');
+            showError('Error changing account currency');
         }
+    }
+
+    function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.innerHTML = `
+            <div class="flex items-center gap-2 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+                <span>${message}</span>
+            </div>
+        `;
+
+        const existingError = document.querySelector('.error-message');
+        if (existingError) existingError.remove();
+
+        document.querySelector('.change-currency-section').prepend(errorDiv);
+    }
+
+    function showSuccess(message) {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'success-message';
+        successDiv.innerHTML = `
+            <div class="flex items-center gap-2 text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span>${message}</span>
+            </div>
+        `;
+
+        const existingSuccess = document.querySelector('.success-message');
+        if (existingSuccess) existingSuccess.remove();
+
+        document.querySelector('.change-currency-section').prepend(successDiv);
     }
 
     async function loadUserAccounts() {
@@ -666,19 +704,5 @@
             console.error('Error saving favorites:', error);
             showError('Error saving favorites');
         }
-    }
-
-    function showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        errorDiv.style.color = '#ef4444';
-        errorDiv.style.marginTop = '10px';
-        errorDiv.style.fontWeight = '600';
-
-        const existingError = document.querySelector('.error-message');
-        if (existingError) existingError.remove();
-
-        document.querySelector('.edit-favorites-section').appendChild(errorDiv);
     }
 });

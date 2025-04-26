@@ -50,9 +50,46 @@
                 <span class="btn-icon">→</span>
             </button>
 
-            <button type="button" id="changeAccountCurrency" class="btn-convert" style="margin-top: 15px;">
-                Change Account Currency
+            <button type="button" id="changeAccountCurrency" class="btn-change-currency">
+                <span class="btn-text">Change Account Currency</span>
+                <span class="btn-icon">↗</span>
             </button>
+
+            <div id="changeCurrencySection" class="change-currency-section" style="display: none;">
+                <div class="change-currency-header">
+                    <h2 class="change-currency-title">Change Account Currency</h2>
+                </div>
+
+                <div class="search-box">
+                    <select id="accountSelect" class="select-account">
+                        <option value="">Select an account</option>
+                    </select>
+                    <p class="mt-2">New currency: <strong id="newCurrencyDisplay" class="text-primary"></strong></p>
+                </div>
+
+                <div id="previewSection" class="preview-section" style="display: none;">
+                    <div class="preview-content">
+                        <div class="balance-card current-balance">
+                            <div class="balance-label">Current Balance</div>
+                            <div class="balance-amount" id="currentBalance"></div>
+                            <div class="balance-currency" id="currentCurrency"></div>
+                        </div>
+                        <div class="balance-card new-balance">
+                            <div class="balance-label">New Balance</div>
+                            <div class="balance-amount" id="newBalance"></div>
+                            <div class="balance-currency" id="newCurrencyPreview"></div>
+                        </div>
+                        <div class="conversion-rate">
+                            <span id="conversionRateInfo"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="change-currency-actions">
+                    <button id="confirmChange" class="btn-confirm">Confirm Change</button>
+                    <button id="cancelChange" class="btn-cancel-change">Cancel</button>
+                </div>
+            </div>
         </form>
 
         <div id="conversionResult" class="converter-result">
@@ -89,46 +126,6 @@
         <h2 class="mb-3">Exchange Rate History: <span id="chartTitle"></span></h2>
         <div class="chart-container">
             <canvas id="exchangeChart"></canvas>
-        </div>
-    </div>
-</div>
-
-<div id="changeCurrencyModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Change Account Currency</h3>
-            <button id="closeModal" class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <select id="accountSelect" class="select-account">
-                <option value="">Select an account</option>
-            </select>
-            <p>New currency will be: <strong id="newCurrencyDisplay"></strong></p>
-            
-            <div id="previewSection" class="preview-section" style="display: none;">
-                <div class="preview-header">
-                    <h4>Currency Conversion Preview</h4>
-                </div>
-                <div class="preview-content">
-                    <div class="balance-row">
-                        <span class="balance-label">Current Balance:</span>
-                        <span id="currentBalance" class="balance-amount"></span>
-                        <span class="balance-currency" id="currentCurrency"></span>
-                    </div>
-                    <div class="balance-row">
-                        <span class="balance-label">New Balance:</span>
-                        <span id="newBalance" class="balance-amount new-balance"></span>
-                        <span class="balance-currency" id="newCurrencyPreview"></span>
-                    </div>
-                    <div class="conversion-rate">
-                        <span id="conversionRateInfo"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button id="confirmChange" class="btn-confirm">Confirm Change</button>
-            <button id="closeModalBtn" class="btn-cancel">Cancel</button>
         </div>
     </div>
 </div>

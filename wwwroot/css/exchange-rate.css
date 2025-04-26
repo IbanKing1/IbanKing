@@ -115,6 +115,7 @@
     box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
     overflow: hidden;
     position: relative;
+    width: auto;
 }
 
     .btn-convert:hover {
@@ -127,6 +128,38 @@
     }
 
     .btn-convert:hover .btn-icon {
+        transform: translateX(4px);
+    }
+
+.btn-change-currency {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(107, 114, 128, 0.2);
+    margin-top: 15px;
+    width: auto;
+}
+
+    .btn-change-currency:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(107, 114, 128, 0.3);
+    }
+
+    .btn-change-currency .btn-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .btn-change-currency:hover .btn-icon {
         transform: translateX(4px);
     }
 
@@ -156,6 +189,203 @@
     font-size: 0.95rem;
     color: #64748b;
     margin-top: 10px;
+}
+
+.change-currency-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .change-currency-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, #3b82f6, #10b981);
+        transition: width 0.3s ease;
+    }
+
+    .change-currency-section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+        .change-currency-section:hover::before {
+            width: 8px;
+        }
+
+.change-currency-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.change-currency-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2c3e50;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.select-account {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+    color: #374151;
+    transition: all 0.3s ease;
+    background-color: white;
+    margin-bottom: 15px;
+}
+
+    .select-account:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        outline: none;
+    }
+
+.preview-section {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+    .preview-section:hover {
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+.preview-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.balance-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+    .balance-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+.balance-label {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.balance-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.current-balance .balance-amount {
+    color: #3b82f6;
+}
+
+.new-balance .balance-amount {
+    color: #10b981;
+}
+
+.balance-currency {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.conversion-rate {
+    grid-column: span 2;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+.change-currency-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-confirm {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+}
+
+    .btn-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+    }
+
+.btn-cancel-change {
+    background: #f3f4f6;
+    color: #4b5563;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+    .btn-cancel-change:hover {
+        background: #e5e7eb;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+.error-message {
+    padding: 12px;
+    margin-bottom: 20px;
+    background-color: #fef2f2;
+    border-radius: 8px;
+    border-left: 4px solid #ef4444;
+    font-weight: 600;
+    color: #dc2626;
+    transition: all 0.3s ease;
+}
+
+.success-message {
+    padding: 12px;
+    margin-bottom: 20px;
+    background-color: #f0fdf4;
+    border-radius: 8px;
+    border-left: 4px solid #10b981;
+    font-weight: 600;
+    color: #059669;
+    transition: all 0.3s ease;
 }
 
 .favorites-section {
@@ -316,18 +546,6 @@
     animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 .search-box {
     position: relative;
     margin-bottom: 20px;
@@ -461,18 +679,6 @@
         animation: ripple 1s ease-out;
     }
 
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
-    }
-
-    100% {
-        transform: scale(20, 20);
-        opacity: 0;
-    }
-}
-
 .currency-select-wrapper {
     position: relative;
 }
@@ -544,6 +750,30 @@
     padding: 10px 15px;
 }
 
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 992px) {
     .currency-input-group {
         min-width: 150px;
@@ -572,6 +802,18 @@
     .available-currencies {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
+
+    .preview-content {
+        grid-template-columns: 1fr;
+    }
+
+    .change-currency-actions {
+        flex-direction: column;
+    }
+
+    .btn-confirm, .btn-cancel-change {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -579,7 +821,7 @@
         padding: 20px;
     }
 
-    .converter-title, .favorites-title, .chart-section h2 {
+    .converter-title, .favorites-title, .chart-section h2, .change-currency-title {
         font-size: 1.3rem;
     }
 
@@ -590,155 +832,5 @@
     .chart-container {
         height: 350px;
         padding: 15px;
-    }
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 25px;
-        border-radius: 10px;
-        width: 80%;
-        max-width: 500px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .modal-title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #2c3e50;
-    }
-
-    .close-modal {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #6b7280;
-    }
-
-    .modal-body {
-        margin-bottom: 25px;
-    }
-
-    .modal-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    .select-account {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #d1d5db;
-        font-size: 1rem;
-        margin-bottom: 15px;
-    }
-
-    .btn-confirm {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .btn-cancel {
-        background: #f3f4f6;
-        color: #4b5563;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-    .preview-section {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border-radius: 10px;
-        padding: 20px;
-        margin-top: 20px;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        animation: fadeIn 0.4s ease;
-    }
-
-    .preview-header h4 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 15px;
-        background: linear-gradient(90deg, #3b82f6, #10b981);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .preview-content {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .balance-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .balance-label {
-        font-weight: 600;
-        color: #4b5563;
-        min-width: 120px;
-    }
-
-    .balance-amount {
-        font-weight: 700;
-        color: #1f2937;
-        font-size: 1.1rem;
-    }
-
-    .new-balance {
-        color: #10b981;
-    }
-
-    .balance-currency {
-        font-weight: 600;
-        color: #3b82f6;
-    }
-
-    .conversion-rate {
-        font-size: 0.9rem;
-        color: #64748b;
-        margin-top: 10px;
-        font-style: italic;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
     }
 }
