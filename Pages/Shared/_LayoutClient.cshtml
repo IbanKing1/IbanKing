@@ -47,9 +47,9 @@
                             Notifications
                         </div>
                         <div class="notification-list">
-                            @foreach (var notification in await NotificationService.GetUserNotificationsAsync(userId, 5))
+                            @foreach (var notification in (await NotificationService.GetUserNotificationsAsync(userId, 5)).Where(n => !n.IsRead))
                             {
-                                <a class="dropdown-item notification-item @(!notification.IsRead ? "unread" : "")" href="@notification.ActionUrl">
+                                <div class="dropdown-item notification-item unread" onclick="markAsRead(@notification.Id, this)">
                                     <div class="d-flex align-items-center">
                                         <div class="notification-icon me-3">
                                             <i class="@notification.IconClass"></i>
@@ -57,12 +57,12 @@
                                         <div class="notification-content">
                                             <div class="d-flex justify-content-between">
                                                 <div class="notification-title">@notification.Title</div>
-                                                <div class="notification-time ms-2">@notification.TimeAgo</div>
+                                                <div class="notification-time">@notification.TimeAgo</div>
                                             </div>
                                             <div class="notification-message">@notification.Message</div>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
                             }
                         </div>
                         <div class="notification-footer text-center">
@@ -112,6 +112,33 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/logout.js" asp-append-version="true"></script>
+    <script>
+        function markAsRead(id, element) {
+            fetch(`/Client/Notifications?handler=MarkAsRead&id=${id}`, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            }).then(() => {
+                element.remove();
+                updateNotificationCount();
+            });
+        }
+
+        function updateNotificationCount() {
+            fetch('/Client/Notifications?handler=UnreadCount')
+                .then(response => response.json())
+                .then(count => {
+                    const badge = document.querySelector('.notification-badge');
+                    if (count > 0) {
+                        badge.textContent = count;
+                        badge.style.display = 'block';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                });
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>
+</html> 

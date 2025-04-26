@@ -27,7 +27,7 @@ namespace IBanKing.Pages.Client
         public async Task<IActionResult> OnPostMarkAsReadAsync(int id)
         {
             await _notificationService.MarkAsReadAsync(id);
-            return RedirectToPage();
+            return new JsonResult(new { success = true });
         }
 
         public async Task<IActionResult> OnPostMarkAllAsReadAsync()
@@ -48,6 +48,13 @@ namespace IBanKing.Pages.Client
             var userId = HttpContext.Session.GetString("UserId");
             await _notificationService.DeleteAllAsync(userId);
             return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnGetUnreadCount()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            var count = await _notificationService.GetUnreadCountAsync(userId);
+            return new JsonResult(count);
         }
     }
 }

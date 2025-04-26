@@ -28,7 +28,7 @@
                 <div class="list-group list-group-flush">
                     @foreach (var notification in Model.Notifications)
                     {
-                        <a href="@notification.ActionUrl" class="list-group-item list-group-item-action notification-item @(!notification.IsRead ? "unread" : "")">
+                        <div class="list-group-item notification-item @(!notification.IsRead ? "unread" : "")" onclick="markAsRead(@notification.Id, this)">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="d-flex flex-grow-1" style="min-width: 0;">
                                     <div class="me-3">
@@ -50,7 +50,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     }
                 </div>
             }
@@ -65,3 +65,35 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function markAsRead(id, element) {
+            fetch(`/Client/Notifications?handler=MarkAsRead&id=${id}`, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            }).then(() => {
+                element.classList.remove('unread');
+                element.style.backgroundColor = '';
+                element.style.borderLeft = '';
+                updateNotificationCount();
+            });
+        }
+
+        function updateNotificationCount() {
+            fetch('/Client/Notifications?handler=UnreadCount')
+                .then(response => response.json())
+                .then(count => {
+                    const badge = document.querySelector('.notification-badge');
+                    if (count > 0) {
+                        badge.textContent = count;
+                        badge.style.display = 'block';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                });
+        }
+    </script>
+}
