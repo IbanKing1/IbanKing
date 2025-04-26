@@ -47,31 +47,45 @@
                             Notifications
                         </div>
                         <div class="notification-list">
-                            @foreach (var notification in (await NotificationService.GetUserNotificationsAsync(userId, 5)).Where(n => !n.IsRead))
+                            @{
+                                var unreadNotifications = (await NotificationService.GetUserNotificationsAsync(userId, 5))
+                                .Where(n => !n.IsRead)
+                                .ToList();
+                            }
+
+                            @if (unreadNotifications.Any())
                             {
-                                <div class="dropdown-item notification-item unread" onclick="markAsRead(@notification.Id, this)">
-                                    <div class="d-flex align-items-center">
-                                        <div class="notification-icon me-3">
-                                            <i class="@notification.IconClass"></i>
-                                        </div>
-                                        <div class="notification-content">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="notification-title">@notification.Title</div>
-                                                <div class="notification-time">@notification.TimeAgo</div>
+                                foreach (var notification in unreadNotifications)
+                                {
+                                    <div class="dropdown-item notification-item unread"
+                                         data-notification-id="@notification.Id">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notification-icon me-3">
+                                                <i class="@notification.IconClass"></i>
                                             </div>
-                                            <div class="notification-message">@notification.Message</div>
+                                            <div class="notification-content">
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="notification-title">@notification.Title</div>
+                                                    <div class="notification-time">@notification.TimeAgo</div>
+                                                </div>
+                                                <div class="notification-message">@notification.Message</div>
+                                            </div>
                                         </div>
                                     </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="no-notifications">
+                                    <i class="fas fa-check-circle me-2"></i> No new notifications
                                 </div>
                             }
                         </div>
-                        <div class="notification-footer text-center">
-                            <a asp-page="/Client/Notifications" class="btn btn-sm see-all-btn w-100">
-                                See All Notifications
-                            </a>
-                        </div>
+                        <a asp-page="/Client/Notifications" class="see-all-btn">
+                            <i class="fas fa-list me-2"></i> See All Notifications
+                        </a>
                     </div>
-                </li>
+
                 <li>
                     <form method="post" asp-page="/Logout/Index">
                         <button class="btn btn-danger mt-2">Logout</button>
@@ -113,31 +127,39 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/logout.js" asp-append-version="true"></script>
     <script>
-        function markAsRead(id, element) {
-            fetch(`/Client/Notifications?handler=MarkAsRead&id=${id}`, {
-                method: 'POST',
-                headers: {
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                }
-            }).then(() => {
-                element.remove();
-                updateNotificationCount();
-            });
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationId = this.getAttribute('data-notification-id');
+                    const redirectUrl = '@Url.Page("/Client/Notifications")';
 
-        function updateNotificationCount() {
-            fetch('/Client/Notifications?handler=UnreadCount')
-                .then(response => response.json())
-                .then(count => {
-                    const badge = document.querySelector('.notification-badge');
-                    if (count > 0) {
-                        badge.textContent = count;
-                        badge.style.display = 'block';
-                    } else {
-                        badge.style.display = 'none';
-                    }
+                    fetch(`/Client/Notifications?handler=MarkAsRead&id=${notificationId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    }).then(() => {
+                        updateNotificationCount();
+
+                        window.location.href = redirectUrl;
+                    });
                 });
-        }
+            });
+
+            function updateNotificationCount() {
+                fetch('/Client/Notifications?handler=UnreadCount')
+                    .then(response => response.json())
+                    .then(count => {
+                        const badge = document.querySelector('.notification-badge');
+                        if (count > 0) {
+                            badge.textContent = count;
+                            badge.style.display = 'block';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    });
+            }
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
