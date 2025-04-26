@@ -1,7 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Http
+@inject IBanKing.Services.INotificationService NotificationService
 @{
     var userName = Context.Session.GetString("UserName") ?? "Client";
     var role = Context.Session.GetString("UserRole") ?? "";
+    var userId = int.Parse(Context.Session.GetString("UserId"));
+    var unreadCount = await NotificationService.GetUnreadNotificationsCount(userId);
 }
 
 <!DOCTYPE html>
@@ -32,7 +35,15 @@
                 <li><a class="btn" asp-page="/MakePayment/Index">Make Payment</a></li>
                 <li><a class="btn" asp-page="/ExchangeRate/Index">Exchange Rate</a></li>
                 <li><a class="btn" asp-page="/Client/Account">Account</a></li>
-
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Client/Notifications">
+                        Notifications
+                        @if (unreadCount > 0)
+                        {
+                            <span class="badge bg-danger">@unreadCount</span>
+                        }
+                    </a>
+                </li>
                 <li>
                     <form method="post" asp-page="/Logout/Index">
                         <button class="btn btn-danger mt-2">Logout</button>

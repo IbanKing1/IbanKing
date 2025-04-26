@@ -1,18 +1,25 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
+using IBanKing.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IBanKing.Pages.BankEmployee
 {
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationService _notificationService;
 
-        public IndexModel(ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public List<Account> Accounts { get; set; }
@@ -57,13 +64,24 @@ namespace IBanKing.Pages.BankEmployee
 
             Accounts = await query.ToListAsync();
 
-            // Logic to get inactive users (>30 days)
             var inactiveThreshold = DateTime.Now.AddDays(-30);
-
             InactiveUsers = await _context.Users
                 .Where(u => u.Role == "Client" && u.LastLog < inactiveThreshold)
                 .OrderBy(u => u.LastLog)
                 .ToListAsync();
+
+            foreach (var user in InactiveUsers)
+            {
+                var hasNotification = await _context.Notifications
+                    .AnyAsync(n => n.UserId == user.UserId &&
+                                  n.NotificationType == "Inactivity" &&
+                                  n.CreatedAt > inactiveThreshold);
+
+                if (!hasNotification)
+                {
+                    await _notificationService.CreateInactivityNotification(user.UserId);
+                }
+            }
         }
     }
 }

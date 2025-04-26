@@ -1,0 +1,36 @@
+﻿@page
+@model IBanKing.Pages.Client.NotificationsModel
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "_LayoutClient";
+}
+
+<h2>My Notifications</h2>
+
+@if (Model.Notifications.Any())
+{
+    <div class="list-group">
+        @foreach (var notification in Model.Notifications)
+        {
+            <div class="list-group-item @(!notification.IsRead ? "list-group-item-primary" : "")">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>@notification.Title</h5>
+                        <p>@notification.Message</p>
+                        <small>@notification.CreatedAt.ToString("g")</small>
+                    </div>
+                    @if (!notification.IsRead)
+                    {
+                        <form method="post" asp-page-handler="MarkAsRead" asp-route-id="@notification.NotificationId">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Mark as read</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">You have no notifications.</div>
+}
