@@ -22,6 +22,12 @@
     const closeModalBtn = document.getElementById('closeModal');
     const confirmChangeBtn = document.getElementById('confirmChange');
     const newCurrencyDisplay = document.getElementById('newCurrencyDisplay');
+    const previewSection = document.getElementById('previewSection');
+    const currentBalanceDisplay = document.getElementById('currentBalance');
+    const newBalanceDisplay = document.getElementById('newBalance');
+    const currentCurrencyDisplay = document.getElementById('currentCurrency');
+    const newCurrencyPreviewDisplay = document.getElementById('newCurrencyPreview');
+    const conversionRateInfo = document.getElementById('conversionRateInfo');
 
     let favorites = [];
     let exchangeRates = {};
@@ -44,12 +50,7 @@
 
     async function loadBaseCurrency() {
         try {
-            const response = await fetch('/ExchangeRate?handler=BaseCurrency', {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
+            const response = await fetch('/ExchangeRate?handler=BaseCurrency');
             if (response.ok) {
                 const data = await response.json();
                 if (data) {
@@ -64,15 +65,9 @@
 
     async function loadFavorites() {
         try {
-            const response = await fetch('/ExchangeRate?handler=Favorites', {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
+            const response = await fetch('/ExchangeRate?handler=Favorites');
             if (response.ok) {
-                const data = await response.json();
-                favorites = data;
+                favorites = await response.json();
             }
         } catch (error) {
             console.error('Error loading favorites:', error);
@@ -89,6 +84,7 @@
         changeCurrencyBtn.addEventListener('click', showChangeCurrencyModal);
         closeModalBtn.addEventListener('click', () => changeCurrencyModal.style.display = 'none');
         confirmChangeBtn.addEventListener('click', changeAccountCurrency);
+        accountSelect.addEventListener('change', handleAccountSelectChange);
 
         fromCurrencySearch.addEventListener('input', () => filterCurrencyOptions('from'));
         fromCurrencySearch.addEventListener('focus', () => showCurrencyDropdown('from', true));
@@ -99,9 +95,7 @@
         toCurrencySearch.addEventListener('focus', () => showCurrencyDropdown('to', true));
         toCurrencySearch.addEventListener('blur', () => setTimeout(() => hideCurrencyDropdown('to'), 200));
         toCurrencySearch.addEventListener('keydown', (e) => handleDropdownKeydown(e, 'to'));
-        toCurrencySearch.addEventListener('change', () => {
-            newCurrencyDisplay.textContent = toCurrencySearch.value;
-        });
+        toCurrencySearch.addEventListener('change', updateNewCurrencyDisplay);
 
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.currency-select-wrapper')) {
@@ -114,40 +108,59 @@
         });
     }
 
-    async function loadUserAccounts() {
-        try {
-            const response = await fetch('/ExchangeRate?handler=UserAccounts', {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                return await response.json();
-            }
-        } catch (error) {
-            console.error('Error loading user accounts:', error);
-        }
-        return [];
-    }
-
     async function showChangeCurrencyModal() {
         const accounts = await loadUserAccounts();
         accountSelect.innerHTML = '';
+        previewSection.style.display = 'none';
 
         accounts.forEach(account => {
             const option = document.createElement('option');
-            option.value = account.accountId;
-            option.textContent = `${account.iban} (${account.currency}) - ${account.balance}`;
+            option.value = JSON.stringify(account);
+            option.textContent = `${account.iban} (${account.currency}) - ${account.balance.toFixed(2)}`;
             accountSelect.appendChild(option);
         });
 
-        newCurrencyDisplay.textContent = toCurrency;
+        updateNewCurrencyDisplay();
         changeCurrencyModal.style.display = 'block';
     }
 
+    function handleAccountSelectChange() {
+        if (this.value) {
+            const account = JSON.parse(this.value);
+            showCurrencyConversionPreview(account);
+        } else {
+            previewSection.style.display = 'none';
+        }
+    }
+
+    function updateNewCurrencyDisplay() {
+        newCurrencyDisplay.textContent = toCurrency;
+        newCurrencyPreviewDisplay.textContent = toCurrency;
+        if (accountSelect.value) {
+            const account = JSON.parse(accountSelect.value);
+            showCurrencyConversionPreview(account);
+        }
+    }
+
+    async function showCurrencyConversionPreview(account) {
+        const rate = getExchangeRate(account.currency, toCurrency);
+        const newBalance = account.balance * rate;
+
+        currentBalanceDisplay.textContent = account.balance.toFixed(2);
+        newBalanceDisplay.textContent = newBalance.toFixed(2);
+        currentCurrencyDisplay.textContent = account.currency;
+        conversionRateInfo.textContent = `1 ${account.currency} = ${rate.toFixed(4)} ${toCurrency}`;
+
+        previewSection.style.display = 'block';
+    }
+
     async function changeAccountCurrency() {
-        const accountId = accountSelect.value;
+        if (!accountSelect.value) {
+            alert('Please select an account');
+            return;
+        }
+
+        const account = JSON.parse(accountSelect.value);
         const newCurrency = toCurrency;
 
         try {
@@ -158,7 +171,7 @@
                     'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                 },
                 body: JSON.stringify({
-                    accountId: parseInt(accountId),
+                    accountId: account.accountId,
                     newCurrency: newCurrency
                 })
             });
@@ -166,12 +179,26 @@
             if (response.ok) {
                 alert('Account currency changed successfully!');
                 changeCurrencyModal.style.display = 'none';
+                window.location.reload();
             } else {
                 alert('Failed to change account currency');
             }
         } catch (error) {
             console.error('Error changing account currency:', error);
             alert('Error changing account currency');
+        }
+    }
+
+    async function loadUserAccounts() {
+        try {
+            const response = await fetch('/ExchangeRate?handler=UserAccounts');
+            if (response.ok) {
+                return await response.json();
+            }
+            return [];
+        } catch (error) {
+            console.error('Error loading user accounts:', error);
+            return [];
         }
     }
 
@@ -233,6 +260,7 @@
                 hideCurrencyDropdown(type);
                 updateResult();
                 fetchHistoricalData();
+                updateNewCurrencyDisplay();
             });
             dropdown.appendChild(option);
         });
@@ -457,6 +485,7 @@
                         toCurrency = currency;
                         updateResult();
                         fetchHistoricalData();
+                        updateNewCurrencyDisplay();
                     }
                 });
 
@@ -512,6 +541,7 @@
 
         updateResult();
         fetchHistoricalData();
+        updateNewCurrencyDisplay();
     }
 
     function updateResult() {
@@ -566,6 +596,7 @@
                         fetchHistoricalData();
                         renderFavorites();
                         renderAvailableCurrencies();
+                        updateNewCurrencyDisplay();
                     }
                 });
 
