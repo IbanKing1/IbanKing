@@ -29,11 +29,11 @@ namespace IBanKing.Services
             var notification = new Notification
             {
                 UserId = userId,
-                Title = "New Payment Received",
-                Message = $"You have received a payment of {amount:C}",
+                Title = "Payment Received",
+                Message = $"You've received a payment of {amount:C}",
                 Type = "Payment",
                 TransactionId = transactionId,
-                ActionUrl = $"/Client/TransactionDetails/{transactionId}"
+                ActionUrl = $"/Client/Transactions"
             };
             await CreateAsync(notification);
         }
@@ -43,9 +43,10 @@ namespace IBanKing.Services
             var notification = new Notification
             {
                 UserId = userId,
-                Title = "Account Inactivity Warning",
-                Message = "You haven't logged in for a while. Please log in to keep your account active.",
-                Type = "Inactivity"
+                Title = "Inactivity Warning",
+                Message = "You haven't logged in for over 30 days",
+                Type = "Inactivity",
+                ActionUrl = "/Client/Account"
             };
             await CreateAsync(notification);
         }

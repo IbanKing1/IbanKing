@@ -5,64 +5,63 @@
     Layout = "_LayoutClient";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Notifications</h2>
-                <div>
-                    <form method="post" asp-page-handler="MarkAllAsRead">
-                        <button type="submit" class="btn btn-sm btn-outline-primary me-2">
-                            <i class="fas fa-check-circle"></i> Mark all as read
-                        </button>
-                    </form>
-                </div>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Notifications</h2>
+            <div>
+                <form method="post" asp-page-handler="MarkAllAsRead" class="d-inline">
+                    <button type="submit" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-check-circle"></i> Mark all as read
+                    </button>
+                </form>
+                <form method="post" asp-page-handler="DeleteAll" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete all notifications?');">
+                        <i class="fas fa-trash-alt"></i> Clear all
+                    </button>
+                </form>
             </div>
-
-            <div class="card">
-                <div class="card-body p-0">
-                    @if (Model.Notifications.Any())
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Notifications.Any())
+            {
+                <div class="list-group list-group-flush">
+                    @foreach (var notification in Model.Notifications)
                     {
-                        <div class="list-group list-group-flush">
-                            @foreach (var notification in Model.Notifications)
-                            {
-                                <div class="list-group-item @(!notification.IsRead ? "bg-light" : "")">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div class="me-3">
-                                            <i class="@notification.IconClass text-primary me-2"></i>
+                        <a href="@notification.ActionUrl" class="list-group-item list-group-item-action notification-item @(!notification.IsRead ? "unread" : "")">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex flex-grow-1" style="min-width: 0;">
+                                    <div class="me-3">
+                                        <i class="@notification.IconClass text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1" style="min-width: 0;">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1 notification-title">@notification.Title</h6>
+                                            <small class="text-muted notification-time">@notification.TimeAgo</small>
                                         </div>
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <h6 class="mb-1">@notification.Title</h6>
-                                                <small class="text-muted">@notification.TimeAgo</small>
-                                            </div>
-                                            <p class="mb-1">@notification.Message</p>
-                                            @if (!string.IsNullOrEmpty(notification.ActionUrl))
-                                            {
-                                                <a href="@notification.ActionUrl" class="btn btn-sm btn-link p-0">View details</a>
-                                            }
-                                        </div>
-                                        <div class="ms-3">
-                                            <form method="post" asp-page-handler="Delete" asp-route-id="@notification.Id">
-                                                <button type="submit" class="btn btn-sm btn-link text-danger">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        <p class="mb-1 notification-message">@notification.Message</p>
                                     </div>
                                 </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-4">
-                            <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
-                            <p class="text-muted">No notifications found</p>
-                        </div>
+                                <div class="ms-3 notification-actions">
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@notification.Id" onclick="event.stopPropagation()">
+                                        <button type="submit" class="btn btn-sm btn-link text-danger">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
                     }
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-bell-slash fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">No notifications</h5>
+                    <p class="text-muted">You don't have any notifications yet.</p>
+                </div>
+            }
         </div>
     </div>
 </div>
