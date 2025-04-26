@@ -26,6 +26,8 @@ namespace IBanKing.Services
 
         public async Task CreatePaymentNotification(string userId, int transactionId, decimal amount)
         {
+            var transaction = await _context.Transactions.FindAsync(transactionId);
+
             var notification = new Notification
             {
                 UserId = userId,
@@ -33,7 +35,8 @@ namespace IBanKing.Services
                 Message = $"You've received a payment of {amount:C}",
                 Type = "Payment",
                 TransactionId = transactionId,
-                ActionUrl = $"/Client/Transactions"
+                ActionUrl = $"/Client/Transactions",
+                Transaction = transaction
             };
             await CreateAsync(notification);
         }
@@ -98,6 +101,7 @@ namespace IBanKing.Services
         public async Task<List<Notification>> GetUserNotificationsAsync(string userId, int count = 10)
         {
             return await _context.Notifications
+                .Include(n => n.Transaction)
                 .Where(n => n.UserId == userId)
                 .OrderByDescending(n => n.CreatedAt)
                 .Take(count)

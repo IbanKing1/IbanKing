@@ -10,11 +10,6 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h2 class="mb-0">Notifications</h2>
             <div>
-                <form method="post" asp-page-handler="MarkAllAsRead" class="d-inline">
-                    <button type="submit" class="btn btn-outline-primary me-2">
-                        <i class="fas fa-check-circle"></i> Mark all as read
-                    </button>
-                </form>
                 <form method="post" asp-page-handler="DeleteAll" class="d-inline">
                     <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete all notifications?');">
                         <i class="fas fa-trash-alt"></i> Clear all
@@ -28,7 +23,8 @@
                 <div class="list-group list-group-flush">
                     @foreach (var notification in Model.Notifications)
                     {
-                        <div class="list-group-item notification-item @(!notification.IsRead ? "unread" : "")" onclick="markAsRead(@notification.Id, this)">
+                        <div class="list-group-item notification-item @(!notification.IsRead ? "unread" : "")"
+                             onclick="markAsRead(@notification.Id, this)">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="d-flex flex-grow-1" style="min-width: 0;">
                                     <div class="me-3">
@@ -40,6 +36,40 @@
                                             <small class="text-muted notification-time">@notification.TimeAgo</small>
                                         </div>
                                         <p class="mb-1 notification-message">@notification.Message</p>
+
+                                        @if (notification.TransactionId.HasValue)
+                                        {
+                                            <button class="btn btn-sm btn-link p-0 view-details-btn"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#details-@notification.Id"
+                                                    onclick="event.stopPropagation()">
+                                                View Details <i class="fas fa-chevron-down"></i>
+                                            </button>
+
+                                            <div id="details-@notification.Id" class="collapse mt-2">
+                                                <div class="card card-body p-3">
+                                                    @if (notification.Transaction != null)
+                                                    {
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p><strong>Sender:</strong> @notification.Transaction.Sender</p>
+                                                                <p><strong>Receiver:</strong> @notification.Transaction.Receiver</p>
+                                                                <p><strong>Date:</strong> @notification.Transaction.DateTime.ToString("g")</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p><strong>Amount:</strong> @notification.Transaction.Amount.ToString("C")</p>
+                                                                <p><strong>Status:</strong> <span class="badge bg-@(notification.Transaction.Status.ToLower() == "completed" ? "success" : "warning")">@notification.Transaction.Status</span></p>
+                                                                <p><strong>Currency:</strong> @notification.Transaction.Currency</p>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="text-muted">Transaction details not available</p>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <div class="ms-3 notification-actions">
@@ -95,5 +125,19 @@
                     }
                 });
         }
+
+        // Handle collapse state for details
+        document.querySelectorAll('.view-details-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-chevron-down')) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            });
+        });
     </script>
 }
