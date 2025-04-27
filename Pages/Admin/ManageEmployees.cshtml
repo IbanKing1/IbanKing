@@ -1,0 +1,70 @@
+﻿@page
+@model IBanKing.Pages.Admin.ManageEmployeesModel
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Manage Employees";
+}
+
+<h2>Manage Bank Employees</h2>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success">@Model.Message</div>
+}
+
+<table class="table table-bordered mt-4">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in Model.Employees)
+        {
+            <tr>
+                <form method="post" asp-page-handler="EditEmployee">
+                <td>
+                    <input type="hidden" name="userId" value="@emp.UserId" />
+                    <input type="text" name="name" class="form-control" value="@emp.Name" />
+                </td>
+                <td>
+                    <input type="email" name="email" class="form-control" value="@emp.Email" />
+                </td>
+                <td>
+                    <input type="text" name="phoneNumber" class="form-control" value="@emp.PhoneNumber" />
+                </td>
+                <td>
+                    <input type="text" name="address" class="form-control" value="@emp.Address" />
+                </td>
+                <td>
+                        @if (emp.IsBlocked)
+                        {
+                        <span class="text-danger">Blocked</span>
+                        }
+                        else
+                        {
+                        <span class="text-success">Active</span>
+                        }
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-warning btn-sm">Save</button>
+                    <form method="post" asp-page-handler="ToggleBlock" asp-route-userId="@emp.UserId" class="d-inline">
+                        <button type="submit" class="btn @(emp.IsBlocked ? "btn-success" : "btn-danger") btn-sm">
+                                @(emp.IsBlocked ? "Unblock" : "Block")
+                        </button>
+                    </form>
+                    <form method="post" asp-page-handler="DeleteEmployee" asp-route-userId="@emp.UserId"
+                          onsubmit="return confirm('Are you sure you want to delete this employee?');" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>

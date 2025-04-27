@@ -2,8 +2,47 @@
 @model IBanKing.Pages.Admin.IndexModel
 @{
     Layout = "_LayoutAdmin";
-    ViewData["Title"] = "Admin Home";
+    ViewData["Title"] = "Admin Dashboard";
 }
+<h2>Welcome to the Dashboard</h2>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Employees</h5>
+                <p class="card-text display-4">@Model.EmployeeCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Blocked Employees</h5>
+                <p class="card-text display-4">@Model.BlockedEmployees</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h2>Bun venit, Admin!</h2>
-<p>Aici e dashboard-ul tău.</p>     
+<h4>Recently Added Employees</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in Model.RecentEmployees)
+        {
+            <tr>
+                <td>@emp.UserId</td>
+                <td>@emp.Name</td>
+                <td>@emp.Email</td>
+                <td>@(emp.IsBlocked ? "Blocked" : "Active")</td>
+            </tr>
+        }
+    </tbody>
+</table>
