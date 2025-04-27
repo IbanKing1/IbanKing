@@ -84,7 +84,7 @@ namespace IBanKing.Pages.Login
             {
                 "Admin" => RedirectToPage("/Admin/Index"),
                 "BankEmployee" => RedirectToPage("/BankEmployee/Index"),
-                _ => RedirectToPage("/Client/Index")
+                _ => RedirectToPage("/Client/HomeClient")
             };
         }
     }

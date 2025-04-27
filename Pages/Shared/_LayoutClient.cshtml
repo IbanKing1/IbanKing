@@ -29,11 +29,12 @@
             </div>
 
             <ul>
-                <li><a class="btn" asp-page="/Client/Index">Home</a></li>
+                <li><a class="btn" asp-page="/Client/HomeClient">Home</a></li>
                 <li><a class="btn" asp-page="/Client/Transactions">Transactions</a></li>
-                <li><a class="btn" asp-page="/MakePayment/Index">Make Payment</a></li>
+                <li><a class="btn" asp-page="/Client/MakePayment">Make Payment</a></li>
                 <li><a class="btn" asp-page="/ExchangeRate/Index">Exchange Rate</a></li>
                 <li><a class="btn" asp-page="/Client/Account">Account</a></li>
+
                 <li class="nav-item dropdown position-relative me-2">
                     <a class="nav-link position-relative px-2" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
@@ -57,8 +58,7 @@
                             {
                                 foreach (var notification in unreadNotifications)
                                 {
-                                    <div class="dropdown-item notification-item unread"
-                                         data-notification-id="@notification.Id">
+                                    <div class="dropdown-item notification-item unread" data-notification-id="@notification.Id">
                                         <div class="d-flex align-items-center">
                                             <div class="notification-icon me-3">
                                                 <i class="@notification.IconClass"></i>
@@ -85,6 +85,7 @@
                             <i class="fas fa-list me-2"></i> See All Notifications
                         </a>
                     </div>
+                </li>
 
                 <li>
                     <form method="post" asp-page="/Logout/Index">
@@ -127,9 +128,9 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/logout.js" asp-append-version="true"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     const notificationId = this.getAttribute('data-notification-id');
                     const redirectUrl = '@Url.Page("/Client/Notifications")';
 
@@ -140,7 +141,6 @@
                         }
                     }).then(() => {
                         updateNotificationCount();
-
                         window.location.href = redirectUrl;
                     });
                 });
@@ -163,4 +163,4 @@
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html> 
+</html>

@@ -1,0 +1,36 @@
+@page
+@model IBanKing.Pages.Client.AddBankAccountModel
+@{
+    ViewData["Title"] = "Create Bank Account";
+    Layout = "_LayoutClient";
+}
+
+<h2 class="text-center">Create a New Bank Account</h2>
+
+<form method="post" class="mt-4">
+    <div class="form-group">
+        <label for="Currency">Select Currency</label>
+        <select asp-for="Currency" class="form-control">
+            <option value="RON">RON</option>
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+        </select>
+        <span asp-validation-for="Currency" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Create Account</button>
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success mt-3">
+            @Model.SuccessMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger mt-3">
+            @Model.ErrorMessage
+        </div>
+    }
+</form>
