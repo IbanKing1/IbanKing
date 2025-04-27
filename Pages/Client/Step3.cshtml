@@ -1,0 +1,45 @@
+@page
+@model IBanKing.Pages.MakePayment.Step3Model
+@{
+    ViewData["Title"] = "Step 3 - Payment Status";
+    Layout = "_LayoutClient";
+}
+
+<h2 class="text-center">Step 3/3: Payment Result</h2>
+
+<div class="progress-bar-container mb-4 text-center">
+    <span class="step">Step 1</span> →
+    <span class="step">Step 2</span> →
+    <span class="step active">Step 3</span>
+</div>
+
+@if (Model.ViewModel.Status == "success")
+{
+    <div class="alert alert-success mt-4 text-center">
+        <p><strong>@Model.ViewModel.Message</strong></p>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger mt-4 text-center">
+        <p><strong>@Model.ViewModel.Message</strong></p>
+    </div>
+}
+
+<div class="card p-4 mt-3">
+    <p><strong>Status:</strong> @Model.ViewModel.Status</p>
+    <p><strong>Receiver IBAN:</strong> @Model.ViewModel.ReceiverIBAN</p>
+    <p><strong>Amount:</strong> @Model.ViewModel.Amount @Model.ViewModel.Currency</p>
+
+    @if (!string.IsNullOrEmpty(Model.ViewModel.ServicedPaymentName))
+    {
+        <p><strong>Payment Type:</strong> Payment to Service</p>
+        <p><strong>Service Name:</strong> @Model.ViewModel.ServicedPaymentName</p>
+    }
+    else
+    {
+        <p><strong>Payment Type:</strong> Internal Transfer</p>
+    }
+</div>
+
+<a class="btn btn-primary mt-4" asp-page="/Client/HomeClient">Return to Home</a>

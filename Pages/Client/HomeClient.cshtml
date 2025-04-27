@@ -1,0 +1,52 @@
+@page
+@model IBanKing.Pages.Client.HomeClientModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_LayoutClient";
+}
+
+<h2 class="text-center mt-4">Welcome, @Model.UserName!</h2>
+
+<div class="card mt-4 p-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Account Overview</h4>
+        <a asp-page="/Client/AddBankAccount" class="btn btn-success">+ Create New Bank Account</a>
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>IBAN</th>
+                <th>Currency</th>
+                <th>Balance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in Model.Accounts)
+            {
+                <tr>
+                    <td>@account.IBAN</td>
+                    <td>@account.Currency</td>
+                    <td>@account.Balance.ToString("F2") @account.Currency</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm" onclick="copyIBAN('@account.IBAN')">Copy IBAN</button>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@account.AccountId" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this account?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function copyIBAN(iban) {
+            navigator.clipboard.writeText(iban).then(function () {
+                alert("IBAN copied to clipboard: " + iban);
+            });
+        }
+    </script>
+}
