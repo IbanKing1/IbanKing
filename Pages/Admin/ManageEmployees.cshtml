@@ -1,0 +1,101 @@
+﻿@page
+@model IBanKing.Pages.Admin.ManageEmployeesModel
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Manage Employees";
+}
+
+<h2>Manage Bank Employees</h2>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success">@Model.Message</div>
+}
+
+<table class="table table-bordered mt-4">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in Model.Employees)
+        {
+            <tr>
+                <form method="post" asp-page-handler="EditEmployee" id="editForm-@emp.UserId">
+                <td>
+                    <input type="hidden" name="userId" value="@emp.UserId" />
+                    <input type="text" name="name" class="form-control" value="@emp.Name" />
+                </td>
+                <td>
+                    <input type="email" name="email" class="form-control" value="@emp.Email" />
+                </td>
+                <td>
+                    <input type="text" name="phoneNumber" class="form-control" value="@emp.PhoneNumber" />
+                </td>
+                <td>
+                    <input type="text" name="address" class="form-control" value="@emp.Address" />
+                </td>
+                <td>
+                        @if (emp.IsBlocked)
+                        {
+                        <span class="text-danger">Blocked</span>
+                        }
+                        else
+                        {
+                        <span class="text-success">Active</span>
+                        }
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-warning btn-sm">Save</button>
+                    <button type="button"
+                            class="btn @(emp.IsBlocked ? "btn-success" : "btn-danger") btn-sm toggle-block"
+                            data-userid="@emp.UserId">
+                            @(emp.IsBlocked ? "Unblock" : "Block")
+                    </button>
+                    <button type="button"
+                            class="btn btn-outline-danger btn-sm delete-employee"
+                            data-userid="@emp.UserId">
+                        Delete
+                    </button>
+                </td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form method="post" id="blockForm" asp-page-handler="ToggleBlock">
+    <input type="hidden" id="blockUserId" name="userId" />
+</form>
+
+<form method="post" id="deleteForm" asp-page-handler="DeleteEmployee">
+    <input type="hidden" id="deleteUserId" name="userId" />
+</form>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.toggle-block').forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-userid');
+                document.getElementById('blockUserId').value = userId;
+                document.getElementById('blockForm').submit();
+            });
+        });
+
+        document.querySelectorAll('.delete-employee').forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-userid');
+                if (confirm('Are you sure you want to delete this employee?')) {
+                    document.getElementById('deleteUserId').value = userId;
+                    document.getElementById('deleteForm').submit();
+                }
+            });
+        });
+    </script>
+}
