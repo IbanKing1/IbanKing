@@ -8,19 +8,24 @@
 
   <ItemGroup>
     <Compile Remove="Pages\TermsAndConditions\**" />
+    <Compile Remove="Services\Interfaces\**" />
     <Content Remove="Pages\TermsAndConditions\**" />
+    <Content Remove="Services\Interfaces\**" />
     <EmbeddedResource Remove="Pages\TermsAndConditions\**" />
+    <EmbeddedResource Remove="Services\Interfaces\**" />
     <None Remove="Pages\TermsAndConditions\**" />
+    <None Remove="Services\Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Interfaces\" />
     <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
       <PrivateAssets>all</PrivateAssets>

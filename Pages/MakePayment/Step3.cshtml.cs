@@ -1,5 +1,6 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
+using IBanKing.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
@@ -7,23 +8,25 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace IBanKing.Pages.MakePayment
 {
     public class Step3Model : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationService _notificationService;
 
-        public Step3Model(ApplicationDbContext context)
+        public Step3Model(ApplicationDbContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public Transaction ViewModel { get; set; } = new();
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            // 1. Citim din TempData
             if (TempData["ReceiverIBAN"] == null || TempData["Amount"] == null)
                 return RedirectToPage("Index");
 
@@ -32,10 +35,8 @@ namespace IBanKing.Pages.MakePayment
             ViewModel.Currency = TempData["Currency"]?.ToString() ?? "RON";
             TempData.Keep();
 
-            // Convertim Amount la decimal pentru operații ulterioare
             decimal amountDecimal = Convert.ToDecimal(ViewModel.Amount, CultureInfo.InvariantCulture);
 
-            // 2. Verificare sesiune și user
             var userIdStr = HttpContext.Session.GetString("UserId") ?? TempData["UserId"]?.ToString();
             if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
             {
@@ -52,7 +53,6 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
-            // 3. Validare IBAN
             if (string.IsNullOrWhiteSpace(ViewModel.ReceiverIBAN) || ViewModel.ReceiverIBAN.Length < 10)
             {
                 ViewModel.Status = "error";
@@ -60,7 +60,6 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
-            // 4. Căutăm contul utilizatorului în valuta selectată
             var account = _context.Accounts.FirstOrDefault(a => a.UserId == userId && a.Currency == ViewModel.Currency);
             if (account == null)
             {
@@ -75,9 +74,7 @@ namespace IBanKing.Pages.MakePayment
                 ViewModel.Message = "Insufficient funds.";
                 return Page();
             }
-            account.Balance = Math.Max(0, account.Balance - amountDecimal);
-            _context.Accounts.Update(account);
-            // 5. Conversie valutară (pentru scopuri interne - ex: raportări în RON)
+
             decimal convertedAmount = amountDecimal;
             int? exchangeRateId = null;
 
@@ -88,35 +85,29 @@ namespace IBanKing.Pages.MakePayment
                 exchangeRateId = exchange.ExchangeRateId;
             }
 
-
-            // 6. Căutăm dacă e plată către un serviciu
             var servicedPayment = _context.ServicedPayments.FirstOrDefault(s => s.IBAN == ViewModel.ReceiverIBAN);
             int? servicedPaymentId = servicedPayment?.ServicedPaymentId;
             ViewModel.ServicedPaymentName = servicedPayment?.Bill_Name;
 
-            // 7. Scădem suma din cont
             account.Balance -= amountDecimal;
             _context.Accounts.Update(account);
 
-            // 8. Salvăm tranzacția
             var transaction = new Transaction
             {
                 Sender = $"USER-{userId}",
                 Receiver = ViewModel.ReceiverIBAN,
                 Amount = (double)convertedAmount,
                 Currency = ViewModel.Currency,
-                DateTime = DateTime.Now,
+                DateTime = DateTime.UtcNow,
                 UserId = userId,
                 ExchangeRateId = exchangeRateId,
                 ServicedPaymentId = servicedPaymentId,
                 Status = "Completed"
             };
 
-
             _context.Transactions.Add(transaction);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            // 9. Trimitem email de confirmare
             try
             {
                 var mail = new MailMessage
@@ -133,17 +124,20 @@ namespace IBanKing.Pages.MakePayment
                     smtp.Send(mail);
                 }
             }
-            catch
+            catch { }
+
+            var receiverAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == ViewModel.ReceiverIBAN);
+            if (receiverAccount != null)
             {
-                // Ignorăm pentru demo
+                await _notificationService.CreatePaymentNotification(
+                    receiverAccount.UserId.ToString(),
+                    transaction.TransactionId,
+                    amountDecimal);
             }
 
             ViewModel.Status = "success";
             ViewModel.Message = "Payment completed and saved successfully.";
             return Page();
-
         }
-
     }
-
 }

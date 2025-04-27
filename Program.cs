@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Razor Pages
 builder.Services.AddRazorPages();
-
+builder.Services.AddHttpClient();
 // EF Core + SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -24,10 +24,12 @@ builder.Services.AddSession(options =>
 });
 
 // DI for Repositories & Services
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IFavoriteCurrencyService, FavoriteCurrencyService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-var app = builder.Build();
+builder.Services.AddScoped<INotificationService, NotificationService>(); builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IFavoriteCurrencyService, FavoriteCurrencyService>(); var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {

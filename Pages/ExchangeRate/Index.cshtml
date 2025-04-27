@@ -1,8 +1,136 @@
-@page
-@model ExchangeRateModel
+﻿@page
+@model IBanKing.Pages.ExchangeRate.IndexModel
 @{
-    ViewData["Title"] = "Exchange Rate";
+    ViewData["Title"] = "Exchange Rates";
     Layout = "_LayoutClient";
 }
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="~/css/exchange-rate.css" asp-append-version="true" />
 
-<h1 class="text-center">Exchange Rate</h1>
+<div class="exchange-container">
+    <h1 class="text-center mb-4">Currency Exchange</h1>
+
+    <div class="currency-converter">
+        <div class="converter-header">
+            <h2 class="converter-title">Currency Converter</h2>
+        </div>
+
+        <form id="conversionForm">
+            <div class="currency-inputs">
+                <div class="currency-input-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" class="currency-amount" value="1" min="0.01" step="0.01">
+                </div>
+
+                <div class="currency-input-group">
+                    <label for="fromCurrency">From</label>
+                    <div class="currency-select-wrapper">
+                        <input type="text" id="fromCurrencySearch" class="currency-search" placeholder="Search currency..." autocomplete="off">
+                        <div id="fromCurrencyDropdown" class="currency-dropdown"></div>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+
+                <button type="button" id="swapCurrencies" class="swap-currencies" title="Swap currencies">
+                    ⇄
+                </button>
+
+                <div class="currency-input-group">
+                    <label for="toCurrency">To</label>
+                    <div class="currency-select-wrapper">
+                        <input type="text" id="toCurrencySearch" class="currency-search" placeholder="Search currency..." autocomplete="off">
+                        <div id="toCurrencyDropdown" class="currency-dropdown"></div>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="convertButton" class="btn-convert">
+                <span class="btn-text">Convert</span>
+                <span class="btn-icon">→</span>
+            </button>
+
+            <button type="button" id="changeAccountCurrency" class="btn-change-currency">
+                <span class="btn-text">Change Account Currency</span>
+                <span class="btn-icon">↗</span>
+            </button>
+
+            <div id="changeCurrencySection" class="change-currency-section" style="display: none;">
+                <div class="change-currency-header">
+                    <h2 class="change-currency-title">Change Account Currency</h2>
+                </div>
+
+                <div class="search-box">
+                    <select id="accountSelect" class="select-account">
+                        <option value="">Select an account</option>
+                    </select>
+                    <p class="mt-2">New currency: <strong id="newCurrencyDisplay" class="text-primary"></strong></p>
+                </div>
+
+                <div id="previewSection" class="preview-section" style="display: none;">
+                    <div class="preview-content">
+                        <div class="balance-card current-balance">
+                            <div class="balance-label">Current Balance</div>
+                            <div class="balance-amount" id="currentBalance"></div>
+                            <div class="balance-currency" id="currentCurrency"></div>
+                        </div>
+                        <div class="balance-card new-balance">
+                            <div class="balance-label">New Balance</div>
+                            <div class="balance-amount" id="newBalance"></div>
+                            <div class="balance-currency" id="newCurrencyPreview"></div>
+                        </div>
+                        <div class="conversion-rate">
+                            <span id="conversionRateInfo"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="change-currency-actions">
+                    <button id="confirmChange" class="btn-confirm">Confirm Change</button>
+                    <button id="cancelChange" class="btn-cancel-change">Cancel</button>
+                </div>
+            </div>
+        </form>
+
+        <div id="conversionResult" class="converter-result">
+            <div class="result-text">
+                <div id="result"></div>
+                <div class="rate-info" id="rate"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="favorites-section">
+        <div class="favorites-header">
+            <h2 class="favorites-title">Favorite Currency Pairs</h2>
+            <button id="toggleEditFavorites" class="edit-favorites">Manage Favorites</button>
+        </div>
+
+        <div id="editFavoritesSection" class="edit-favorites-section" style="display: none;">
+            <div class="search-box">
+                <input type="text" id="currencySearch" placeholder="Search currencies...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div id="availableCurrencies" class="available-currencies"></div>
+            <div class="favorites-actions">
+                <button id="saveFavorites" class="btn-save">
+                    <span>Save Changes</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="favoritesContainer" class="favorites-grid"></div>
+    </div>
+
+    <div class="chart-section">
+        <h2 class="mb-3">Exchange Rate History: <span id="chartTitle"></span></h2>
+        <div class="chart-container">
+            <canvas id="exchangeChart"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/exchange-rate.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,112 @@
+﻿.notification-dropdown {
+    width: 250px;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    right: 10px;
+    left: auto;
+}
+
+.notification-header {
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.notification-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+    color: #212529;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+    .notification-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .notification-item.unread {
+        background-color: #f0f7ff;
+        border-left: 3px solid #0d6efd;
+    }
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+.notification-title {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #212529;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.notification-message {
+    font-size: 0.825rem;
+    color: #6c757d;
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.notification-time {
+    font-size: 0.75rem;
+    color: #adb5bd;
+    margin-top: 4px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 3px;
+    font-size: 0.65rem;
+    padding: 0.25em 0.4em;
+}
+
+.see-all-btn {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    text-align: center;
+    background-color: #0d6efd;
+    color: white !important;
+    border: none;
+    font-size: 0.85rem;
+    border-radius: 0 0 4px 4px;
+    text-decoration: none;
+}
+
+    .see-all-btn:hover {
+        background-color: #0b5ed7;
+        color: white !important;
+        text-decoration: none;
+    }
+
+.no-notifications {
+    padding: 20px;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
