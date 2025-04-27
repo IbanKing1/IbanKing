@@ -16,6 +16,8 @@ namespace IBanKing.Pages.BankEmployee
         }
 
         public IList<User> Clients { get; set; }
+        public IList<Account> Accounts { get; set; }
+
 
         [TempData]
         public string Message { get; set; }
@@ -23,9 +25,17 @@ namespace IBanKing.Pages.BankEmployee
         public async Task OnGetAsync()
         {
             Clients = await _context.Users.Where(u => u.Role == "Client").ToListAsync();
+            Accounts = await _context.Accounts.ToListAsync();
+
         }
 
-        public async Task<IActionResult> OnPostEditClientAsync(int UserId, string EditedName, string TransactionLimit, string TransactionMaxAmount)
+        public async Task<IActionResult> OnPostEditClientAsync(
+      int UserId,
+      int? AccountId,
+      string EditedName,
+      string EditedTransactionLimit,
+      string EditedTransactionMaxAmount,
+      string EditedBalance)
         {
             var client = await _context.Users.FindAsync(UserId);
             if (client == null)
@@ -35,12 +45,20 @@ namespace IBanKing.Pages.BankEmployee
             }
 
             client.Name = EditedName;
-            client.TransactionLimit = TransactionLimit;
-            client.TransactionMaxAmount = TransactionMaxAmount;
+            client.TransactionLimit = EditedTransactionLimit;
+            client.TransactionMaxAmount = EditedTransactionMaxAmount;
+
+            if (AccountId.HasValue && decimal.TryParse(EditedBalance, out var balance))
+            {
+                var account = await _context.Accounts.FindAsync(AccountId.Value);
+                if (account != null)
+                {
+                    account.Balance = balance;
+                }
+            }
 
             await _context.SaveChangesAsync();
-
-            Message = "Client information updated successfully.";
+            Message = "Client and balance updated successfully.";
             return RedirectToPage();
         }
 
