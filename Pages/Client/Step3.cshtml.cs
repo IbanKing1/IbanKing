@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using IBanKing.Services;
 
 namespace IBanKing.Pages.MakePayment
 {
@@ -17,11 +18,13 @@ namespace IBanKing.Pages.MakePayment
     {
         private readonly ApplicationDbContext _context;
         private readonly HttpClient _httpClient;
+        private readonly INotificationService _notificationService;
 
-        public Step3Model(ApplicationDbContext context, IHttpClientFactory httpClientFactory)
+        public Step3Model(ApplicationDbContext context, IHttpClientFactory httpClientFactory, INotificationService notificationService)
         {
             _context = context;
             _httpClient = httpClientFactory.CreateClient();
+            _notificationService = notificationService;
         }
 
         public Transaction ViewModel { get; set; } = new();
@@ -56,7 +59,7 @@ namespace IBanKing.Pages.MakePayment
 
             string senderIBAN = TempData["SenderIBAN"]!.ToString()!;
             var senderAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == senderIBAN && a.UserId == userId);
-            var receiverAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == ViewModel.ReceiverIBAN); // modificat: nu mai verificăm userId
+            var receiverAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == ViewModel.ReceiverIBAN);
 
             if (senderAccount == null)
             {
@@ -113,6 +116,12 @@ namespace IBanKing.Pages.MakePayment
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
+            await _notificationService.CreatePaymentNotification(
+                receiverAccount.UserId.ToString(),
+                transaction.TransactionId,
+                amountInReceiverCurrency,
+                receiverAccount.Currency);
+
             ViewModel.Status = "success";
             ViewModel.Message = "Payment completed successfully.";
             return Page();
@@ -132,10 +141,7 @@ namespace IBanKing.Pages.MakePayment
                 {
                     return response.Rates[toCurrency];
                 }
-                else
-                {
-                    return 1;
-                }
+                return 1;
             }
             catch
             {
