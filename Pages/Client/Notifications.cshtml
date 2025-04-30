@@ -57,9 +57,8 @@
                                                                 <p><strong>Date:</strong> @notification.Transaction.DateTime.ToString("g")</p>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <p><strong>Amount:</strong> @notification.Transaction.Amount.ToString("C")</p>
+                                                                <p><strong>Amount:</strong> @notification.Transaction.Amount.ToString("N2") @notification.Transaction.Currency</p>
                                                                 <p><strong>Status:</strong> <span class="badge bg-@(notification.Transaction.Status.ToLower() == "completed" ? "success" : "warning")">@notification.Transaction.Status</span></p>
-                                                                <p><strong>Currency:</strong> @notification.Transaction.Currency</p>
                                                             </div>
                                                         </div>
                                                     }
@@ -126,7 +125,6 @@
                 });
         }
 
-        // Handle collapse state for details
         document.querySelectorAll('.view-details-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const icon = this.querySelector('i');

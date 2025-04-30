@@ -24,7 +24,7 @@ namespace IBanKing.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreatePaymentNotification(string userId, int transactionId, decimal amount)
+        public async Task CreatePaymentNotification(string userId, int transactionId, decimal amount, string currency)
         {
             var transaction = await _context.Transactions.FindAsync(transactionId);
 
@@ -32,7 +32,7 @@ namespace IBanKing.Services
             {
                 UserId = userId,
                 Title = "Payment Received",
-                Message = $"You've received a payment of {amount:C}",
+                Message = $"You've received a payment of {amount.ToString("N2")} {currency}",
                 Type = "Payment",
                 TransactionId = transactionId,
                 ActionUrl = $"/Client/Transactions",

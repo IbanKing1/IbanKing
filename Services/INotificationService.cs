@@ -7,7 +7,7 @@ namespace IBanKing.Services
     public interface INotificationService
     {
         Task CreateAsync(Notification notification);
-        Task CreatePaymentNotification(string userId, int transactionId, decimal amount);
+        Task CreatePaymentNotification(string userId, int transactionId, decimal amount, string currency);
         Task CreateInactivityNotification(string userId);
         Task MarkAsReadAsync(int id);
         Task MarkAllAsReadAsync(string userId);
