@@ -5,20 +5,24 @@ using IBanKing.Models;
 using IBanKing.Data;
 using IBanKing.Utils;
 using Microsoft.EntityFrameworkCore;
+using IBanKing.Services;
 
 namespace IBanKing.Pages.Login
 {
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationService _notificationService;
 
-        public IndexModel(ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         [BindProperty]
         public LoginInputModel LoginInput { get; set; }
+        public List<User> InactiveUsers { get; set; }
 
         public string? ErrorMessage { get; set; }
 
@@ -71,6 +75,22 @@ namespace IBanKing.Pages.Login
             // Reset failed attempts on successful login
             Console.WriteLine("✅ Password correct. Login successful.");
             user.FailedLoginAttempts = 0;
+
+            // Check for inactivity
+            var inactiveThreshold = DateTime.UtcNow.AddDays(-30);
+            if (user.Role == "Client" && user.LastLog < inactiveThreshold)
+            {
+                var hasNotification = await _context.Notifications
+                    .AnyAsync(n => n.UserId == user.UserId.ToString() &&
+                                n.Type == "Inactivity" &&
+                                n.CreatedAt > inactiveThreshold);
+
+                if (!hasNotification)
+                {
+                    await _notificationService.CreateInactivityNotification(user.UserId.ToString());
+                }
+            }
+
             user.LastLog = DateTime.Now;
             await _context.SaveChangesAsync();
 
