@@ -60,22 +60,15 @@ namespace IBanKing.Pages.Client
             SuccessMessage = $"Account created successfully! IBAN: {iban}";
             return Page();
         }
+
         private string GenerateIban()
         {
             var random = new Random();
-            string iban;
-            bool exists;
-            do
-            {
-                var bankCode = "IBAN";
-                var digits = new string(Enumerable.Range(0, 16)
-                    .Select(_ => random.Next(0, 10).ToString()[0]).ToArray());
-                var checkDigits = random.Next(10, 99).ToString();
-                iban = $"RO{checkDigits}{bankCode}{digits}";
-                exists = _context.Accounts.Any(a => a.IBAN == iban);
-            } while (exists);
-            return iban;
+            var bankCode = "IBAN";
+            var digits = new string(Enumerable.Range(0, 16)
+                .Select(_ => random.Next(0, 10).ToString()[0]).ToArray());
+            var checkDigits = random.Next(10, 99).ToString();
+            return $"RO{checkDigits}{bankCode}{digits}";
         }
-
     }
 }
