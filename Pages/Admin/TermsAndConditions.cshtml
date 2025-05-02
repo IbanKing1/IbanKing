@@ -5,8 +5,30 @@
     Layout = "_LayoutAdmin";
 }
 
-<h1 class="text-center">Terms and Conditions</h1>
-<p class="text-center">
-    By using IBanKing services, you agree to the following terms and conditions.
-    Make sure to read this section carefully. IBanKing reserves the right to update the terms at any time.
-</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-center">Terms and Conditions</h3>
+                    <p class="text-muted text-center">Last updated: @Model.Terms.LastUpdated.ToString("f")</p>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="form-group">
+                            <textarea asp-for="Terms.Content" class="form-control" rows="15"></textarea>
+                            <span asp-validation-for="Terms.Content" class="text-danger"></span>
+                        </div>
+                        <div class="form-group text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Update Terms</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
