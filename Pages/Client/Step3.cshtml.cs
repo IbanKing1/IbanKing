@@ -1,16 +1,17 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
+using IBanKing.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using IBanKing.Services;
 
 namespace IBanKing.Pages.MakePayment
 {
@@ -75,13 +76,20 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
-            decimal amountInSenderCurrency = originalAmount;
-            if (ViewModel.Currency != senderAccount.Currency)
+            // ✅ Convert entered amount (in ViewModel.Currency) → sender's currency
+            decimal amountInSenderCurrency;
+
+            if (ViewModel.Currency == senderAccount.Currency)
             {
-                double rateToSenderCurrency = await GetExchangeRate(ViewModel.Currency, senderAccount.Currency);
-                amountInSenderCurrency = originalAmount * (decimal)rateToSenderCurrency;
+                amountInSenderCurrency = originalAmount;
+            }
+            else
+            {
+                double rate = await GetExchangeRate(ViewModel.Currency, senderAccount.Currency);
+                amountInSenderCurrency = Math.Round(originalAmount * (decimal)rate, 2);
             }
 
+            // ✅ Check balance after conversion
             if (senderAccount.Balance < amountInSenderCurrency)
             {
                 ViewModel.Status = "error";
@@ -89,6 +97,7 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
+            // ✅ Transaction max limit
             double transactionMaxAmount = double.TryParse(user.TransactionMaxAmount, out double max) ? max : double.MaxValue;
             if ((double)amountInSenderCurrency > transactionMaxAmount)
             {
@@ -111,27 +120,34 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
-            decimal amountInReceiverCurrency = amountInSenderCurrency;
-            if (senderAccount.Currency != receiverAccount.Currency)
+            // ✅ Convert sender → receiver currency
+            decimal amountInReceiverCurrency;
+            if (senderAccount.Currency == receiverAccount.Currency)
+            {
+                amountInReceiverCurrency = amountInSenderCurrency;
+            }
+            else
             {
                 double rateToReceiverCurrency = await GetExchangeRate(senderAccount.Currency, receiverAccount.Currency);
-                amountInReceiverCurrency = amountInSenderCurrency * (decimal)rateToReceiverCurrency;
+                amountInReceiverCurrency = Math.Round(amountInSenderCurrency * (decimal)rateToReceiverCurrency, 2);
             }
 
+            // ✅ Save transaction with encoded status
             var transaction = new Transaction
             {
                 Sender = senderIBAN,
                 Receiver = ViewModel.ReceiverIBAN,
-                Amount = (double)amountInReceiverCurrency,
+                Amount = Convert.ToDouble(amountInReceiverCurrency),
                 Currency = receiverAccount.Currency,
                 DateTime = DateTime.Now,
                 UserId = userId,
-                Status = "Pending"
+                Status = $"Pending:{amountInSenderCurrency.ToString(CultureInfo.InvariantCulture)}:{senderAccount.Currency}"
             };
 
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
+            // ✅ Notify receiver
             await _notificationService.CreatePaymentNotification(
                 receiverAccount.UserId.ToString(),
                 transaction.TransactionId,
@@ -153,10 +169,11 @@ namespace IBanKing.Pages.MakePayment
                 var response = await _httpClient.GetFromJsonAsync<ExchangeRateApiResponse>(
                     $"https://api.frankfurter.app/latest?from={fromCurrency}&to={toCurrency}");
 
-                if (response != null && response.Rates.ContainsKey(toCurrency))
+                if (response != null && response.Rates.TryGetValue(toCurrency, out double rate))
                 {
-                    return response.Rates[toCurrency];
+                    return rate;
                 }
+
                 return 1;
             }
             catch

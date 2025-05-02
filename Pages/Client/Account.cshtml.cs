@@ -1,5 +1,6 @@
 using IBanKing.Data;
 using IBanKing.Models;
+using IBanKing.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -20,26 +21,26 @@ namespace IBanKing.Pages.Client
         [BindProperty]
         public EditInputModel Input { get; set; }
 
-        public bool Success { get; set; } = false;
+        public bool Success { get; set; }
 
         public class EditInputModel
         {
-            [Required]
             [EmailAddress]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
-            public string Address { get; set; }
+            public string? Address { get; set; }
 
-            [Required]
             [RegularExpression(@"^\d{7,15}$", ErrorMessage = "Phone number must contain only digits (7-15 digits).")]
-            public string PhoneNumber { get; set; }
+            public string? PhoneNumber { get; set; }
 
             [DataType(DataType.Password)]
-            [Required(ErrorMessage = "Password is required.")]
-            [StringLength(100, ErrorMessage = "Password must be at least {2} characters.", MinimumLength = 8)]
+            public string? CurrentPassword { get; set; }
+
+            [DataType(DataType.Password)]
+            [StringLength(100, MinimumLength = 8)]
             [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}:;'<>,.?\/~`-]).{8,}$",
                 ErrorMessage = "Password must contain at least one uppercase letter, one digit, and one special character.")]
-            public string? NewPassword { get; set; }
+            public string? NewPassword { get; set; } // removed [Required]
         }
 
 
@@ -75,30 +76,67 @@ namespace IBanKing.Pages.Client
                 return RedirectToPage("/Login/Index");
             }
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return NotFound();
             }
-            if (!string.IsNullOrWhiteSpace(Input.NewPassword))
+
+            if (!ModelState.IsValid)
             {
-                var hashedPassword = IBanKing.Utils.PasswordHelper.HashPassword(Input.NewPassword);
-                user.Password = hashedPassword;
+                return Page();
             }
 
-            user.Email = Input.Email;
-            user.Address = Input.Address;
-            user.PhoneNumber = Input.PhoneNumber;
+            // If email was provided, check if it's already taken
+            if (!string.IsNullOrWhiteSpace(Input.Email) && Input.Email != user.Email)
+            {
+                bool emailExists = await _context.Users
+                    .AnyAsync(u => u.Email == Input.Email && u.UserId != userId);
+
+                if (emailExists)
+                {
+                    ModelState.AddModelError("Input.Email", "This email is already in use.");
+                    return Page();
+                }
+
+                user.Email = Input.Email;
+            }
+
+            // If Address is provided
+            if (!string.IsNullOrWhiteSpace(Input.Address))
+            {
+                user.Address = Input.Address;
+            }
+
+            // If Phone number is provided
+            if (!string.IsNullOrWhiteSpace(Input.PhoneNumber))
+            {
+                user.PhoneNumber = Input.PhoneNumber;
+            }
+
+            // If user wants to change the password
+            if (!string.IsNullOrWhiteSpace(Input.NewPassword))
+            {
+                if (string.IsNullOrWhiteSpace(Input.CurrentPassword))
+                {
+                    ModelState.AddModelError("Input.CurrentPassword", "You must enter your current password to set a new one.");
+                    return Page();
+                }
+
+                if (!PasswordHelper.VerifyPassword(Input.CurrentPassword, user.Password))
+                {
+                    ModelState.AddModelError("Input.CurrentPassword", "Current password is incorrect.");
+                    return Page();
+                }
+
+                user.Password = PasswordHelper.HashPassword(Input.NewPassword);
+            }
 
             await _context.SaveChangesAsync();
             Success = true;
 
             return Page();
         }
+
     }
 }

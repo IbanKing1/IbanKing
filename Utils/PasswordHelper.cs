@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+
 namespace IBanKing.Utils
 {
     public static class PasswordHelper
@@ -12,6 +13,12 @@ namespace IBanKing.Utils
                 byte[] hash = sha256.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }
+        }
+
+        public static bool VerifyPassword(string enteredPassword, string storedHashedPassword)
+        {
+            string enteredHashed = HashPassword(enteredPassword);
+            return enteredHashed == storedHashedPassword;
         }
     }
 }
