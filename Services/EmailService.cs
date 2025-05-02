@@ -20,6 +20,8 @@ namespace IBanKing.Services
     public interface IEmailService
     {
         Task SendInactivityEmailAsync(string toEmail, string userName, DateTime lastLog);
+        Task SendPasswordChangeEmailAsync(string toEmail, string userName, DateTime changeTime);
+
     }
 
     public class EmailService : IEmailService
@@ -96,6 +98,34 @@ namespace IBanKing.Services
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
         }
+
+        public async Task SendPasswordChangeEmailAsync(string toEmail, string userName, DateTime changeTime)
+        {
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress(_mailSettings.FromName, _mailSettings.FromEmail));
+            email.To.Add(MailboxAddress.Parse(toEmail));
+            email.Subject = "Your IBanKing Password Has Been Changed";
+
+            var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = $@"
+        <div style='font-family: Arial, sans-serif;'>
+            <h2>Hello {userName},</h2>
+            <p>This is a confirmation that your IBanKing password was changed on <strong>{changeTime:dd MMMM yyyy 'at' HH:mm}</strong>.</p>
+            <p>If you did not make this change, please contact our support team immediately.</p>
+            <hr />
+            <p style='font-size: 12px; color: gray;'>This is an automated message. Do not reply.</p>
+        </div>
+    ";
+
+            email.Body = bodyBuilder.ToMessageBody();
+
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            await smtp.ConnectAsync(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.SslOnConnect);
+            await smtp.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
+            await smtp.SendAsync(email);
+            await smtp.DisconnectAsync(true);
+        }
+
 
     }
 }
