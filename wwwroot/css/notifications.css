@@ -84,7 +84,7 @@
 
 .notification-badge {
     position: absolute;
-    top: 0px;
+    top: 9px;
     right: 3px;
     font-size: 0.65rem;
     padding: 0.25em 0.4em;
