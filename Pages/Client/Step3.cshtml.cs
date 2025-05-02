@@ -4,9 +4,7 @@ using IBanKing.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -20,27 +18,28 @@ namespace IBanKing.Pages.MakePayment
         private readonly ApplicationDbContext _context;
         private readonly HttpClient _httpClient;
         private readonly INotificationService _notificationService;
+        private readonly IEmailService _emailService;
 
-        public Step3Model(ApplicationDbContext context, IHttpClientFactory httpClientFactory, INotificationService notificationService)
+        public Step3Model(ApplicationDbContext context, IHttpClientFactory httpClientFactory, INotificationService notificationService, IEmailService emailService)
         {
             _context = context;
             _httpClient = httpClientFactory.CreateClient();
             _notificationService = notificationService;
+            _emailService = emailService;
         }
 
         public Transaction ViewModel { get; set; } = new();
+        public string ServicedPaymentName { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
             if (TempData["SenderIBAN"] == null || TempData["ReceiverIBAN"] == null || TempData["Amount"] == null || TempData["Currency"] == null)
                 return RedirectToPage("Step1");
 
-            ViewModel.ReceiverIBAN = TempData["ReceiverIBAN"]!.ToString()!;
+            ViewModel.Receiver = TempData["ReceiverIBAN"]!.ToString()!;
             ViewModel.Currency = TempData["Currency"]!.ToString()!;
             ViewModel.Amount = double.Parse(TempData["Amount"]!.ToString()!, CultureInfo.InvariantCulture);
             TempData.Keep();
-
-            decimal originalAmount = Convert.ToDecimal(ViewModel.Amount, CultureInfo.InvariantCulture);
 
             var userIdStr = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
@@ -60,34 +59,20 @@ namespace IBanKing.Pages.MakePayment
 
             string senderIBAN = TempData["SenderIBAN"]!.ToString()!;
             var senderAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == senderIBAN && a.UserId == userId);
-            var receiverAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == ViewModel.ReceiverIBAN);
+            var receiverAccount = _context.Accounts.FirstOrDefault(a => a.IBAN == ViewModel.Receiver);
 
-            if (senderAccount == null)
+            if (senderAccount == null || receiverAccount == null)
             {
                 ViewModel.Status = "error";
-                ViewModel.Message = "Invalid sender account.";
+                ViewModel.Message = "Sender or Receiver account not found.";
                 return Page();
             }
 
-            if (receiverAccount == null)
-            {
-                ViewModel.Status = "error";
-                ViewModel.Message = "Receiver IBAN not found.";
-                return Page();
-            }
+            decimal originalAmount = Convert.ToDecimal(ViewModel.Amount, CultureInfo.InvariantCulture);
 
-            decimal amountInSenderCurrency;
-
-            if (ViewModel.Currency == senderAccount.Currency)
-            {
-                amountInSenderCurrency = originalAmount;
-            }
-            else
-            {
-                double rate = await GetExchangeRate(ViewModel.Currency, senderAccount.Currency);
-                amountInSenderCurrency = Math.Round(originalAmount * (decimal)rate, 2);
-            }
-
+            decimal amountInSenderCurrency = ViewModel.Currency == senderAccount.Currency
+                ? originalAmount
+                : Math.Round(originalAmount * (decimal)await GetExchangeRate(ViewModel.Currency, senderAccount.Currency), 2);
 
             if (senderAccount.Balance < amountInSenderCurrency)
             {
@@ -96,7 +81,7 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
-            double transactionMaxAmount = double.TryParse(user.TransactionMaxAmount, out double max) ? max : double.MaxValue;
+            double transactionMaxAmount = double.TryParse(user.TransactionMaxAmount, out var max) ? max : double.MaxValue;
             if ((double)amountInSenderCurrency > transactionMaxAmount)
             {
                 ViewModel.Status = "error";
@@ -104,37 +89,23 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
-            int transactionLimit = int.TryParse(user.TransactionLimit, out int lim) ? lim : int.MaxValue;
-            DateTime today = DateTime.Today;
-
-            int todayTransactionCount = _context.Transactions
-                .Where(t => t.UserId == userId && t.DateTime.Date == today)
-                .Count();
-
-            if (todayTransactionCount >= transactionLimit)
+            int transactionLimit = int.TryParse(user.TransactionLimit, out var lim) ? lim : int.MaxValue;
+            int todayCount = _context.Transactions.Count(t => t.UserId == userId && t.DateTime.Date == DateTime.Today);
+            if (todayCount >= transactionLimit)
             {
                 ViewModel.Status = "error";
                 ViewModel.Message = $"Daily transaction limit of {transactionLimit} reached.";
                 return Page();
             }
 
-          
-            decimal amountInReceiverCurrency;
-            if (senderAccount.Currency == receiverAccount.Currency)
-            {
-                amountInReceiverCurrency = amountInSenderCurrency;
-            }
-            else
-            {
-                double rateToReceiverCurrency = await GetExchangeRate(senderAccount.Currency, receiverAccount.Currency);
-                amountInReceiverCurrency = Math.Round(amountInSenderCurrency * (decimal)rateToReceiverCurrency, 2);
-            }
+            decimal amountInReceiverCurrency = senderAccount.Currency == receiverAccount.Currency
+                ? amountInSenderCurrency
+                : Math.Round(amountInSenderCurrency * (decimal)await GetExchangeRate(senderAccount.Currency, receiverAccount.Currency), 2);
 
-          
             var transaction = new Transaction
             {
                 Sender = senderIBAN,
-                Receiver = ViewModel.ReceiverIBAN,
+                Receiver = ViewModel.Receiver,
                 Amount = Convert.ToDouble(amountInReceiverCurrency),
                 Currency = receiverAccount.Currency,
                 DateTime = DateTime.Now,
@@ -142,15 +113,32 @@ namespace IBanKing.Pages.MakePayment
                 Status = $"Pending:{amountInSenderCurrency.ToString(CultureInfo.InvariantCulture)}:{senderAccount.Currency}"
             };
 
+            var service = _context.ServicedPayments.FirstOrDefault(s => s.IBAN == ViewModel.Receiver);
+            if (service != null)
+            {
+                transaction.ServicedPaymentId = service.ServicedPaymentId;
+                ServicedPaymentName = service.Bill_Name;
+            }
+
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
-           
             await _notificationService.CreatePaymentNotification(
                 receiverAccount.UserId.ToString(),
                 transaction.TransactionId,
                 amountInReceiverCurrency,
-                receiverAccount.Currency);
+                receiverAccount.Currency
+            );
+
+            // ✅ Send confirmation email
+            await _emailService.SendPaymentConfirmationEmailAsync(
+                toEmail: user.Email,
+                userName: user.Name,
+                amount: amountInReceiverCurrency,
+                currency: receiverAccount.Currency,
+                receiver: service?.Bill_Name ?? receiverAccount.IBAN,
+                dateTime: transaction.DateTime
+            );
 
             ViewModel.Status = "success";
             ViewModel.Message = "Payment submitted and awaiting bank employee approval.";
@@ -167,12 +155,9 @@ namespace IBanKing.Pages.MakePayment
                 var response = await _httpClient.GetFromJsonAsync<ExchangeRateApiResponse>(
                     $"https://api.frankfurter.app/latest?from={fromCurrency}&to={toCurrency}");
 
-                if (response != null && response.Rates.TryGetValue(toCurrency, out double rate))
-                {
-                    return rate;
-                }
-
-                return 1;
+                return response != null && response.Rates.TryGetValue(toCurrency, out double rate)
+                    ? rate
+                    : 1;
             }
             catch
             {

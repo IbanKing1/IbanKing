@@ -27,11 +27,5 @@ namespace IBanKing.Pages.Client
         {
             return RedirectToPage("/Client/Step1");
         }
-
-        public IActionResult OnPostPayService(string serviceIBAN)
-        {
-            TempData["ReceiverIBAN"] = serviceIBAN;
-            return RedirectToPage("/Client/Step1");
-        }
     }
 }

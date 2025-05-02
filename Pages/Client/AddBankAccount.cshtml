@@ -10,10 +10,8 @@
 <form method="post" class="mt-4">
     <div class="form-group">
         <label for="Currency">Select Currency</label>
-        <select asp-for="Currency" class="form-control">
-            <option value="RON">RON</option>
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
+        <select asp-for="Currency" class="form-control" asp-items="Model.CurrencyOptions">
+            <option value="">-- Select a currency --</option>
         </select>
         <span asp-validation-for="Currency" class="text-danger"></span>
     </div>
@@ -34,3 +32,7 @@
         </div>
     }
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
