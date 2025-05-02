@@ -42,5 +42,6 @@ namespace IBanKing.Data
         public DbSet<ServicedPayment> ServicedPayments { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<FavoriteCurrencyPair> FavoriteCurrencyPairs { get; set; }
+        public DbSet<TermsAndConditions> TermsAndConditions { get; set; }
     }
 }

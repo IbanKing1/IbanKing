@@ -1,12 +1,11 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
-using IBanKing.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using IBanKing.Services;
 
 namespace IBanKing.Pages.Admin
 {
@@ -15,7 +14,9 @@ namespace IBanKing.Pages.Admin
         private readonly ApplicationDbContext _context;
         private readonly INotificationService _notificationService;
 
-        public TermsAndConditionsModel(ApplicationDbContext context, INotificationService notificationService)
+        public TermsAndConditionsModel(
+            ApplicationDbContext context,
+            INotificationService notificationService)
         {
             _context = context;
             _notificationService = notificationService;
@@ -24,13 +25,25 @@ namespace IBanKing.Pages.Admin
         [BindProperty]
         public TermsAndConditions Terms { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Terms = await _context.TermsAndConditions.FirstOrDefaultAsync();
+            Terms = await _context.TermsAndConditions
+                .OrderByDescending(t => t.LastUpdated)
+                .FirstOrDefaultAsync();
+
             if (Terms == null)
             {
-                Terms = new TermsAndConditions();
+                Terms = new TermsAndConditions
+                {
+                    Content = "Enter your terms and conditions here...",
+                    LastUpdated = DateTime.Now,
+                    UpdatedByUserId = GetCurrentUserId()
+                };
+                _context.TermsAndConditions.Add(Terms);
+                await _context.SaveChangesAsync();
             }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -40,30 +53,48 @@ namespace IBanKing.Pages.Admin
                 return Page();
             }
 
-            var existingTerms = await _context.TermsAndConditions.FirstOrDefaultAsync();
+            var existingTerms = await _context.TermsAndConditions
+                .OrderByDescending(t => t.LastUpdated)
+                .FirstOrDefaultAsync();
+
             if (existingTerms == null)
             {
-                Terms.LastUpdated = DateTime.UtcNow;
-                Terms.UpdatedByUserId = 0;
-                _context.TermsAndConditions.Add(Terms);
+                existingTerms = new TermsAndConditions();
+                _context.TermsAndConditions.Add(existingTerms);
             }
-            else
-            {
-                existingTerms.Content = Terms.Content;
-                existingTerms.LastUpdated = DateTime.UtcNow;
-                existingTerms.UpdatedByUserId = 0; 
-                _context.TermsAndConditions.Update(existingTerms);
-            }
+
+            existingTerms.Content = Terms.Content;
+            existingTerms.LastUpdated = DateTime.Now;
+            existingTerms.UpdatedByUserId = GetCurrentUserId();
 
             await _context.SaveChangesAsync();
 
-            var allUsers = await _context.Users.ToListAsync();
-            foreach (var user in allUsers)
-            {
-                await _notificationService.CreateTermsUpdateNotification(user.UserId.ToString());
-            }
+            await SendNotificationsToAllUsers();
 
-            return RedirectToPage("/Admin/TermsAndConditions");
+            TempData["SuccessMessage"] = "Terms and conditions updated successfully!";
+            return RedirectToPage();
+        }
+
+        private async Task SendNotificationsToAllUsers()
+        {
+            var allUserIds = await _context.Users
+                .Where(u => !u.IsBlocked)
+                .Select(u => u.UserId.ToString())
+                .ToListAsync();
+
+            foreach (var userId in allUserIds)
+            {
+                await _notificationService.CreateTermsUpdateNotification(userId);
+            }
+        }
+
+        private int GetCurrentUserId()
+        {
+            if (int.TryParse(HttpContext.Session.GetString("UserId"), out var userId))
+            {
+                return userId;
+            }
+            return 0;
         }
     }
 }
