@@ -104,18 +104,45 @@ namespace IBanKing.Services
             var email = new MimeMessage();
             email.From.Add(new MailboxAddress(_mailSettings.FromName, _mailSettings.FromEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
-            email.Subject = "Your IBanKing Password Has Been Changed";
+            email.Subject = "Password Updated - Your IBanKing Account";
 
+            var logoPath = Path.Combine(_env.WebRootPath, "images", "logo.png");
             var bodyBuilder = new BodyBuilder();
+
             bodyBuilder.HtmlBody = $@"
-        <div style='font-family: Arial, sans-serif;'>
-            <h2>Hello {userName},</h2>
-            <p>This is a confirmation that your IBanKing password was changed on <strong>{changeTime:dd MMMM yyyy 'at' HH:mm}</strong>.</p>
-            <p>If you did not make this change, please contact our support team immediately.</p>
-            <hr />
-            <p style='font-size: 12px; color: gray;'>This is an automated message. Do not reply.</p>
+        <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;'>
+            <div style='background-color: #f8f9fa; padding: 20px; text-align: center;'>
+                <img src='cid:logo' alt='IBanking Logo' style='max-height: 60px;'>
+            </div>
+            
+            <div style='padding: 30px;'>
+                <h2 style='color: #2c3e50;'>Hello {userName},</h2>
+                
+                <p style='color: #34495e; line-height: 1.6;'>
+                    This is a confirmation that your IBanKing password was successfully changed.
+                </p>
+                
+                <div style='background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;'>
+                    <p style='margin: 0; color: #7f8c8d;'>
+                        <strong>Change time:</strong> {changeTime:dd MMMM yyyy 'at' HH:mm}
+                    </p>
+                </div>
+                
+                <p style='color: #34495e; line-height: 1.6;'>
+                    If you didn't make this change, please contact our support team immediately as your account security might be compromised.
+                </p>
+               
+            </div>
+            
+            <div style='background-color: #f8f9fa; padding: 20px; text-align: center; color: #7f8c8d; font-size: 12px;'>
+                <p>© {DateTime.Now.Year} IBanKing. All rights reserved.</p>
+                <p>This is an automated message - please do not reply directly to this email.</p>
+            </div>
         </div>
     ";
+
+            var image = bodyBuilder.LinkedResources.Add(logoPath);
+            image.ContentId = "logo";
 
             email.Body = bodyBuilder.ToMessageBody();
 
@@ -125,7 +152,6 @@ namespace IBanKing.Services
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
         }
-
 
     }
 }
