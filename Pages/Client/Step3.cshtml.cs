@@ -89,18 +89,34 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
+            double transactionMaxAmount = double.TryParse(user.TransactionMaxAmount, out double max) ? max : double.MaxValue;
+            if ((double)amountInSenderCurrency > transactionMaxAmount)
+            {
+                ViewModel.Status = "error";
+                ViewModel.Message = $"Transaction exceeds maximum allowed amount ({transactionMaxAmount}).";
+                return Page();
+            }
+
+            int transactionLimit = int.TryParse(user.TransactionLimit, out int lim) ? lim : int.MaxValue;
+            DateTime today = DateTime.Today;
+
+            int todayTransactionCount = _context.Transactions
+                .Where(t => t.UserId == userId && t.DateTime.Date == today)
+                .Count();
+
+            if (todayTransactionCount >= transactionLimit)
+            {
+                ViewModel.Status = "error";
+                ViewModel.Message = $"Daily transaction limit of {transactionLimit} reached.";
+                return Page();
+            }
+
             decimal amountInReceiverCurrency = amountInSenderCurrency;
             if (senderAccount.Currency != receiverAccount.Currency)
             {
                 double rateToReceiverCurrency = await GetExchangeRate(senderAccount.Currency, receiverAccount.Currency);
                 amountInReceiverCurrency = amountInSenderCurrency * (decimal)rateToReceiverCurrency;
             }
-
-            senderAccount.Balance = Math.Max(0, senderAccount.Balance - amountInSenderCurrency);
-            receiverAccount.Balance += amountInReceiverCurrency;
-
-            _context.Accounts.Update(senderAccount);
-            _context.Accounts.Update(receiverAccount);
 
             var transaction = new Transaction
             {
@@ -110,7 +126,7 @@ namespace IBanKing.Pages.MakePayment
                 Currency = receiverAccount.Currency,
                 DateTime = DateTime.Now,
                 UserId = userId,
-                Status = "Completed"
+                Status = "Pending"
             };
 
             _context.Transactions.Add(transaction);
@@ -123,7 +139,7 @@ namespace IBanKing.Pages.MakePayment
                 receiverAccount.Currency);
 
             ViewModel.Status = "success";
-            ViewModel.Message = "Payment completed successfully.";
+            ViewModel.Message = "Payment submitted and awaiting bank employee approval.";
             return Page();
         }
 

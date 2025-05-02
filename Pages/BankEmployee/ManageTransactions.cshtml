@@ -5,3 +5,97 @@
     ViewData["Title"] = "Manage Client Accounts";
 }
 <h1>transactions</h1>
+<h2 class="text-center mt-4">Pending Transactions</h2>
+
+@if (!Model.PendingTransactions.Any())
+{
+    <div class="alert alert-info text-center">No pending transactions.</div>
+}
+else
+{
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sender</th>
+                <th>Receiver</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tx in Model.PendingTransactions)
+            {
+                <tr>
+                    <td>@tx.TransactionId</td>
+                    <td>@tx.Sender</td>
+                    <td>@tx.Receiver</td>
+                    <td>@tx.Amount</td>
+                    <td>@tx.Currency</td>
+                    <td>@tx.DateTime.ToString("g")</td>
+                    <td>
+                        <form method="post" asp-page-handler="Approve" asp-route-id="@tx.TransactionId" style="display:inline">
+                            <button class="btn btn-success btn-sm" type="submit">Approve</button>
+                        </form>
+                        <form method="post" asp-page-handler="Reject" asp-route-id="@tx.TransactionId" style="display:inline">
+                            <button class="btn btn-danger btn-sm" type="submit">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+<h3 class="text-center mt-5">Transaction History</h3>
+
+@if (!Model.AllTransactions.Any())
+{
+    <div class="alert alert-secondary text-center">No transactions in history.</div>
+}
+else
+{
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sender</th>
+                <th>Receiver</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tx in Model.AllTransactions)
+            {
+                <tr>
+                    <td>@tx.TransactionId</td>
+                    <td>@tx.Sender</td>
+                    <td>@tx.Receiver</td>
+                    <td>@tx.Amount</td>
+                    <td>@tx.Currency</td>
+                    <td>@tx.DateTime.ToString("g")</td>
+                    <td>
+                        @if (tx.Status == "Completed")
+                        {
+                            <span class="badge bg-success">Completed</span>
+                        }
+                        else if (tx.Status == "Rejected")
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
