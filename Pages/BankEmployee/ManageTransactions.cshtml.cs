@@ -45,6 +45,7 @@ namespace IBanKing.Pages.BankEmployee
             if (sender == null || receiver == null)
                 return BadRequest("Invalid accounts.");
 
+            // ✅ Parse Status format: "Pending:amount:currency"
             var parts = transaction.Status.Split(':');
             if (parts.Length != 3 || parts[0] != "Pending")
                 return BadRequest("Invalid transaction status format.");
@@ -54,6 +55,7 @@ namespace IBanKing.Pages.BankEmployee
 
             string senderCurrency = parts[2];
 
+            // ✅ Check balance
             if (sender.Balance < senderAmount)
             {
                 transaction.Status = "Rejected";
@@ -62,6 +64,7 @@ namespace IBanKing.Pages.BankEmployee
                 return RedirectToPage();
             }
 
+            // ✅ Apply actual balances
             sender.Balance -= senderAmount;
             receiver.Balance += (decimal)transaction.Amount;
             transaction.Status = "Completed";

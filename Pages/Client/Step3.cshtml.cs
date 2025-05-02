@@ -76,6 +76,7 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
+            // ✅ Convert entered amount (in ViewModel.Currency) → sender's currency
             decimal amountInSenderCurrency;
 
             if (ViewModel.Currency == senderAccount.Currency)
@@ -88,12 +89,15 @@ namespace IBanKing.Pages.MakePayment
                 amountInSenderCurrency = Math.Round(originalAmount * (decimal)rate, 2);
             }
 
+            // ✅ Check balance after conversion
             if (senderAccount.Balance < amountInSenderCurrency)
             {
                 ViewModel.Status = "error";
                 ViewModel.Message = "Insufficient funds.";
                 return Page();
             }
+
+            // ✅ Transaction max limit
             double transactionMaxAmount = double.TryParse(user.TransactionMaxAmount, out double max) ? max : double.MaxValue;
             if ((double)amountInSenderCurrency > transactionMaxAmount)
             {
@@ -116,6 +120,7 @@ namespace IBanKing.Pages.MakePayment
                 return Page();
             }
 
+            // ✅ Convert sender → receiver currency
             decimal amountInReceiverCurrency;
             if (senderAccount.Currency == receiverAccount.Currency)
             {
@@ -127,6 +132,7 @@ namespace IBanKing.Pages.MakePayment
                 amountInReceiverCurrency = Math.Round(amountInSenderCurrency * (decimal)rateToReceiverCurrency, 2);
             }
 
+            // ✅ Save transaction with encoded status
             var transaction = new Transaction
             {
                 Sender = senderIBAN,
@@ -141,6 +147,7 @@ namespace IBanKing.Pages.MakePayment
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
+            // ✅ Notify receiver
             await _notificationService.CreatePaymentNotification(
                 receiverAccount.UserId.ToString(),
                 transaction.TransactionId,

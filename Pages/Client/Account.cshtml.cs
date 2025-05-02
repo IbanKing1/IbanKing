@@ -40,8 +40,9 @@ namespace IBanKing.Pages.Client
             [StringLength(100, MinimumLength = 8)]
             [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}:;'<>,.?\/~`-]).{8,}$",
                 ErrorMessage = "Password must contain at least one uppercase letter, one digit, and one special character.")]
-            public string? NewPassword { get; set; }
+            public string? NewPassword { get; set; } // removed [Required]
         }
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -86,6 +87,7 @@ namespace IBanKing.Pages.Client
                 return Page();
             }
 
+            // If email was provided, check if it's already taken
             if (!string.IsNullOrWhiteSpace(Input.Email) && Input.Email != user.Email)
             {
                 bool emailExists = await _context.Users
@@ -100,16 +102,19 @@ namespace IBanKing.Pages.Client
                 user.Email = Input.Email;
             }
 
+            // If Address is provided
             if (!string.IsNullOrWhiteSpace(Input.Address))
             {
                 user.Address = Input.Address;
             }
 
+            // If Phone number is provided
             if (!string.IsNullOrWhiteSpace(Input.PhoneNumber))
             {
                 user.PhoneNumber = Input.PhoneNumber;
             }
 
+            // If user wants to change the password
             if (!string.IsNullOrWhiteSpace(Input.NewPassword))
             {
                 if (string.IsNullOrWhiteSpace(Input.CurrentPassword))
@@ -124,13 +129,6 @@ namespace IBanKing.Pages.Client
                     return Page();
                 }
 
-                // Prevent reuse of old password
-                if (PasswordHelper.VerifyPassword(Input.NewPassword, user.Password))
-                {
-                    ModelState.AddModelError("Input.NewPassword", "New password must be different from the current password.");
-                    return Page();
-                }
-
                 user.Password = PasswordHelper.HashPassword(Input.NewPassword);
             }
 
@@ -139,5 +137,6 @@ namespace IBanKing.Pages.Client
 
             return Page();
         }
+
     }
 }
