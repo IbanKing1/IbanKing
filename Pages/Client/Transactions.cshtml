@@ -1,0 +1,66 @@
+﻿@page
+@model IBanKing.Pages.Client.TransactionsModel
+@{
+    ViewData["Title"] = "Transactions";
+    Layout = "_LayoutClient";
+}
+
+<h2 class="text-center mt-4">My Transactions</h2>
+
+<form method="get" class="mb-3 text-center">
+    <label for="statusFilter">Filter by Status:</label>
+    <select id="statusFilter" name="FilterStatus" onchange="this.form.submit()" class="form-select d-inline w-auto mx-2">
+        <option value="All" selected="@("All" == Model.FilterStatus)">All</option>
+        <option value="Pending" selected=@("Pending" == Model.FilterStatus)>Pending</option>
+        <option value="Completed" selected=@("Completed" == Model.FilterStatus)>Completed</option>
+        <option value="Rejected" selected=@("Rejected" == Model.FilterStatus)>Rejected</option>
+    </select>
+</form>
+
+@if (!Model.UserTransactions.Any())
+{
+    <div class="alert alert-warning text-center">You have no transactions.</div>
+}
+else
+{
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sender</th>
+                <th>Receiver</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tx in Model.UserTransactions)
+            {
+                <tr>
+                    <td>@tx.TransactionId</td>
+                    <td>@tx.Sender</td>
+                    <td>@tx.Receiver</td>
+                    <td>@tx.Amount</td>
+                    <td>@tx.Currency</td>
+                    <td>@tx.DateTime.ToString("g")</td>
+                    <td>
+                        @if (tx.Status == "Completed")
+                        {
+                            <span class="badge bg-success">Completed</span>
+                        }
+                        else if (tx.Status == "Rejected")
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
