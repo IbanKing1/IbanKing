@@ -24,7 +24,7 @@
 
         <div class="last-updated-info">
             <small class="text-muted">
-                Last updated: @Model.Terms.LastUpdated.ToString("g") by user ID: @Model.Terms.UpdatedByUserId
+                Last updated: @Model.Terms.LastUpdated.ToString("g")
             </small>
         </div>
     </div>
@@ -32,7 +32,7 @@
     <div class="terms-admin-card">
         <form method="post" id="termsForm">
             <div class="terms-admin-content">
-                <textarea asp-for="Terms.Content" class="terms-admin-textarea" id="termsTextarea" style="white-space: pre;"></textarea>
+                <textarea asp-for="Terms.Content" class="terms-admin-textarea" id="termsTextarea" style="white-space: pre;">@Model.Terms?.Content</textarea>
                 <span asp-validation-for="Terms.Content" class="text-danger"></span>
             </div>
         </form>
