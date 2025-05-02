@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using IBanKing.Services;
 
 namespace IBanKing.Pages.Client
 {
@@ -13,9 +14,12 @@ namespace IBanKing.Pages.Client
     {
         private readonly ApplicationDbContext _context;
 
-        public AccountModel(ApplicationDbContext context)
+        private readonly IEmailService _emailService;
+
+        public AccountModel(ApplicationDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         [BindProperty]
@@ -126,6 +130,8 @@ namespace IBanKing.Pages.Client
                 }
 
                 user.Password = PasswordHelper.HashPassword(Input.NewPassword);
+                await _emailService.SendPasswordChangeEmailAsync(user.Email, user.Name, DateTime.Now);
+
             }
 
             await _context.SaveChangesAsync();
