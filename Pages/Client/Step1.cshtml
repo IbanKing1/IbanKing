@@ -4,52 +4,44 @@
     ViewData["Title"] = "Make a Payment";
     Layout = "_LayoutClient";
 }
-
 <h2 class="text-center">Step 1/3: Payment Details</h2>
-
 <div class="progress-bar-container mb-4 text-center">
     <span class="step active">Step 1</span> →
     <span class="step">Step 2</span> →
     <span class="step">Step 3</span>
 </div>
-
 <form method="post">
     <div class="form-group">
         <label>Sender IBAN</label>
         <select asp-for="SenderIBAN" class="form-control">
             @foreach (var account in Model.UserAccounts)
             {
-                <option value="@account.IBAN">@account.IBAN (@account.Currency) - Balance: @account.Balance.ToString("F2")</option>
+                <option value="@account.IBAN">
+                    @account.IBAN (@account.Currency) - Balance: @account.Balance.ToString("F2")
+                </option>
             }
         </select>
         <span asp-validation-for="SenderIBAN" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label>Receiver IBAN</label>
         <input asp-for="ReceiverIBAN" class="form-control" placeholder="Enter receiver IBAN" />
         <span asp-validation-for="ReceiverIBAN" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label>Amount</label>
         <input asp-for="Amount" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="Amount" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label>Currency</label>
-        <select asp-for="Currency" class="form-control">
-            <option value="RON">RON</option>
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
+        <select asp-for="Currency" class="form-control" asp-items="Model.CurrencyOptions">
+            <option value="">-- Select a currency --</option>
         </select>
         <span asp-validation-for="Currency" class="text-danger"></span>
     </div>
-
     <button type="submit" class="btn btn-primary mt-3">Continue to Step 2</button>
 </form>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

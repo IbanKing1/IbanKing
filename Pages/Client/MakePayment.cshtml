@@ -11,7 +11,7 @@
     <div class="col-md-6">
         @foreach (var service in Model.Services)
         {
-            <form method="post" asp-page-handler="PayService">
+            <form method="get" asp-page="/Client/PayService">
                 <input type="hidden" name="serviceIBAN" value="@service.IBAN" />
                 <button type="submit" class="btn btn-secondary mb-2 w-100">
                     Pay for @service.Bill_Name
