@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using IBanKing.Services.Interfaces;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -14,13 +15,6 @@ namespace IBanKing.Services
         public string Password { get; set; }
         public string FromEmail { get; set; }
         public string FromName { get; set; }
-    }
-
-    public interface IEmailService
-    {
-        Task SendInactivityEmailAsync(string toEmail, string userName, DateTime lastLog);
-        Task SendPasswordChangeEmailAsync(string toEmail, string userName, DateTime changeTime);
-        Task SendPaymentConfirmationEmailAsync(string toEmail, string userName, decimal amount, string currency, string receiver, DateTime dateTime);
     }
 
     public class EmailService : IEmailService

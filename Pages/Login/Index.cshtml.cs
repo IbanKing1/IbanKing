@@ -5,7 +5,7 @@ using IBanKing.Models;
 using IBanKing.Data;
 using IBanKing.Utils;
 using Microsoft.EntityFrameworkCore;
-using IBanKing.Services;
+using IBanKing.Services.Interfaces;
 
 namespace IBanKing.Pages.Login
 {
@@ -72,11 +72,11 @@ namespace IBanKing.Pages.Login
                 return Page();
             }
 
-            // Reset failed attempts on successful login
+            /* Reset failed attempts on successful login */
             Console.WriteLine("✅ Password correct. Login successful.");
             user.FailedLoginAttempts = 0;
 
-            // Check for inactivity
+            /* Check for inactivity */
             var inactiveThreshold = DateTime.UtcNow.AddDays(-30);
             if (user.Role == "Client" && user.LastLog < inactiveThreshold)
             {
@@ -94,12 +94,13 @@ namespace IBanKing.Pages.Login
             user.LastLog = DateTime.Now;
             await _context.SaveChangesAsync();
 
-            // Store user session
+            /* Store user session */
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("UserRole", user.Role);
             HttpContext.Session.SetString("UserName", user.Name);
             HttpContext.Session.SetString("ProfilePicturePath", user.ProfilePicturePath);
-            // Redirect user by role
+
+            /* Redirect user by role */
             return user.Role switch
             {
                 "Admin" => RedirectToPage("/Admin/Index"),

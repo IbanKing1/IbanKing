@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using IBanKing.Services;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using IBanKing.Services.Interfaces;
 
 namespace IBanKing.Pages.Client
 {

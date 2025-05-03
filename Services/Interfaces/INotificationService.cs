@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace IBanKing.Services
+namespace IBanKing.Services.Interfaces
 {
     public interface INotificationService
     {

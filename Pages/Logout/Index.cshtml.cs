@@ -8,10 +8,9 @@ namespace IBanKing.Pages.Logout
     {
         public IActionResult OnPost()
         {
-            // Clear session
             HttpContext.Session.Clear();
 
-            // Prevent caching (back button)
+            /* Prevent caching (back button) */
             Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
             Response.Headers["Pragma"] = "no-cache";
             Response.Headers["Expires"] = "0";

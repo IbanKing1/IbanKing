@@ -1,7 +1,7 @@
 ﻿using IBanKing.Models;
 using System.Threading.Tasks;
 
-namespace IBanKing.Services
+namespace IBanKing.Services.Interfaces
 {
     public interface IUserService
     {

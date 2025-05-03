@@ -100,7 +100,6 @@ namespace IBanKing.Pages.MakePayment
             }
             catch
             {
-                // fallback în caz de eroare API
                 CurrencyOptions = new List<SelectListItem>
                 {
                     new("RON", "RON - Romanian Leu"),

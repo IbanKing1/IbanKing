@@ -1,6 +1,7 @@
 ﻿using IBanKing.Data;
 using IBanKing.Services;
 using Microsoft.EntityFrameworkCore;
+using IBanKing.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

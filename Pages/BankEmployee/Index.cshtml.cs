@@ -1,6 +1,6 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
-using IBanKing.Services;
+using IBanKing.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
