@@ -1,5 +1,6 @@
 @page
 @model IBanKing.Pages.Client.HomeClientModel
+
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "_LayoutClient";
@@ -8,17 +9,42 @@
 <h2 class="text-center mt-4">Welcome, @Model.UserName!</h2>
 
 <div class="card mt-4 p-4 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0">Account Overview</h4>
-        <a asp-page="/Client/AddBankAccount" class="btn btn-success">+ Create New Bank Account</a>
+    <div class="dashboard-actions">
+        <h4>Account Overview</h4>
+        <a asp-page="/Client/AddBankAccount"
+           class="btn btn-success"
+           data-bs-toggle="tooltip"
+           title="Create a new bank account">
+            + Create New Bank Account
+        </a>
     </div>
-
     <table class="table mt-3">
         <thead>
             <tr>
                 <th>IBAN</th>
                 <th>Currency</th>
-                <th>Balance</th>
+                <th> 
+                    <div class="balance-header">
+                        Balance
+                        <button id="toggleBalanceBtn"
+                                class="btn btn-sm btn-link"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title="Show or hide account balances"
+                                onclick="toggleBalanceVisibility(); this.blur();">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg"
+                                 width="20" height="20" fill="currentColor"
+                                 viewBox="0 0 16 16">
+                                <path d="M13.359 11.238a9.469 9.469 0 0 0 2.273-3.238
+                                         s-3-5.5-8-5.5a9.719 9.719 0 0 0-3.366.66L5.43 4.43
+                                         a6.5 6.5 0 0 1 6.218 1.082 3 3 0 0 1-4.087 4.087
+                                         6.5 6.5 0 0 1-1.082-6.218L2.293 1.707
+                                         a1 1 0 0 0-1.414 1.414l12 12
+                                         a1 1 0 0 0 1.414-1.414l-1.934-1.934z" />
+                            </svg>
+                        </button>
+                    </div>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,11 +54,25 @@
                 <tr>
                     <td>@account.IBAN</td>
                     <td>@account.Currency</td>
-                    <td>@account.Balance.ToString("F2") @account.Currency</td>
+                    <td class="account-balance">@account.Balance.ToString("F2") @account.Currency</td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm" onclick="copyIBAN('@account.IBAN')">Copy IBAN</button>
-                        <form method="post" asp-page-handler="Delete" asp-route-id="@account.AccountId" class="d-inline">
-                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this account?')">Delete</button>
+                        <button class="btn btn-outline-primary btn-sm"
+                                onclick="copyIBAN('@account.IBAN')"
+                                data-bs-toggle="tooltip"
+                                title="Copy IBAN">
+                            Copy IBAN
+                        </button>
+                        <form method="post"
+                              asp-page-handler="Delete"
+                              asp-route-id="@account.AccountId"
+                              class="d-inline">
+                            <button type="submit"
+                                    class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this account?')"
+                                    data-bs-toggle="tooltip"
+                                    title="Delete bank account">
+                                Delete
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -42,11 +82,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        function copyIBAN(iban) {
-            navigator.clipboard.writeText(iban).then(function () {
-                alert("IBAN copied to clipboard: " + iban);
-            });
-        }
-    </script>
+    <script src="~/js/homeclient.js" asp-append-version="true"></script>
 }

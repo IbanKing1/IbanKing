@@ -10,7 +10,6 @@ namespace IBanKing.Pages.Client
     public class MakePaymentModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-
         public MakePaymentModel(ApplicationDbContext context)
         {
             _context = context;
