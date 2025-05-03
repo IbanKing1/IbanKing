@@ -1,26 +1,41 @@
-@page
+﻿@page
 @model IBanKing.Pages.Client.MakePaymentModel
 @{
     ViewData["Title"] = "Make a Payment";
     Layout = "_LayoutClient";
 }
 <link rel="stylesheet" href="~/css/MakePayment.css" asp-append-version="true" />
-<h2 class="mb-4">Make a payment</h2>
 
- 
+<h2 class="mb-4">Make a Payment</h2>
+
 <div class="row">
     <div class="col-md-6">
         <h4 class="mb-3">Pay a Service</h4>
+
         @if (Model.Services != null && Model.Services.Any())
         {
-            @foreach (var service in Model.Services)
+            foreach (var service in Model.Services.OrderByDescending(s => s.IsHighPriority))
             {
-                <form method="get" asp-page="/Client/PayService">
-                    <input type="hidden" name="serviceIBAN" value="@service.IBAN" />
-                    <button type="submit" class="btn btn-secondary mb-2 w-100">
-                        Pay for @service.Bill_Name
-                    </button>
-                </form>
+                <div class="service-item @(service.IsHighPriority ? "service-priority" : "")">
+                    <form method="get" asp-page="/Client/PayService" class="service-pay-button">
+                        <input type="hidden" name="serviceIBAN" value="@service.IBAN" />
+                        <button type="submit" class="btn btn-outline-dark w-100 text-start">
+                            <div class="fw-bold">@service.Bill_Name</div>
+                            <small class="text-muted">@service.Provider</small>
+                            @if (service.IsHighPriority)
+                            {
+                                <div class="text-warning mt-1 fw-semibold">★ High Priority</div>
+                            }
+                        </button>
+                    </form>
+
+                    <form method="post" asp-page-handler="TogglePriority">
+                        <input type="hidden" name="serviceIBAN" value="@service.IBAN" />
+                        <button type="submit" class="service-toggle-btn" title="Toggle Priority">
+                            <i class="fas @(service.IsHighPriority ? "fa-star text-warning" : "fa-star")"></i>
+                        </button>
+                    </form>
+                </div>
             }
         }
         else
@@ -29,12 +44,17 @@
         }
     </div>
 
-    <div class="col-md-6 text-center">
+    <div class="col-md-6">
         <h4 class="mb-3">Transfer Between Accounts</h4>
-        <form method="post" asp-page-handler="Transfer">
-            <button type="submit" class="btn btn-primary w-75">
-                Make a Transfer
-            </button>
-        </form>
+
+        <div class="service-item service-transfer">
+            <form method="post" asp-page-handler="Transfer" class="service-pay-button">
+                <button type="submit" class="btn btn-outline-dark w-100 text-start">
+                    <div class="fw-bold">Transfer Between Your Accounts</div>
+                    <small class="text-muted">Secure transfer with currency conversion</small>
+                </button>
+            </form>
+        </div>
     </div>
+
 </div>

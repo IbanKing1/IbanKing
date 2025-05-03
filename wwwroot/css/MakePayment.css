@@ -1,15 +1,13 @@
-﻿/* Stiluri generale pentru pagina */
-body {
-    font-family: 'Lato', sans-serif; /* Un font modern și aerisit */
-    background-color: #f5f5f5; /* Un gri deschis neutru */
-    color: #555; /* Gri mediu pentru text */
+﻿body {
+    font-family: 'Lato', sans-serif;
+    background-color: #f5f5f5;
+    color: #555;
     line-height: 1.6;
     transition: background-color 0.3s ease;
 }
 
-/* Stil pentru titlul principal */
 h2.mb-4 {
-    color: #00bcd4; /* Cyan vibrant */
+    color: #00bcd4;
     margin-bottom: 2rem;
     font-weight: 400;
     text-align: center;
@@ -29,7 +27,6 @@ h2.mb-4 {
     }
 }
 
-/* Stil pentru containerele secțiunilor */
 .col-md-6 {
     background-color: #fff;
     padding: 2rem;
@@ -45,17 +42,15 @@ h2.mb-4 {
         transform: translateY(-3px);
     }
 
-    /* Stil pentru titlurile secțiunilor */
     .col-md-6 h4.mb-3 {
-        color: #4caf50; /* Verde deschis */
+        color: #4caf50;
         font-weight: 400;
         margin-bottom: 1.2rem;
         text-align: center;
     }
 
-/* Stil pentru butoanele de plată servicii */
 .btn-secondary {
-    background-color: #9e9e9e; /* Gri mediu */
+    background-color: #9e9e9e;
     color: #fff;
     border: none;
     border-radius: 0.25rem;
@@ -70,9 +65,8 @@ h2.mb-4 {
         transform: scale(1.02);
     }
 
-/* Stil pentru butonul de transfer între conturi */
 .btn-primary.w-75 {
-    background-color: #ff9800; /* Portocaliu */
+    background-color: #ff9800;
     color: #fff;
     border: none;
     border-radius: 0.25rem;
@@ -88,9 +82,8 @@ h2.mb-4 {
         transform: scale(1.02);
     }
 
-/* Stil pentru mesajul "No services available" */
 p {
-    color: #f44336; /* Roșu */
+    color: #f44336;
     font-style: italic;
     text-align: center;
     margin-top: 1rem;
@@ -107,7 +100,6 @@ p {
     }
 }
 
-/* Media query pentru ecrane mai mici */
 @media (max-width: 768px) {
     .col-md-6 {
         padding: 1.5rem;
@@ -124,4 +116,53 @@ p {
     .btn-primary.w-75 {
         width: 100%;
     }
+}
+
+.service-item {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+    .service-item:hover {
+        background-color: #f1f3f5;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+.service-priority {
+    border-left: 5px solid #ffc107;
+    background-color: #fff3cd;
+}
+
+.service-pay-button {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.service-toggle-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+    transition: color 0.2s;
+    font-size: 1.2rem;
+}
+
+    .service-toggle-btn:hover {
+        color: #0d6efd;
+    }
+
+.service-transfer {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-left: 5px solid #0d6efd;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
 }
