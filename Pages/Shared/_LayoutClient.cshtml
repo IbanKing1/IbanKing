@@ -5,7 +5,7 @@
     var userName = Context.Session.GetString("UserName") ?? "Client";
     var role = Context.Session.GetString("UserRole") ?? "";
     var userId = Context.Session.GetString("UserId");
-    var profilePicturePath = Context.Session.GetString("ProfilePicturePath") ?? "default.png";
+    var profilePicturePath = Context.Session.GetString("ProfilePicturePath") ?? "user.png";
     var unreadCount = await NotificationService.GetUnreadCountAsync(userId);
 }
 
@@ -97,7 +97,7 @@
             </ul>
 
             <div class="user-footer">
-                <img src="~/uploads/profile-pictures/@profilePicturePath" alt="User photo" class="profile-picture">
+                <img src="~/uploads/profile-pictures/@profilePicturePath" onerror="this.src='/images/user.png'" alt="User photo" class="profile-picture">
                 <span>@userName</span>
             </div>
         </aside>
@@ -134,6 +134,19 @@
     <script src="~/js/logout.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const toggleSidebar = document.getElementById('toggle-sidebar');
+            const sidebar = document.getElementById('sidebar');
+            const content = document.querySelector('.main-content-wrapper');
+            const footer = document.querySelector('.page-footer');
+
+            if (toggleSidebar && sidebar && content && footer) {
+                toggleSidebar.addEventListener('click', function () {
+                    sidebar.classList.toggle('sidebar-hidden');
+                    content.classList.toggle('sidebar-hidden');
+                    footer.classList.toggle('sidebar-hidden');
+                });
+            }
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function () {
                     const notificationId = this.getAttribute('data-notification-id');
@@ -156,11 +169,13 @@
                     .then(response => response.json())
                     .then(count => {
                         const badge = document.querySelector('.notification-badge');
-                        if (count > 0) {
-                            badge.textContent = count;
-                            badge.style.display = 'block';
-                        } else {
-                            badge.style.display = 'none';
+                        if (badge) {
+                            if (count > 0) {
+                                badge.textContent = count;
+                                badge.style.display = 'block';
+                            } else {
+                                badge.style.display = 'none';
+                            }
                         }
                     });
             }

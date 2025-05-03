@@ -262,8 +262,55 @@ textarea.form-control {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
+    .profile-picture:hover {
+        opacity: 0.8;
+    }
+
+.sidebar-hidden {
+    margin-left: -250px;
+}
+
+.main-content-wrapper {
+    transition: margin-left 0.3s ease;
+}
+
+.page-footer {
+    transition: margin-left 0.3s ease;
+}
+
+.user-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-top: 1px solid #444;
+    margin-top: auto;
+}
+
+.profile-picture-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    cursor: pointer;
+}
+
+.profile-picture-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+    .profile-picture-preview:hover {
+        opacity: 0.8;
+    }
 .custom-file-label::after {
     content: "Browse";
 }

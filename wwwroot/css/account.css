@@ -122,3 +122,23 @@ hr {
     margin-top: 20px;
     text-align: center;
 }
+.profile-picture-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    cursor: pointer;
+}
+
+.profile-picture-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+    .profile-picture-preview:hover {
+        opacity: 0.8;
+    }

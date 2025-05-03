@@ -31,8 +31,9 @@ namespace IBanKing.Pages.Client
         [BindProperty]
         [AllowedExtensions(new string[] { ".jpg", ".png", ".gif", ".jpeg" })]
         [MaxFileSize(2 * 1024 * 1024)]
-        public IFormFile ProfilePicture { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
 
+        public string ProfilePath { get; set; }
         public bool Success { get; set; }
 
         public class EditInputModel
@@ -64,6 +65,7 @@ namespace IBanKing.Pages.Client
                 return NotFound();
             }
 
+            ProfilePath = user.ProfilePicturePath;
             Input = new EditInputModel
             {
                 Email = user.Email,
@@ -90,6 +92,7 @@ namespace IBanKing.Pages.Client
 
             if (!ModelState.IsValid)
             {
+                ProfilePath = user.ProfilePicturePath;
                 return Page();
             }
 
@@ -99,6 +102,7 @@ namespace IBanKing.Pages.Client
                 if (emailExists)
                 {
                     ModelState.AddModelError("Input.Email", "This email is already in use.");
+                    ProfilePath = user.ProfilePicturePath;
                     return Page();
                 }
                 user.Email = Input.Email;
@@ -116,7 +120,7 @@ namespace IBanKing.Pages.Client
 
             if (ProfilePicture != null && ProfilePicture.Length > 0)
             {
-                if (!string.IsNullOrEmpty(user.ProfilePicturePath) && user.ProfilePicturePath != "default.png")
+                if (!string.IsNullOrEmpty(user.ProfilePicturePath) && user.ProfilePicturePath != "user.png")
                 {
                     var oldFilePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", "profile-pictures", user.ProfilePicturePath);
                     if (System.IO.File.Exists(oldFilePath))
@@ -144,12 +148,14 @@ namespace IBanKing.Pages.Client
                 if (string.IsNullOrWhiteSpace(Input.CurrentPassword))
                 {
                     ModelState.AddModelError("Input.CurrentPassword", "You must enter your current password to set a new one.");
+                    ProfilePath = user.ProfilePicturePath;
                     return Page();
                 }
 
                 if (!PasswordHelper.VerifyPassword(Input.CurrentPassword, user.Password))
                 {
                     ModelState.AddModelError("Input.CurrentPassword", "Current password is incorrect.");
+                    ProfilePath = user.ProfilePicturePath;
                     return Page();
                 }
 
@@ -159,6 +165,7 @@ namespace IBanKing.Pages.Client
 
             await _context.SaveChangesAsync();
             Success = true;
+            ProfilePath = user.ProfilePicturePath;
 
             return Page();
         }
