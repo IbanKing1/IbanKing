@@ -1,5 +1,4 @@
-﻿/* Stiluri generale pentru pagina */
-body {
+﻿body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f3f6f9;
     color: #333;
@@ -21,7 +20,6 @@ h2.text-center {
     font-weight: 500;
 }
 
-/* Bara de progres */
 .progress-bar-container {
     margin-bottom: 30px;
     color: #777;
@@ -35,7 +33,6 @@ h2.text-center {
         color: #2ecc71;
     }
 
-/* Cardul de confirmare */
 .card {
     padding: 20px;
     margin-bottom: 20px;
@@ -54,7 +51,6 @@ h2.text-center {
         color: #333;
     }
 
-/* Butoane */
 .btn {
     border: none;
     border-radius: 5px;
@@ -62,9 +58,9 @@ h2.text-center {
     font-size: 1.1rem;
     cursor: pointer;
     transition: opacity 0.2s ease-in-out;
-    text-decoration: none; /* Pentru link-ul "Go Back" */
-    display: inline-block; /* Asigură spațiere corectă */
-    margin-right: 10px; /* Spațiere între butoane */
+    text-decoration: none;
+    display: inline-block; 
+    margin-right: 10px; 
 }
 
     .btn:hover {
@@ -81,7 +77,6 @@ h2.text-center {
     color: #fff;
 }
 
-/* Formularul pentru confirmare */
 form {
-    text-align: center; /* Centrează butoanele în formular */
+    text-align: center; 
 }

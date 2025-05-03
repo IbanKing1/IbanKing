@@ -22,13 +22,13 @@
 }
 
 .notification-list {
-    overflow-y: auto; /* ✅ Scroll pe verticală */
+    overflow-y: auto; 
     overflow-x: hidden;
     width: 100%;
     flex-grow: 1;
     margin: 0;
     padding: 0;
-    max-height: 220px; /* ✅ Spațiu lăsat pentru header + footer */
+    max-height: 220px;
 }
 
     .notification-list::-webkit-scrollbar {

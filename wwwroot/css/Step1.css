@@ -1,13 +1,12 @@
-﻿/* Stiluri generale pentru pagina */
-body {
+﻿body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f3f6f9; /* Un fundal deschis și modern */
+    background-color: #f3f6f9;
     color: #333;
     line-height: 1.6;
 }
 
 .container {
-    max-width: 600px; /* Limităm lățimea containerului principal */
+    max-width: 600px; 
     margin: 30px auto;
     padding: 30px;
     background-color: #fff;
@@ -16,12 +15,11 @@ body {
 }
 
 h2.text-center {
-    color: #3498db; /* Albastru vibrant pentru titlu */
+    color: #3498db; 
     margin-bottom: 25px;
     font-weight: 500;
 }
 
-/* Bara de progres */
 .progress-bar-container {
     margin-bottom: 30px;
     color: #777;
@@ -32,10 +30,9 @@ h2.text-center {
 }
 
     .step.active {
-        color: #2ecc71; /* Verde pentru pasul activ */
+        color: #2ecc71; 
     }
 
-/* Stiluri pentru formulare */
 .form-group {
     margin-bottom: 20px;
 }
@@ -64,12 +61,11 @@ label {
     }
 
 .text-danger {
-    color: #e74c3c; /* Roșu pentru mesajele de validare */
+    color: #e74c3c; 
     font-size: 0.9rem;
     margin-top: 5px;
 }
 
-/* Stil pentru butonul principal */
 .btn-primary {
     background-color: #3498db;
     color: #fff;
@@ -85,7 +81,6 @@ label {
         background-color: #2980b9;
     }
 
-/* Stil pentru selector (dropdown) */
 select.form-control {
     appearance: none;
     background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
