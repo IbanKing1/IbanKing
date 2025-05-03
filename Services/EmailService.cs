@@ -3,7 +3,6 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
-using System.Net.Mail;
 
 namespace IBanKing.Services
 {
@@ -21,7 +20,7 @@ namespace IBanKing.Services
     {
         Task SendInactivityEmailAsync(string toEmail, string userName, DateTime lastLog);
         Task SendPasswordChangeEmailAsync(string toEmail, string userName, DateTime changeTime);
-
+        Task SendPaymentConfirmationEmailAsync(string toEmail, string userName, decimal amount, string currency, string receiver, DateTime dateTime);
     }
 
     public class EmailService : IEmailService
@@ -37,95 +36,119 @@ namespace IBanKing.Services
 
         public async Task SendInactivityEmailAsync(string toEmail, string userName, DateTime lastLog)
         {
-            var email = new MimeMessage();
-            email.From.Add(new MailboxAddress(_mailSettings.FromName, _mailSettings.FromEmail));
-            email.To.Add(MailboxAddress.Parse(toEmail));
-            email.Subject = "We've Missed You - Your IBanking Account";
-
+            var email = CreateEmail(toEmail, "We've Missed You - Your IBanKing Account");
             var logoPath = Path.Combine(_env.WebRootPath, "images", "logo.png");
-            var logo = new LinkedResource(logoPath, "image/png") { ContentId = "logo" };
 
-            var bodyBuilder = new BodyBuilder();
-
-            bodyBuilder.HtmlBody = $@"
-                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;'>
-                    <div style='background-color: #f8f9fa; padding: 20px; text-align: center;'>
-                        <img src='cid:logo' alt='IBanking Logo' style='max-height: 60px;'>
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = $@"
+                <div style='font-family: Arial; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;'>
+                    <div style='background: #f8f9fa; padding: 20px; text-align: center;'>
+                        <img src='cid:logo' style='max-height: 60px;' />
                     </div>
-                    
                     <div style='padding: 30px;'>
-                        <h2 style='color: #2c3e50;'>Hello {userName},</h2>
-                        
-                        <p style='color: #34495e; line-height: 1.6;'>
-                            We noticed you haven't logged in to your IBanking account for
-                            <strong> 30 days</strong>.
-                        </p>
-                        
-                        <p style='color: #34495e; line-height: 1.6;'>
-                            For security reasons, we recommend logging in to keep your account active and ensure uninterrupted access to our services.
-                        </p>
-                        
-                        <div style='background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;'>
-                            <p style='margin: 0; color: #7f8c8d;'>
-                                <strong>Last activity:</strong> {lastLog:dd MMMM yyyy 'at' HH:mm}
-                            </p>
+                        <h2>Hello {userName},</h2>
+                        <p>You haven’t logged in to your IBanKing account for <strong>30 days</strong>.</p>
+                        <p>For security, we recommend logging in to keep your account active.</p>
+                        <div style='background: #eee; padding: 10px; margin: 20px 0;'>
+                            <strong>Last activity:</strong> {lastLog:dd MMMM yyyy 'at' HH:mm}
                         </div>
-                        
-                        <p style='color: #95a5a6; font-size: 14px;'>
-                            If you didn't attempt to log in or believe this is a mistake, please contact our support team immediately.
-                        </p>
+                        <p style='font-size: 13px; color: #999;'>If this wasn't you, contact support immediately.</p>
                     </div>
-                    
-                    <div style='background-color: #f8f9fa; padding: 20px; text-align: center; color: #7f8c8d; font-size: 12px;'>
-                        <p>© {DateTime.Now.Year} IBanking. All rights reserved.</p>
-                        <p>This is an automated message - please do not reply directly to this email.</p>
+                    <div style='text-align: center; background: #f8f9fa; padding: 20px; font-size: 12px; color: #999;'>
+                        © {DateTime.Now.Year} IBanKing. This is an automated message.
                     </div>
-                </div>
-            ";
+                </div>"
+            };
 
-            var image = bodyBuilder.LinkedResources.Add(logoPath);
-            image.ContentId = "logo";
-
+            bodyBuilder.LinkedResources.Add(logoPath).ContentId = "logo";
             email.Body = bodyBuilder.ToMessageBody();
 
-            using var smtp = new MailKit.Net.Smtp.SmtpClient();
-            await smtp.ConnectAsync(
-                _mailSettings.Host,
-                _mailSettings.Port,
-                SecureSocketOptions.SslOnConnect
-            );
-            await smtp.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
-            await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
+            await SendEmailAsync(email);
         }
 
         public async Task SendPasswordChangeEmailAsync(string toEmail, string userName, DateTime changeTime)
         {
+            var email = CreateEmail(toEmail, "Password Updated - Your IBanKing Account");
+            var logoPath = Path.Combine(_env.WebRootPath, "images", "logo.png");
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = $@"
+                <div style='font-family: Arial; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;'>
+                    <div style='background: #f8f9fa; padding: 20px; text-align: center;'>
+                        <img src='cid:logo' style='max-height: 60px;' />
+                    </div>
+                    <div style='padding: 30px;'>
+                        <h2>Hello {userName},</h2>
+                        <p>This is to confirm your password was successfully changed.</p>
+                        <div style='background: #eee; padding: 10px; margin: 20px 0;'>
+                            <strong>Change time:</strong> {changeTime:dd MMMM yyyy 'at' HH:mm}
+                        </div>
+                        <p style='font-size: 13px; color: #999;'>If this wasn't you, contact support immediately.</p>
+                    </div>
+                    <div style='text-align: center; background: #f8f9fa; padding: 20px; font-size: 12px; color: #999;'>
+                        © {DateTime.Now.Year} IBanKing. This is an automated message.
+                    </div>
+                </div>"
+            };
+
+            bodyBuilder.LinkedResources.Add(logoPath).ContentId = "logo";
+            email.Body = bodyBuilder.ToMessageBody();
+
+            await SendEmailAsync(email);
+        }
+
+        public async Task SendPaymentConfirmationEmailAsync(string toEmail, string userName, decimal amount, string currency, string receiver, DateTime dateTime)
+        {
+            var email = CreateEmail(toEmail, "Payment Confirmation - IBanKing");
+            var logoPath = Path.Combine(_env.WebRootPath, "images", "logo.png");
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = $@"
+                <div style='font-family: Arial; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;'>
+                    <div style='background: #f8f9fa; padding: 20px; text-align: center;'>
+                        <img src='cid:logo' style='max-height: 60px;' />
+                    </div>
+                    <div style='padding: 30px;'>
+                        <h2>Hello {userName},</h2>
+                        <p>You’ve just completed a payment:</p>
+                        <ul>
+                            <li><strong>Receiver:</strong> {receiver}</li>
+                            <li><strong>Amount:</strong> {amount:F2} {currency}</li>
+                            <li><strong>Date:</strong> {dateTime:dd MMM yyyy HH:mm}</li>
+                        </ul>
+                        <p style='font-size: 13px; color: #999;'>If this wasn't you, please contact support.</p>
+                    </div>
+                    <div style='text-align: center; background: #f8f9fa; padding: 20px; font-size: 12px; color: #999;'>
+                        © {DateTime.Now.Year} IBanKing. This is an automated message.
+                    </div>
+                </div>"
+            };
+
+            bodyBuilder.LinkedResources.Add(logoPath).ContentId = "logo";
+            email.Body = bodyBuilder.ToMessageBody();
+
+            await SendEmailAsync(email);
+        }
+
+        private MimeMessage CreateEmail(string toEmail, string subject)
+        {
             var email = new MimeMessage();
             email.From.Add(new MailboxAddress(_mailSettings.FromName, _mailSettings.FromEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
-            email.Subject = "Your IBanKing Password Has Been Changed";
+            email.Subject = subject;
+            return email;
+        }
 
-            var bodyBuilder = new BodyBuilder();
-            bodyBuilder.HtmlBody = $@"
-        <div style='font-family: Arial, sans-serif;'>
-            <h2>Hello {userName},</h2>
-            <p>This is a confirmation that your IBanKing password was changed on <strong>{changeTime:dd MMMM yyyy 'at' HH:mm}</strong>.</p>
-            <p>If you did not make this change, please contact our support team immediately.</p>
-            <hr />
-            <p style='font-size: 12px; color: gray;'>This is an automated message. Do not reply.</p>
-        </div>
-    ";
-
-            email.Body = bodyBuilder.ToMessageBody();
-
-            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+        private async Task SendEmailAsync(MimeMessage email)
+        {
+            using var smtp = new SmtpClient();
             await smtp.ConnectAsync(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.SslOnConnect);
             await smtp.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
         }
-
-
     }
 }

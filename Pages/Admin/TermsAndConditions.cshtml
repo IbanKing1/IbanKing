@@ -1,0 +1,69 @@
+﻿@page
+@model IBanKing.Pages.Admin.TermsAndConditionsModel
+@{
+    ViewData["Title"] = "Terms and Conditions";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="terms-admin-container">
+    <div class="terms-admin-header">
+        <div class="header-top-row">
+            <h2>@ViewData["Title"]</h2>
+            <button type="button" class="btn btn-primary btn-update-terms" onclick="confirmUpdate()">
+                <i class="fas fa-save me-2"></i>Update Terms
+            </button>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mb-2" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="last-updated-info">
+            <small class="text-muted">
+                Last updated: @Model.Terms.LastUpdated.ToString("g")
+            </small>
+        </div>
+    </div>
+
+    <div class="terms-admin-card">
+        <form method="post" id="termsForm">
+            <div class="terms-admin-content">
+                <textarea asp-for="Terms.Content" class="terms-admin-textarea" id="termsTextarea" style="white-space: pre;">@Model.Terms?.Content</textarea>
+                <span asp-validation-for="Terms.Content" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmUpdate() {
+            Swal.fire({
+                title: 'Confirm Update',
+                text: "Are you sure you want to update the terms and conditions?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, update it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("termsForm").submit();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('termsTextarea');
+            textarea.style.height = 'calc(100vh - 250px)';
+            textarea.style.overflowY = 'auto';
+        });
+    </script>
+}

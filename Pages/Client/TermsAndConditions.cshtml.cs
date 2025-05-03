@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace IBanKing.Pages.BankEmployee
+namespace IBanKing.Pages.Client
 {
     public class TermsAndConditionsModel : PageModel
     {

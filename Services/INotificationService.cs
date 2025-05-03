@@ -9,6 +9,7 @@ namespace IBanKing.Services
         Task CreateAsync(Notification notification);
         Task CreatePaymentNotification(string userId, int transactionId, decimal amount, string currency);
         Task CreateInactivityNotification(string userId);
+        Task CreateTermsUpdateNotification(string userId);
         Task MarkAsReadAsync(int id);
         Task MarkAllAsReadAsync(string userId);
         Task DeleteAsync(int id);

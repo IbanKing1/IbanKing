@@ -510,15 +510,17 @@
                 const favoriteCard = document.createElement('div');
                 favoriteCard.className = 'favorite-card';
                 favoriteCard.innerHTML = `
-                    <div>
-                        <div class="favorite-pair">${baseCurrency}/${currency}</div>
-                        <div class="favorite-rate">${rate.toFixed(4)}</div>
-                    </div>
-                    <button class="delete-favorite" data-currency="${currency}">✕</button>
-                `;
+                <div>
+                    <div class="favorite-pair">${baseCurrency}/${currency}</div>
+                    <div class="favorite-rate">${rate.toFixed(4)}</div>
+                </div>
+                <button class="delete-favorite" data-currency="${currency}">✕</button>
+            `;
 
                 favoriteCard.addEventListener('click', (e) => {
                     if (!e.target.classList.contains('delete-favorite')) {
+                        fromCurrencySearch.value = baseCurrency;
+                        fromCurrency = baseCurrency;
                         toCurrencySearch.value = currency;
                         toCurrency = currency;
                         updateResult();

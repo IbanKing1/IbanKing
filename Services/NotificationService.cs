@@ -27,7 +27,6 @@ namespace IBanKing.Services
         public async Task CreatePaymentNotification(string userId, int transactionId, decimal amount, string currency)
         {
             var transaction = await _context.Transactions.FindAsync(transactionId);
-
             var notification = new Notification
             {
                 UserId = userId,
@@ -54,6 +53,19 @@ namespace IBanKing.Services
             await CreateAsync(notification);
         }
 
+        public async Task CreateTermsUpdateNotification(string userId)
+        {
+            var notification = new Notification
+            {
+                UserId = userId,
+                Title = "Terms and Conditions Updated",
+                Message = "The terms and conditions have been updated. Please review them.",
+                Type = "Account",
+                ActionUrl = "/Client/TermsAndConditions"
+            };
+            await CreateAsync(notification);
+        }
+
         public async Task MarkAsReadAsync(int id)
         {
             var notification = await _context.Notifications.FindAsync(id);
@@ -69,12 +81,10 @@ namespace IBanKing.Services
             var notifications = await _context.Notifications
                 .Where(n => n.UserId == userId && !n.IsRead)
                 .ToListAsync();
-
             foreach (var notification in notifications)
             {
                 notification.IsRead = true;
             }
-
             await _context.SaveChangesAsync();
         }
 
@@ -93,7 +103,6 @@ namespace IBanKing.Services
             var notifications = await _context.Notifications
                 .Where(n => n.UserId == userId)
                 .ToListAsync();
-
             _context.Notifications.RemoveRange(notifications);
             await _context.SaveChangesAsync();
         }
