@@ -109,7 +109,7 @@ namespace IBanKing.Pages.MakePayment
                 Currency = receiverAccount.Currency,
                 DateTime = DateTime.Now,
                 UserId = userId,
-                Status = "Pending"
+                Status = $"Pending:{amountInSenderCurrency.ToString(CultureInfo.InvariantCulture)}:{senderAccount.Currency}"
             };
 
             var service = _context.ServicedPayments.FirstOrDefault(s => s.IBAN == ViewModel.Receiver);
@@ -129,7 +129,6 @@ namespace IBanKing.Pages.MakePayment
                 receiverAccount.Currency
             );
 
-            // ✅ Send confirmation email
             await _emailService.SendPaymentConfirmationEmailAsync(
                 toEmail: user.Email,
                 userName: user.Name,
@@ -154,9 +153,7 @@ namespace IBanKing.Pages.MakePayment
                 var response = await _httpClient.GetFromJsonAsync<ExchangeRateApiResponse>(
                     $"https://api.frankfurter.app/latest?from={fromCurrency}&to={toCurrency}");
 
-                return response != null && response.Rates.TryGetValue(toCurrency, out double rate)
-                    ? rate
-                    : 1;
+                return response != null && response.Rates.TryGetValue(toCurrency, out double rate) ? rate : 1;
             }
             catch
             {

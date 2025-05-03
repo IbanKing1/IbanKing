@@ -1,4 +1,4 @@
-using IBanKing.Data;
+﻿using IBanKing.Data;
 using IBanKing.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,6 +25,10 @@ namespace IBanKing.Pages.Client
         public IActionResult OnPostTransfer()
         {
             return RedirectToPage("/Client/Step1");
+        }
+        public IActionResult OnPostPayService(string serviceIBAN)
+        {
+            return RedirectToPage("/Client/PayService", new { serviceIBAN });
         }
     }
 }

@@ -4,24 +4,38 @@
     ViewData["Title"] = "Make a Payment";
     Layout = "_LayoutClient";
 }
+<<<<<<< HEAD
 
 <h2 class="mb-4">Make a payment</h2>
+=======
+<h2 class="mb-4">Make a Payment</h2>
+>>>>>>> 12cbc03b28c60204b64e106ad9c5ec023ae1ec62
 <div class="row">
     <div class="col-md-6">
-        @foreach (var service in Model.Services)
+        <h4 class="mb-3">Pay a Service</h4>
+        @if (Model.Services != null && Model.Services.Any())
         {
-            <form method="get" asp-page="/Client/PayService">
-                <input type="hidden" name="serviceIBAN" value="@service.IBAN" />
-                <button type="submit" class="btn btn-secondary mb-2 w-100">
-                    Pay for @service.Bill_Name
-                </button>
-            </form>
+            @foreach (var service in Model.Services)
+            {
+                <form method="get" asp-page="/Client/PayService">
+                    <input type="hidden" name="serviceIBAN" value="@service.IBAN" />
+                    <button type="submit" class="btn btn-secondary mb-2 w-100">
+                        Pay for @service.Bill_Name
+                    </button>
+                </form>
+            }
+        }
+        else
+        {
+            <p>No services available at this time.</p>
         }
     </div>
+
     <div class="col-md-6 text-center">
+        <h4 class="mb-3">Transfer Between Accounts</h4>
         <form method="post" asp-page-handler="Transfer">
             <button type="submit" class="btn btn-primary w-75">
-                Make a transfer
+                Make a Transfer
             </button>
         </form>
     </div>
