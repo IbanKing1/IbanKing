@@ -3,9 +3,12 @@ using IBanKing.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace IBanKing.Pages.Client
 {
@@ -19,8 +22,12 @@ namespace IBanKing.Pages.Client
         }
 
         public List<Transaction> UserTransactions { get; set; } = new();
+
         [BindProperty(SupportsGet = true)]
         public string FilterStatus { get; set; } = "All";
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -40,12 +47,50 @@ namespace IBanKing.Pages.Client
 
             if (!string.IsNullOrEmpty(FilterStatus) && FilterStatus != "All")
             {
-                query = query.Where(t => t.Status == FilterStatus);
+                query = FilterStatus == "Pending"
+                    ? query.Where(t => t.Status.StartsWith("Pending"))
+                    : query.Where(t => t.Status == FilterStatus);
             }
 
-            UserTransactions = query
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                var searchTermLower = SearchTerm.ToLower();
+
+                if (DateTime.TryParseExact(SearchTerm, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var searchDate))
+                {
+                    query = query.Where(t =>
+                        t.DateTime.Year == searchDate.Year &&
+                        t.DateTime.Month == searchDate.Month &&
+                        t.DateTime.Day == searchDate.Day);
+                }
+                else if (int.TryParse(SearchTerm, out int searchId))
+                {
+                    query = query.Where(t => t.TransactionId == searchId);
+                }
+                else if (!SearchTerm.Contains('.') && double.TryParse(SearchTerm, out double searchAmount))
+                {
+                    query = query.Where(t => Math.Abs(t.Amount - searchAmount) < 0.01);
+                }
+                else
+                {
+                    query = query.Where(t =>
+                        t.Sender.ToLower().Contains(searchTermLower) ||
+                        t.Receiver.ToLower().Contains(searchTermLower) ||
+                        t.Currency.ToLower().Contains(searchTermLower));
+                }
+            }
+
+            UserTransactions = await query
                 .OrderByDescending(t => t.DateTime)
-                .ToList();
+                .ToListAsync();
+
+            foreach (var tx in UserTransactions)
+            {
+                if (tx.Status.StartsWith("Pending"))
+                {
+                    tx.Status = "Pending";
+                }
+            }
 
             return Page();
         }

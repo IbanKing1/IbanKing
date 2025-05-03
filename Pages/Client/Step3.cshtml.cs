@@ -110,7 +110,7 @@ namespace IBanKing.Pages.MakePayment
                 Currency = receiverAccount.Currency,
                 DateTime = DateTime.Now,
                 UserId = userId,
-                Status = $"Pending:{amountInSenderCurrency.ToString(CultureInfo.InvariantCulture)}:{senderAccount.Currency}"
+                Status = "Pending"
             };
 
             var service = _context.ServicedPayments.FirstOrDefault(s => s.IBAN == ViewModel.Receiver);
