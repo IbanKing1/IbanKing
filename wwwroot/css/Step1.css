@@ -1,0 +1,96 @@
+﻿/* Stiluri generale pentru pagina */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f6f9; /* Un fundal deschis și modern */
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px; /* Limităm lățimea containerului principal */
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+h2.text-center {
+    color: #3498db; /* Albastru vibrant pentru titlu */
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+/* Bara de progres */
+.progress-bar-container {
+    margin-bottom: 30px;
+    color: #777;
+}
+
+.step {
+    font-weight: bold;
+}
+
+    .step.active {
+        color: #2ecc71; /* Verde pentru pasul activ */
+    }
+
+/* Stiluri pentru formulare */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        outline: none;
+    }
+
+.text-danger {
+    color: #e74c3c; /* Roșu pentru mesajele de validare */
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Stil pentru butonul principal */
+.btn-primary {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+/* Stil pentru selector (dropdown) */
+select.form-control {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: center;
+    background-size: 1em;
+}

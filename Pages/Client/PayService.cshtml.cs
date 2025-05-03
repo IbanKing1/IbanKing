@@ -104,18 +104,15 @@ namespace IBanKing.Pages.Client
 
             _context.Transactions.Add(transaction);
             _context.SaveChanges();
-
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
             if (user != null)
             {
                 await _emailService.SendPaymentConfirmationEmailAsync(
                     user.Email, user.Name, Amount, SelectedCurrency, Service.Bill_Name, DateTime.Now);
             }
-
             SuccessMessage = $"Payment of {Amount:F2} {SelectedCurrency} sent to {Service.Bill_Name}.";
             return Page();
         }
-
         private async Task<double> GetExchangeRateAsync(string from, string to)
         {
             try

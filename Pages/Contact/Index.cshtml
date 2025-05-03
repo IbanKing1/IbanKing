@@ -3,14 +3,26 @@
     ViewData["Title"] = "Contact";
     Layout = "_LayoutClient";
 }
+<link rel="stylesheet" href="~/css/Contact.css" asp-append-version="true" />
 
-<h1 class="text-center">Contact</h1>
-<p class="text-center">
-    We'd love to hear from you! Reach us at:
-</p>
+<div class="contact-container">
+    <div class="contact-card">
+        <h1>Contact IBanKing</h1>
+        <p class="subtitle">We're happy to assist you. Reach us via:</p>
 
-<ul class="text-center list-unstyled">
-    <li><strong>Email:</strong> ibankingfamily@gmail.com</li>
-    <li><strong>Phone:</strong> +40 123 456 789</li>
-    <li><strong>Address:</strong> Str. Exemplu, Nr. 99, București, România</li>
-</ul>
+        <div class="contact-info">
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <span><strong>Email:</strong> ibankingfamily@gmail.com</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-phone-alt"></i>
+                <span><strong>Phone:</strong> +40 123 456 789</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span><strong>Address:</strong> Str. Exemplu, Nr. 99, București, România</span>
+            </div>
+        </div>
+    </div>
+</div>
