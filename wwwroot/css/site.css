@@ -14,7 +14,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    transition: width 0.3s ease;
+    transition: width 0.4s ease;
     overflow: hidden;
 }
 
@@ -114,6 +114,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    transition: margin-left 0.4s ease;
 }
 
     .main-content-wrapper.sidebar-hidden {
@@ -140,7 +141,7 @@
     left: 250px;
     width: calc(100% - 250px);
     z-index: 1000;
-    transition: all 0.3s ease;
+    transition: left 0.4s ease, width 0.4s ease;
 }
 
     .page-footer.sidebar-hidden {
