@@ -98,7 +98,7 @@ namespace IBanKing.Pages.Login
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("UserRole", user.Role);
             HttpContext.Session.SetString("UserName", user.Name);
-
+            HttpContext.Session.SetString("ProfilePicturePath", user.ProfilePicturePath);
             // Redirect user by role
             return user.Role switch
             {

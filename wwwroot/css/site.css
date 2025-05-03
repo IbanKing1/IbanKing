@@ -256,7 +256,17 @@ textarea.form-control {
     overflow: hidden;
     display: flex;
 }
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
 
+.custom-file-label::after {
+    content: "Browse";
+}
 .terms-admin-textarea {
     width: 100%;
     height: 100%;
