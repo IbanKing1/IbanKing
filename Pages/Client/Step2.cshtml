@@ -4,15 +4,13 @@
     ViewData["Title"] = "Step 2 - Confirm Payment";
     Layout = "_LayoutClient";
 }
-
+<link rel="stylesheet" href="~/css/Step2.css" asp-append-version="true" />
 <h2 class="text-center">Step 2/3: Confirm Your Payment</h2>
-
 <div class="progress-bar-container mb-4 text-center">
     <span class="step">Step 1</span> →
     <span class="step active">Step 2</span> →
     <span class="step">Step 3</span>
 </div>
-
 <div class="card p-4 mt-3">
     <p><strong>Receiver IBAN:</strong> @Model.ReceiverIBAN</p>
     <p><strong>Amount:</strong> @Model.Amount @Model.Currency</p>

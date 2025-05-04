@@ -1,6 +1,7 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
 using IBanKing.Services;
+using IBanKing.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,7 +19,6 @@ namespace IBanKing.Pages.MakePayment
         private readonly HttpClient _httpClient;
         private readonly INotificationService _notificationService;
         private readonly IEmailService _emailService;
-
         public Step3Model(ApplicationDbContext context, IHttpClientFactory httpClientFactory, INotificationService notificationService, IEmailService emailService)
         {
             _context = context;
@@ -100,7 +100,6 @@ namespace IBanKing.Pages.MakePayment
             decimal amountInReceiverCurrency = senderAccount.Currency == receiverAccount.Currency
                 ? amountInSenderCurrency
                 : Math.Round(amountInSenderCurrency * (decimal)await GetExchangeRate(senderAccount.Currency, receiverAccount.Currency), 2);
-
             var transaction = new Transaction
             {
                 Sender = senderIBAN,
@@ -111,24 +110,20 @@ namespace IBanKing.Pages.MakePayment
                 UserId = userId,
                 Status = $"Pending:{amountInSenderCurrency.ToString(CultureInfo.InvariantCulture)}:{senderAccount.Currency}"
             };
-
             var service = _context.ServicedPayments.FirstOrDefault(s => s.IBAN == ViewModel.Receiver);
             if (service != null)
             {
                 transaction.ServicedPaymentId = service.ServicedPaymentId;
                 ServicedPaymentName = service.Bill_Name;
             }
-
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
-
             await _notificationService.CreatePaymentNotification(
                 receiverAccount.UserId.ToString(),
                 transaction.TransactionId,
                 amountInReceiverCurrency,
                 receiverAccount.Currency
             );
-
             await _emailService.SendPaymentConfirmationEmailAsync(
                 toEmail: user.Email,
                 userName: user.Name,
@@ -137,22 +132,33 @@ namespace IBanKing.Pages.MakePayment
                 receiver: service?.Bill_Name ?? receiverAccount.IBAN,
                 dateTime: transaction.DateTime
             );
-
+            if (receiverAccount.UserId != user.UserId)
+            {
+                var receiverUser = _context.Users.FirstOrDefault(u => u.UserId == receiverAccount.UserId);
+                if (receiverUser != null)
+                {
+                    await _emailService.SendPaymentConfirmationEmailAsync(
+                        toEmail: receiverUser.Email,
+                        userName: receiverUser.Name,
+                        amount: amountInReceiverCurrency,
+                        currency: receiverAccount.Currency,
+                        receiver: senderAccount.IBAN,
+                        dateTime: transaction.DateTime
+                    );
+                }
+            }
             ViewModel.Status = "success";
             ViewModel.Message = "Payment submitted and awaiting bank employee approval.";
             return Page();
         }
-
         private async Task<double> GetExchangeRate(string fromCurrency, string toCurrency)
         {
             try
             {
                 if (fromCurrency == toCurrency)
                     return 1;
-
                 var response = await _httpClient.GetFromJsonAsync<ExchangeRateApiResponse>(
                     $"https://api.frankfurter.app/latest?from={fromCurrency}&to={toCurrency}");
-
                 return response != null && response.Rates.TryGetValue(toCurrency, out double rate) ? rate : 1;
             }
             catch
@@ -160,7 +166,6 @@ namespace IBanKing.Pages.MakePayment
                 return 1;
             }
         }
-
         public class ExchangeRateApiResponse
         {
             public string Base { get; set; }

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
-using IBanKing.Services;
 using Microsoft.AspNetCore.Http;
+using IBanKing.Services.Interfaces;
 
 namespace IBanKing.Pages.Admin
 {

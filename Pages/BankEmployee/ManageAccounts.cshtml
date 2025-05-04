@@ -19,7 +19,6 @@
             <tr>
                 <td colspan="10">
                     <div class="border rounded p-3 mb-4 shadow-sm">
-                        <!-- Client Info -->
                         <form method="post" asp-page-handler="EditClient">
                             <input type="hidden" name="UserId" value="@client.UserId" />
                             <div class="row g-3 align-items-center mb-2">
@@ -56,7 +55,6 @@
                             </div>
                         </form>
 
-                        <!-- Accounts Section (forms are no longer nested!) -->
                         <div class="mt-3 ps-3">
                             <h6 class="text-muted">Accounts</h6>
                             @foreach (var acc in Model.Accounts.Where(a => a.UserId == client.UserId))
@@ -79,7 +77,6 @@
                             }
                         </div>
 
-                        <!-- Block/Delete buttons -->
                         <div class="d-flex justify-content-end gap-2 pt-2">
                             <form method="post" asp-page-handler="ToggleBlock" asp-route-id="@client.UserId">
                                 <button type="submit" class="btn @(client.IsBlocked ? "btn-success" : "btn-danger") btn-sm">

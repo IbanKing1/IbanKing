@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http
-@using IBanKing.Services
+﻿@using IBanKing.Services
+@using IBanKing.Services.Interfaces
+@using Microsoft.AspNetCore.Http
 @inject INotificationService NotificationService
 @{
     var userName = Context.Session.GetString("UserName") ?? "Employee";

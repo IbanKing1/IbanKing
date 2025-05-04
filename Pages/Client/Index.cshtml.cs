@@ -13,10 +13,11 @@ namespace IBanKing.Pages.Home
         {
             if (HttpContext.Session.GetString("UserId") == null)
             {
-                // Redirect to login if session expired
+                /* Redirect to login if session expired */
                 return RedirectToPage("/Login/Index");
             }
-            // Prevent back button after logout
+
+            /* Prevent back button after logout */
             Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
             Response.Headers["Pragma"] = "no-cache";
             Response.Headers["Expires"] = "0";

@@ -1,5 +1,6 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
+using IBanKing.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

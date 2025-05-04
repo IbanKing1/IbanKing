@@ -11,7 +11,8 @@ namespace IBanKing.Models
 
         public string Provider { get; set; }
         public string IBAN { get; set; }
-          
+        public bool IsHighPriority { get; set; }
+
         public int UserId { get; set; }
         public User User { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using IBanKing.Models;
 using IBanKing.Repositories;
+using IBanKing.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace IBanKing.Services

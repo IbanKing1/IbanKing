@@ -1,6 +1,7 @@
 ﻿using IBanKing.Data;
 using IBanKing.Models;
 using IBanKing.Services;
+using IBanKing.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+
 namespace IBanKing.Pages.Client
 {
     public class PayServiceModel : PageModel
@@ -19,24 +21,16 @@ namespace IBanKing.Pages.Client
         private readonly HttpClient _httpClient;
         private readonly IEmailService _emailService;
 
-        public PayServiceModel(
-            ApplicationDbContext context,
-            IHttpClientFactory httpClientFactory,
-            IEmailService emailService)
+        public PayServiceModel(ApplicationDbContext context, IHttpClientFactory httpClientFactory, IEmailService emailService)
         {
             _context = context;
             _httpClient = httpClientFactory.CreateClient();
             _emailService = emailService;
         }
 
-        [BindProperty]
-        public int SelectedAccountId { get; set; }
-
-        [BindProperty]
-        public decimal Amount { get; set; }
-
-        [BindProperty]
-        public string SelectedCurrency { get; set; } = "RON";
+        [BindProperty] public int SelectedAccountId { get; set; }
+        [BindProperty] public decimal Amount { get; set; }
+        [BindProperty] public string SelectedCurrency { get; set; } = "RON";
 
         public List<Account> UserAccounts { get; set; } = new();
         public List<SelectListItem> CurrencyOptions { get; set; } = new();
