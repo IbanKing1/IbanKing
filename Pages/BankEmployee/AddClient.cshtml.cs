@@ -52,6 +52,15 @@ namespace IBanKing.Pages.BankEmployee
             if (!ModelState.IsValid)
                 return Page();
 
+            var age = DateTime.Today.Year - Input.DateBirth.Year;
+            if (Input.DateBirth > DateTime.Today.AddYears(-age)) age--;
+
+            if (age < 18)
+            {
+                ModelState.AddModelError("Input.DateBirth", "Client must be at least 18 years old.");
+                return Page();
+            }
+
             var hashedPassword = PasswordHelper.HashPassword(Input.Password);
 
             var newClient = new User
@@ -78,5 +87,6 @@ namespace IBanKing.Pages.BankEmployee
             ModelState.Clear();
             return Page();
         }
+
     }
 }
