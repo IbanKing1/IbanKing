@@ -29,8 +29,8 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <button id="toggle-sidebar">&#9776;</button>
+                <script src="~/js/site.js" asp-append-version="true"></script>
             </div>
-
             <ul>
                 <li><a class="btn" asp-page="/Client/HomeClient">Home</a></li>
                 <li><a class="btn" asp-page="/Client/Transactions">Transactions</a></li>
@@ -131,7 +131,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+   
     <script src="~/js/logout.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -182,6 +182,8 @@
             }
         });
     </script>
+ 
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
