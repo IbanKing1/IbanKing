@@ -33,7 +33,7 @@ namespace IBanKing.Services
             return true;
         }
 
-        private async Task<double> GetExchangeRate(string fromCurrency, string toCurrency)
+        protected virtual async Task<double> GetExchangeRate(string fromCurrency, string toCurrency)
         {
             try
             {
