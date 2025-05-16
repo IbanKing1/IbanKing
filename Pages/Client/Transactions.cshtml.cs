@@ -67,10 +67,10 @@ namespace IBanKing.Pages.Client
                 {
                     query = query.Where(t => t.TransactionId == searchId);
                 }
-                else if (!SearchTerm.Contains('.') && double.TryParse(SearchTerm, out double searchAmount))
-                {
-                    query = query.Where(t => Math.Abs(t.Amount - searchAmount) < 0.01);
-                }
+               else if (double.TryParse(SearchTerm, NumberStyles.Any, CultureInfo.InvariantCulture, out double searchAmount))
+                 {
+                     query = query.Where(t => t.Amount == searchAmount);
+                 }
                 else
                 {
                     query = query.Where(t =>
