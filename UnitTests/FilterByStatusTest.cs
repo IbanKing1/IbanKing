@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Microsoft.EntityFrameworkCore;
 using IBanKing.Data;
 using IBanKing.Models;
@@ -29,7 +29,8 @@ namespace UnitTests
             _context.Transactions.AddRange(
                 new Transaction { TransactionId = 1, Sender = "IBAN001", Receiver = "IBAN002", Amount = 100, Currency = "EUR", DateTime = DateTime.Now, Status = "Completed" },
                 new Transaction { TransactionId = 2, Sender = "IBAN002", Receiver = "IBAN001", Amount = 200, Currency = "USD", DateTime = DateTime.Now, Status = "Pending" },
-                new Transaction { TransactionId = 3, Sender = "IBAN001", Receiver = "IBAN002", Amount = 150, Currency = "EUR", DateTime = DateTime.Now, Status = "Completed" }
+                new Transaction { TransactionId = 3, Sender = "IBAN001", Receiver = "IBAN002", Amount = 150, Currency = "EUR", DateTime = DateTime.Now, Status = "Completed" },
+                new Transaction { TransactionId = 4, Sender = "IBAN002", Receiver = "IBAN001", Amount = 50, Currency = "USD", DateTime = DateTime.Now, Status = "Rejected" }
             );
 
             _context.SaveChanges();
@@ -72,6 +73,25 @@ namespace UnitTests
             Assert.AreEqual(1, transactions.Count);
             Assert.AreEqual("Pending", transactions[0].Status);
             Assert.AreEqual(2, transactions[0].TransactionId);
+        }
+        [Test]
+        public async Task FilterTransactionsByStatus_Rejected()
+        {
+            int userId = 23;
+            string status = "Rejected";
+
+            var userIbans = await _context.Accounts
+                .Where(a => a.UserId == userId)
+                .Select(a => a.IBAN)
+                .ToListAsync();
+
+            var transactions = await _context.Transactions
+                .Where(t => (userIbans.Contains(t.Sender) || userIbans.Contains(t.Receiver)) && t.Status == status)
+                .ToListAsync();
+
+            Assert.AreEqual(1, transactions.Count);
+            Assert.AreEqual("Rejected", transactions[0].Status);
+            Assert.AreEqual(4, transactions[0].TransactionId);
         }
     }
 }
